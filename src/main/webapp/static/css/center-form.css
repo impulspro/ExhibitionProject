@@ -1,0 +1,24 @@
+main {
+}
+
+.center-form {
+    border: 1px solid black;
+    border-radius: 15px;
+    display: inline-block;
+    text-align: center;
+    position: absolute;
+    min-width: 340px;
+    max-width: 340px;
+    padding: 40px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.text {
+    margin-bottom: 10px;
+}
+
+.form-group {
+    text-align: left;
+}

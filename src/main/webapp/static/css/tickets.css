@@ -1,0 +1,17 @@
+.ticket{
+    margin-bottom: 20px;
+}
+
+.tickets-caption {
+    margin-top: 20px;
+}
+
+.ticket-field-name{
+    display: inline-block;
+    width: 150px;
+}
+
+.link-back {
+    font-size: 24px;
+    padding-bottom: 50px;
+}

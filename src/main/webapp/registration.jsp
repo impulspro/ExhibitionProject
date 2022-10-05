@@ -18,15 +18,15 @@
 <%@include file="view/template/header.jsp" %>
 
 <main>
-    <div class="container">
-
-        <h1><fmt:message key="index.welcome"/></h1>
-        <h2><fmt:message key="index.showrooms"/></h2>
-
-    </div>
+    <form action="${pageContext.request.contextPath}/index-servlet" method="post">
+        <div class="registration_container">
+            <input name="command" type="hidden" value="registration_command">
+            <input type="text" name="login" placeholder="<fmt:message key='registration.form.enterLogin'/>">
+            <input type="password" name="password" placeholder="<fmt:message key='registration.form.enterPassword'/>">
+            <button type="submit"><fmt:message key='registration.form.register'/></button>
+        </div>
+    </form>
 </main>
-
 <%@include file="view/template/message.jsp" %>
-
 </body>
 </html>

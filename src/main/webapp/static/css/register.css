@@ -1,0 +1,22 @@
+#label-password{
+    position: relative;
+}
+
+#label-password>.popup{
+    font-size: 14px;
+    background-color: white;
+    position: absolute;
+    width: 250px;
+    top: -35px;
+    cursor: help;
+
+    display: none;
+}
+
+#label-password:hover .popup{
+    display: inline-block;
+}
+
+.required{
+    color: red;
+}
