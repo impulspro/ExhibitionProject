@@ -17,6 +17,8 @@ public class CommandContainer {
         commands.put("registration_command", new RegistrationCommand());
         commands.put("logout_command", new LogoutCommand());
         commands.put("login_command", new LoginCommand());
+        commands.put("home_command", new HomeCommand());
+        commands.put("getHalls_command", new GetHallsCommand());
         /*commands.put("error", new ExceptionCommand());
         commands.put("addExhibition", new AddExhibitionCommand());
         commands.put("buy", new BuyTicketCommand());
@@ -31,7 +33,4 @@ public class CommandContainer {
         return commands.get(command);
     }
 
-    public static String doCommand(Command command, HttpServletRequest req) {
-        return command.execute(req);
-    }
 }

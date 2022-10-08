@@ -6,13 +6,11 @@ public class UserConstants {
     public static final String ADMINISTRATOR = "admin";
     public static final String AUTHORIZED_USER = "user";
     public static final String ADD_USER_SQL = "INSERT INTO user VALUES (DEFAULT, ?, ?, ?, DEFAULT)";
-    public static final String DEBUG_LOGGER = "debug";
-    public static final String INFO_LOGGER = "info";
-    public static final String ERROR_LOGGER = "error";
+
 
     public static final String FIND_USER_BY_ID =
             "SELECT * FROM user WHERE id = ?";
-    public static final String FIND_ALL_USERS =
+    public static final String FIND_ALL_USERS_SQL =
             "SELECT * FROM user";
     public static final String UPDATE_USER =
             "UPDATE user SET email = ? , login = ?, password = ?, role_id = ? WHERE id = ?";

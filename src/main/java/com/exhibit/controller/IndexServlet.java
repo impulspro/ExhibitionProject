@@ -2,19 +2,25 @@ package com.exhibit.controller;
 
 import com.exhibit.controller.commands.Command;
 import com.exhibit.controller.commands.CommandContainer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.io.*;
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 
 
 @WebServlet(name = "indexServlet", value = {"/index-servlet"})
 public class IndexServlet extends HttpServlet {
-    private String message;
-
-    public void init() {
-        message = "Hello World!";
+    private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
+    public void init() throws ServletException {
+        super.init();
+        logger.info("Initializing servlet");
     }
 
     @Override
@@ -27,27 +33,19 @@ public class IndexServlet extends HttpServlet {
     }
 
     public void destroy() {
+        super.destroy();
+        logger.info("Destroying servlet");
     }
 
     private void commandManager(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-
-        HttpSession httpSession = req.getSession();
-        if (httpSession.isNew()) {
-            httpSession.setAttribute("user", null);
-        }
-
         String page = "index.jsp";
         String commandName = req.getParameter("command");
+        logger.info(commandName + " command");
         if (commandName == null) {
             req.getRequestDispatcher(page).forward(req, resp);
         } else {
             Command command = CommandContainer.getCommand(commandName);
-            page = CommandContainer.doCommand(command, req);
-            if (page.contains("redirect")) {
-                resp.sendRedirect(page.replace("redirect:", ""));
-            } else {
-                req.getRequestDispatcher(page).forward(req, resp);
-            }
+            command.execute(req, resp);
         }
     }
 }

@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.exhibit.util.constants.UserConstants.*;
 
@@ -42,5 +44,21 @@ public class UserDao {
         } catch (SQLException e) {
             throw new DBException("Invalid user input", e);
         }
+    }
+
+    public List<User> findAll() {
+        List<User> userList = new CopyOnWriteArrayList<>();
+        try (Connection conn = ConnectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(FIND_ALL_USERS_SQL)){
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                long asdf = rs.getLong(1);
+                User user = (User) mapper.extractFromResultSet(rs);
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            throw new DBException("Cannot find all users", e);
+        }
+        return userList;
     }
 }

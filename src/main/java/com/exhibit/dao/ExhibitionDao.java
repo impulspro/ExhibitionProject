@@ -4,6 +4,7 @@ import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
 import com.exhibit.exeptions.DBException;
 import com.exhibit.model.Exhibition;
+import com.exhibit.model.Hall;
 
 import java.sql.*;
 import java.util.List;
@@ -59,11 +60,11 @@ public class ExhibitionDao {
     }
 
     public static List<Exhibition> findAll() throws DBException {
-        List<Exhibition> exhibitions = null;
+        List<Exhibition> exhibitions = new CopyOnWriteArrayList<>();
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement prepSt = conn.prepareStatement(FIND_ALL_EXHIBITIONS_SQL)) {
             ResultSet rs = prepSt.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 exhibitions.add((Exhibition) mapper.extractFromResultSet(rs));
             }
         } catch (SQLException | DBException e) {
@@ -85,7 +86,7 @@ public class ExhibitionDao {
         }
     }
 
-    public void delete(long id) throws DBException {
+     public void delete(long id) throws DBException {
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement prepSt = conn.prepareStatement(DELETE_EXHIBITION_BY_ID_SQL)) {
             prepSt.setLong(1, id);

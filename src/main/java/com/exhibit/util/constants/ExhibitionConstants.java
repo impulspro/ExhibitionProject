@@ -18,4 +18,6 @@ public class ExhibitionConstants {
     public static final String SET_HALLS_SQL =
             "INSERT INTO exhibitions_halls VALUES(?, ?)";
 
+    public static final String FIND_ALL_HALLS_SQL =
+            "SELECT * FROM hall";
 }

@@ -7,6 +7,22 @@ public class Hall {
     private String name;
     private String details;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
     public Hall(long id, String name) {
         this.id = id;
         this.name = name;
@@ -28,21 +44,21 @@ public class Hall {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         Hall hall = (Hall) o;
-        return Objects.equals(name, hall.name);
+        return id == hall.id && Objects.equals(name, hall.name) && Objects.equals(details, hall.details);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name);
+        return Objects.hash(id, name, details);
     }
 
     @Override
     public String toString() {
         return "Hall{" +
-                "name='" + name + '\'' +
-                ", id=" + id +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", details='" + details + '\'' +
                 '}';
     }
 
