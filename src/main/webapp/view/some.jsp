@@ -10,12 +10,12 @@
 <head>
     <title>Exhibition</title>
 
-    <%@include file="view/template/styles.jsp" %>
+    <%@include file="template/styles.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}static/css/index.css">
 </head>
 <body>
 
-<%@include file="view/template/header.jsp" %>
+<%@include file="template/header.jsp" %>
 
 <main>
     <div class="container">
@@ -25,23 +25,10 @@
 
     </div>
 
-    <div class="exhibitions_container">
-
-        <h1><fmt:message key='index.topic'/></h1>
-
-        <form action="${pageContext.request.contextPath}/index-servlet" method="get">
-            <input name="command" type="hidden" value="getExhibitions_command">
-            <button type="submit"><fmt:message key='index.exhibition.byDefault'/></button>
-        </form>
-    </div>
-    <br>
-    <a href="view/exhibitions.jsp"> Jsp</a>
-    <a href="view/some.jsp"> SomeJsp</a>
-
 
 </main>
 
-<%@include file="view/template/message.jsp" %>
+<%@include file="template/message.jsp" %>
 
 </body>
 </html>

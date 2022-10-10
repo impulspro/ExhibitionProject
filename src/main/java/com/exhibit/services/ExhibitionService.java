@@ -12,19 +12,23 @@ import java.util.List;
 
 public class ExhibitionService {
 
+    ExhibitionDao dao = new ExhibitionDao();
     public void addExhibition(Exhibition exhibition) throws DaoException {
-        ExhibitionDao.add(exhibition);
+        dao.add(exhibition);
     }
 
     public Exhibition findByTheme(String theme) throws DaoException {
-        return  ExhibitionDao.findByTheme(theme);
+        return  dao.findByTheme(theme);
     }
     public List<Exhibition> findAll() throws DaoException {
-        return  ExhibitionDao.findAll();
+        return  dao.findAll();
     }
 
     public void setHalls(long exhibition_id, String[] halls_id) throws DaoException, DBException {
-        ExhibitionDao.setHalls(exhibition_id, halls_id);
+        dao.setHalls(exhibition_id, halls_id);
     }
 
+    public List<Hall> getHalls(long id) {
+        return dao.getHalls(id);
+    }
 }

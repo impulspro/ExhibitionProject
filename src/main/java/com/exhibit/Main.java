@@ -14,8 +14,9 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws DaoException {
         ExhibitionService service = new ExhibitionService();
-        List<Exhibition> halls = service.findAll();
-        halls.stream().forEach(s -> System.out.println(s));
+        List<Exhibition> list = service.findAll();
+        list.stream().forEach(s -> System.out.println(s.getTheme() + s.getHalls()));
+
        // halls.stream().forEach(s -> System.out.println(s));
         /*List<Exhibition> exhibitions = service.findAll();
         exhibitions.stream().forEach(s -> System.out.println(s));

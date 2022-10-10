@@ -1,7 +1,10 @@
 package com.exhibit.model;
 
+import com.exhibit.services.ExhibitionService;
+
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -16,6 +19,7 @@ public class Exhibition {
     private Time startTime;
     private Time endTime;
     private double price;
+
 
     private Exhibition() {
     }
@@ -51,7 +55,9 @@ public class Exhibition {
         return price;
     }
 
-
+    public List<Hall> getHalls() {
+        return new ExhibitionService().getHalls(id);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

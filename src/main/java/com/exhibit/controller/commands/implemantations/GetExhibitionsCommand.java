@@ -25,13 +25,12 @@ public class GetExhibitionsCommand implements Command {
 
         String page = "index.jsp";
         HttpSession session = req.getSession();
-        String sortType = req.getParameter("sortType");
 
-        List<Exhibition> exList = null;
+        List<Exhibition> exhList = null;
         try {
-            exList = new ExhibitionService().findAll();
+            exhList = new ExhibitionService().findAll();
             page = "view/exhibitions.jsp";
-            session.setAttribute("exhibitions", exList);
+            session.setAttribute("exhList", exhList);
             logger.info("GetExhibitions Command successfully");
         } catch (DaoException e) {
             logger.info("GetExhibitions Command failed");

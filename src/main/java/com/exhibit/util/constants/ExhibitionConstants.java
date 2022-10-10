@@ -13,11 +13,16 @@ public class ExhibitionConstants {
             "SELECT * FROM exhibition WHERE id = ?";
     public static final String FIND_ALL_EXHIBITIONS_SQL =
             "SELECT * FROM exhibition";
+    public static final String FIND_EXHIBITIONS_RELATED_HALLS_SQL =
+            "SELECT * FROM exhibition_halls";
     public static final String DELETE_EXHIBITION_BY_ID_SQL =
             "DELETE FROM exhibition WHERE id = ?";
+
     public static final String SET_HALLS_SQL =
             "INSERT INTO exhibitions_halls VALUES(?, ?)";
 
     public static final String FIND_ALL_HALLS_SQL =
             "SELECT * FROM hall";
+    public static final String FIND_HALLS_BY_EXHIBITION_ID =
+            "SELECT * FROM exhibition_halls WHERE exhibition_id = ?";
 }
