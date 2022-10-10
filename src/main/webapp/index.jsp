@@ -24,6 +24,21 @@
         <h2><fmt:message key="index.showrooms"/></h2>
 
     </div>
+
+    <div class="exhibitions_container">
+
+        <h1><fmt:message key='index.topic'/></h1>
+
+        <form action="home" method="get">
+            <input name="command" type="hidden" value="command_getExhibitions">
+            <input name="pageNum" type="hidden" value="1">
+            <input name="sortType" type="hidden" value="default">
+            <button type="submit"><fmt:message key='index.exhibition.byDefault'/></button>
+        </form>
+    </div>
+
+
+
 </main>
 
 <%@include file="view/template/message.jsp" %>
