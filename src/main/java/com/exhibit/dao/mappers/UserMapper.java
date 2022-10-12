@@ -13,6 +13,7 @@ public class UserMapper implements Mapper<User> {
                 .setLogin(rs.getString("login"))
                 .setPassword(rs.getString("password"))
                 .setRole(rs.getString("role"))
+                .setMoney(rs.getDouble("money"))
                 .build();
     }
 }

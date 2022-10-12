@@ -24,10 +24,7 @@ public class RegistrationCommand implements Command{
             UserService userService = new UserService();
             User user = new User(login, password);
             userService.add(user);
-            System.out.println(user);
-            System.out.println("------------");
             session.setAttribute("user", user);
-            System.out.println("------------");
             session.setAttribute("user_message", "successful registration");
             logger.info("Registration command execute successful for login = " + login);
         } catch (Exception e) {

@@ -47,9 +47,8 @@ public class UserDao {
             ps.setString(i++, user.getLogin());
             ps.setString(i++, user.getPassword());
             ps.setString(i++, AUTHORIZED_USER);
+            ps.setDouble(i++, USER_DEFAULT_MONEY);
             ps.executeUpdate();
-            System.out.println(user);
-            System.out.println("-avasd----------");
             try (PreparedStatement ps2 = conn.prepareStatement(FIND_REAL_USER_ID_BY_LOGIN_SQL)){
                 ps2.setString(1, user.getLogin());
                 ResultSet rs = ps2.executeQuery();
@@ -71,7 +70,6 @@ public class UserDao {
              PreparedStatement ps = conn.prepareStatement(FIND_ALL_USERS_SQL)){
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                long asdf = rs.getLong(1);
                 User user = (User) mapper.extractFromResultSet(rs);
                 userList.add(user);
             }
@@ -86,7 +84,7 @@ public class UserDao {
         List<Ticket> tickets = getUserTickets(user);
         if (tickets != null && !tickets.isEmpty()){
             Optional<Ticket> ticket = tickets.stream().filter(t -> t.getExhibition_id() == exhibition_id).findFirst();
-            if (!ticket.isPresent()) {
+            if (ticket.isPresent()) {
                 return "You already buy a ticket to this exhibition";
             }
         }

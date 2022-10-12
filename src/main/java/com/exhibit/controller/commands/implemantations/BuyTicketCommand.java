@@ -22,15 +22,18 @@ public class BuyTicketCommand implements Command {
         logger.info("BuyTicket Command start ");
 
         long exhibition_id = Long.parseLong(req.getParameter("exhibition_id"));
+
+
         User user = (User) req.getSession().getAttribute("user");
         UserService service = new UserService();
         HttpSession session = req.getSession();
 
         String answer = service.buyTicket(user, exhibition_id);
+        session.removeAttribute("user");
+        session.removeAttribute("exhibition_id");
         session.setAttribute("user", user);
-        List<Ticket> tickets = service.getUserTickets(user);
 
-        if (answer != null || answer.equals("ok")){
+        if (answer != null && answer.equals("ok")){
             logger.info("BuyTicket Command successful");
             session.setAttribute("user_message","see you at the exhibition");
         }else {

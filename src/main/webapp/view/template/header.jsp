@@ -27,10 +27,10 @@
                     </c:when>
                     <c:otherwise>
                         <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet" method="get">
-                            <button class="btn-info">${sessionScope.user.login}</button>
+                            <button class="btn-info" disabled>${sessionScope.user.login}</button>
                             <input name="command" type="hidden" value="logout_command">
                             <button class="btn-success" type="submit"><fmt:message key='topnav.button.logOut'/></button>
-                            <button class="btn-info">${sessionScope.user.money}$</button>
+                            <button class="btn-info" disabled>${sessionScope.user.money}$</button>
                         </form>
                     </c:otherwise>
                 </c:choose>

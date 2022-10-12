@@ -6,18 +6,24 @@ import com.exhibit.services.UserService;
 import java.io.Serializable;
 import java.util.Objects;
 
+import static com.exhibit.util.constants.UserConstants.AUTHORIZED_USER;
+import static com.exhibit.util.constants.UserConstants.USER_DEFAULT_MONEY;
+
 public class User implements Serializable {
     private long id;
     private String login;
 
     private String password;
 
-    private String role = "user";
+    private String role;
     private double money;
 
     public User(String login, String password) {
+        this.id = 0;
         this.login = login;
         this.password = password;
+        this.role = AUTHORIZED_USER;
+        this.money = USER_DEFAULT_MONEY;
     }
 
     public User() {

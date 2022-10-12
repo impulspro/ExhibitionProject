@@ -18,5 +18,6 @@ public class LogoutCommand implements Command {
         logger.info("Logout command");
         HttpSession session = req.getSession();
         session.invalidate();
+        resp.sendRedirect("index.jsp");
     }
 }

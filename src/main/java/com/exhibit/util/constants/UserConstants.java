@@ -5,7 +5,8 @@ public class UserConstants {
     public static final String SETTINGS_FILE = "app.properties";
     public static final String ADMINISTRATOR = "admin";
     public static final String AUTHORIZED_USER = "user";
-    public static final String ADD_USER_SQL = "INSERT INTO user VALUES (DEFAULT, ?, ?, ?, DEFAULT)";
+    public static final double USER_DEFAULT_MONEY = 1000;
+    public static final String ADD_USER_SQL = "INSERT INTO user VALUES (DEFAULT, ?, ?, ?, ?)";
     public static final String ADD_USER_TICKET_SQL = "INSERT INTO user_tickets VALUES (DEFAULT, ?, ?)";
     public static final String FIND_REAL_USER_ID_BY_LOGIN_SQL = "SELECT * FROM user WHERE login = ?";
 
