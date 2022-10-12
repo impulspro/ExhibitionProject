@@ -1,5 +1,8 @@
 package com.exhibit.model;
 
+import com.exhibit.dao.UserDao;
+import com.exhibit.services.UserService;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -60,6 +63,10 @@ public class User implements Serializable {
         this.money = money;
     }
 
+    public boolean isTicketPresent(long exhibition_id){
+        UserDao dao = new UserDao();
+        return dao.isTicketPreset(getLogin(), exhibition_id);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

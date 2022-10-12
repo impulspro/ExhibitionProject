@@ -4,7 +4,6 @@ import com.exhibit.model.Exhibition;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 public class ExhibitionMapper implements Mapper<Exhibition> {
 
     public Exhibition extractFromResultSet(ResultSet rs) throws SQLException {

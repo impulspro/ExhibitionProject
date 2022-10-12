@@ -29,7 +29,7 @@ public class GetExhibitionsCommand implements Command {
         List<Exhibition> exhList = null;
         try {
             exhList = new ExhibitionService().findAll();
-            page = "view/exhibitions.jsp";
+            page = "view/page/exhibitions.jsp";
             session.setAttribute("exhList", exhList);
             logger.info("GetExhibitions Command successfully");
         } catch (DaoException e) {

@@ -11,11 +11,11 @@
     </resource-ref>
     <error-page>
         <error-code>404</error-code>
-        <location>/view/error.jsp</location>
+        <location>/view/page/error.jsp</location>
     </error-page>
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
-        <location>/view/error.jsp</location>
+        <location>/view/page/error.jsp</location>
     </error-page>
     <context-param>
         <param-name>isLog4jContextSelectorNamed</param-name>

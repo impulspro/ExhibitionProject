@@ -15,6 +15,7 @@ public class CommandContainer {
         commands.put("home_command", new HomeCommand());
         commands.put("getHalls_command", new GetHallsCommand());
         commands.put("getExhibitions_command", new GetExhibitionsCommand());
+        commands.put("buyTicket_command", new BuyTicketCommand());
        /* commands.put("error", new ExceptionCommand());
         commands.put("addExhibition", new AddExhibitionCommand());
         commands.put("buy", new BuyTicketCommand());

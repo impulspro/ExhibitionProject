@@ -10,7 +10,7 @@
 <head>
     <title>Exhibition</title>
 
-    <%@include file="template/styles.jsp" %>
+    <%@include file="../template/styles.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}static/css/index.css">
 </head>
 <body>
@@ -21,7 +21,7 @@
                     <div class="col-lg-4">
                         <div class="card">
                             <img
-                                    src="img/hall_red.jpg"
+                                    src="../img/hall_red.jpg"
                                     class="card-img-top"
                                     alt="Red Hall"
                             />
@@ -215,7 +215,7 @@
 
 </main>
 
-<%@include file="template/message.jsp" %>
+<%@include file="../template/message.jsp" %>
 
 </body>
 </html>

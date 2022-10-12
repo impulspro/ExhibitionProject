@@ -13,7 +13,7 @@
     <%@include file="view/template/styles.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}static/css/index.css">
 </head>
-<body>
+<body style="background-image: url('view/img/back2.jpg');">
 
 <%@include file="view/template/header.jsp" %>
 
@@ -35,10 +35,6 @@
         </form>
     </div>
     <br>
-    <a href="view/exhibitions.jsp"> Jsp</a>
-    <a href="view/some.jsp"> SomeJsp</a>
-
-
 </main>
 
 <%@include file="view/template/message.jsp" %>

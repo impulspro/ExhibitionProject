@@ -31,4 +31,8 @@ public class ExhibitionService {
     public List<Hall> getHalls(long id) {
         return dao.getHalls(id);
     }
+
+    public Exhibition findById(long exhibition_id) {
+        return  dao.findById(exhibition_id);
+    }
 }

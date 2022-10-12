@@ -6,6 +6,7 @@ import com.exhibit.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,11 +28,11 @@ public class LoginCommand implements Command {
                 req.getSession().setAttribute("user", user.get());
                 logger.info("Login command execute successful for login = " + login);
             }
+            page = req.getHeader("Referer");
         } catch (Exception e) {
             logger.info("Login command execute failed for login = " + login);
             req.getSession().setAttribute("error_message", "login/password dont match with db");
         }
-
         resp.sendRedirect(page);
     }
 }

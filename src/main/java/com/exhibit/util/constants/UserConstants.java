@@ -6,14 +6,16 @@ public class UserConstants {
     public static final String ADMINISTRATOR = "admin";
     public static final String AUTHORIZED_USER = "user";
     public static final String ADD_USER_SQL = "INSERT INTO user VALUES (DEFAULT, ?, ?, ?, DEFAULT)";
-
+    public static final String ADD_USER_TICKET_SQL = "INSERT INTO user_tickets VALUES (DEFAULT, ?, ?)";
+    public static final String FIND_REAL_USER_ID_BY_LOGIN_SQL = "SELECT * FROM user WHERE login = ?";
 
     public static final String FIND_USER_BY_ID =
             "SELECT * FROM user WHERE id = ?";
     public static final String FIND_ALL_USERS_SQL =
             "SELECT * FROM user";
-    public static final String UPDATE_USER =
-            "UPDATE user SET email = ? , login = ?, password = ?, role_id = ? WHERE id = ?";
+    public static final String FIND_USER_TICKETS_SQL = "SELECT * FROM user_tickets WHERE user_id = ?";
+    public static final String UPDATE_USER_SQL =
+            "UPDATE user SET login = ?, password = ?, role = ?, money = ? WHERE id = ?";
     public static final String DELETE_USER_BY_ID =
             "DELETE FROM user  WHERE id = ?";
     public static final String FIND_USER_BY_LOGIN_AND_PASSWORD =

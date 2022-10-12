@@ -10,12 +10,12 @@
 <head>
     <title>Exhibition</title>
 
-    <%@include file="view/template/styles.jsp" %>
+    <%@include file="../template/styles.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}static/css/index.css">
 </head>
 <body>
 
-<%@include file="view/template/header.jsp" %>
+<%@include file="../template/header.jsp" %>
 
 <main>
 
@@ -72,6 +72,6 @@
         </div>
     </section>
 </main>
-<%@include file="view/template/message.jsp" %>
+<%@include file="../template/message.jsp" %>
 </body>
 </html>

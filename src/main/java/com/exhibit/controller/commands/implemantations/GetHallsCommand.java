@@ -21,7 +21,7 @@ public class GetHallsCommand implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String page = "view/halls.jsp";
+        String page = "view/page/halls.jsp";
         try {
             HallService service = new HallService();
             List<Hall> hallList = service.findAll();
