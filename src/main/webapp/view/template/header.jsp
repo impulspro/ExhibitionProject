@@ -1,10 +1,12 @@
 <nav class="navbar sticky-top navbar-light bg-light">
+
     <div class="container-fluid">
         <form action="${pageContext.request.contextPath}/index-servlet" method="get">
             <input name="command" type="hidden" value="home_command">
             <button class="btn btn-info">Home</button>
         </form>
         <form action="${pageContext.request.contextPath}/index-servlet" method="get">
+            <input name="sortType" type="hidden" value="sort">
             <input name="command" type="hidden" value="getExhibitions_command">
             <button class="btn btn-success" type="submit"><fmt:message key='index.exhibition.byDefault'/></button>
         </form>
@@ -44,4 +46,5 @@
             </div>
         </div>
     </div>
+
 </nav>

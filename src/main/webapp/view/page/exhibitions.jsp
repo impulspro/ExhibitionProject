@@ -28,7 +28,7 @@
             <div class="col-3 bg-info">
                 <div class="card-header bg-light">
                     <b> <fmt:message key='index.exhibition.from'/>:</b> ${exh.startDate} <b><fmt:message
-                        key='index.exhibition.to'/>:</b> ${exh.endDate} </b>
+                        key='index.exhibition.to'/>:</b> ${exh.endDate} Price = ${exh.price}</b>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">${exh.theme}</h5>

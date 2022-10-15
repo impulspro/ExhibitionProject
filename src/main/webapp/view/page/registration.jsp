@@ -11,7 +11,7 @@
     <title>Exhibition</title>
 
     <%@include file="../template/styles.jsp" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}static/css/index.css">
+
 </head>
 <body>
 

@@ -11,7 +11,7 @@
     <title>Exhibition</title>
 
     <%@include file="view/template/styles.jsp" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}static/css/index.css">
+
 </head>
 <body style="background-image: url('view/img/back2.jpg');">
 
@@ -25,19 +25,38 @@
 
     </div>
 
-    <div class="exhibitions_container">
 
-        <h1><fmt:message key='index.topic'/></h1>
+    <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet" method="get">
+        <input name="command" type="hidden" value="getExhibitions_command">
+        <input name="sortType" type="hidden" value="sort">
+        <button class="btn-success" type="submit">Exhibition</button>
+    </form>
 
-        <form action="${pageContext.request.contextPath}/index-servlet" method="get">
-            <input name="command" type="hidden" value="getExhibitions_command">
-            <button type="submit"><fmt:message key='index.exhibition.byDefault'/></button>
-        </form>
-    </div>
-    <br>
+    <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet" method="get">
+        <input name="command" type="hidden" value="getExhibitions_command">
+        <input name="sortType" type="hidden" value="sortByDate">
+        <input type="date" placeholder="Date" name="exhDate">
+        <button class="btn-success" type="submit">By Date</button>
+    </form>
+
+    <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet" method="get">
+        <input name="command" type="hidden" value="getExhibitions_command">
+        <input name="sortType" type="hidden" value="sortByPrice">
+        <button class="btn-success" type="submit">Price</button>
+    </form>
+
+    <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet" method="get">
+        <input name="command" type="hidden" value="getExhibitions_command">
+        <input name="sortType" type="hidden" value="sortByTheme">
+        <button class="btn-success" type="submit">Topic</button>
+    </form>
+
 </main>
 
 <%@include file="view/template/message.jsp" %>
 
 </body>
 </html>
+
+
+
