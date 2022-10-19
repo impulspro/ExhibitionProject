@@ -1,6 +1,7 @@
 package com.exhibit.controller.commands.implemantations;
 
 import com.exhibit.controller.commands.Command;
+import com.exhibit.dao.PasswordHashing;
 import com.exhibit.model.User;
 import com.exhibit.services.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +21,7 @@ public class LoginCommand implements Command {
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
+        password = PasswordHashing.toMD5(password);
         String page = "index.jsp";
 
         try {

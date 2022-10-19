@@ -1,9 +1,7 @@
 package com.exhibit.services;
 
-import com.exhibit.dao.DaoException;
+import com.exhibit.exeptions.DaoException;
 import com.exhibit.dao.ExhibitionDao;
-import com.exhibit.dao.UserDao;
-import com.exhibit.exeptions.DBException;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Hall;
 
@@ -40,5 +38,9 @@ public class ExhibitionService {
     }
     public void cancelExhibition(long exhibition_id){
         dao.cancelExhibition(exhibition_id);
+    }
+
+    public void deleteExhibition(long exhibition_id) {
+        dao.deleteExhibition(exhibition_id);
     }
 }

@@ -34,7 +34,7 @@
 
                                     <form action="${pageContext.request.contextPath}/index-servlet" method="post">
                                         <div class="d-flex flex-row align-items-center mb-4">
-                                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+
                                             <div class="form-outline flex-fill mb-0">
                                                 <input type="text" name="login" id="form3Example1c"
                                                        class="form-control"/>
@@ -43,7 +43,7 @@
                                             </div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center mb-4">
-                                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+
                                             <div class="form-outline flex-fill mb-0">
                                                 <input type="password" name="password" id="form3Example1cc"
                                                        class="form-control"/>

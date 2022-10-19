@@ -1,8 +1,8 @@
-package com.exhibit.dao;
+package com.exhibit.exeptions;
 
 import java.util.Iterator;
 
-public class DaoException extends Exception {
+public class DaoException extends RuntimeException {
 
     public DaoException() {
         super();

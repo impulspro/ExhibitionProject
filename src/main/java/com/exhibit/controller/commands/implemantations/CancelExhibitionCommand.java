@@ -22,11 +22,12 @@ public class CancelExhibitionCommand implements Command {
         try {
             service.cancelExhibition(Long.parseLong(exhibition_id));
             logger.info("CancelExhibition Command successfully");
-            req.getSession().setAttribute("user_message", "you canceled exhibition with id =  " + exhibition_id);
+            session.setAttribute("user_message", "you canceled exhibition with id =  " + exhibition_id);
         } catch (Exception e){
             logger.info("CancelExhibition Command failed");
-            req.getSession().setAttribute("error_message", "cannot cancel exhibition");
+            session.setAttribute("error_message", "cannot cancel exhibition");
         }
-
+        String page = req.getHeader("Referer");
+        resp.sendRedirect(page);
     }
 }

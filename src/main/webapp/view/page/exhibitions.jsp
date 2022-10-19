@@ -24,7 +24,6 @@
         <c:set var="i" value="1"/>
 
         <c:forEach var="exh" items="${exhList}">
-
             <div class="col-3 bg-info">
                 <div class="card-header bg-light">
                     <fmt:message key='exhibition.from'/>: <b> ${exh.startDate} </b>
@@ -60,11 +59,16 @@
                                 </button>
                             </c:if>
 
-                            <c:if test="${!sessionScope.user.isTicketPresent(exh.id)}">
-                                <button class="btn btn-primary" type="submit">
-                                    <fmt:message key='exhibition.buyTickets'/></button>
+                            <c:if test="${exh.price != '-1'}">
+                                <c:if test="${!sessionScope.user.isTicketPresent(exh.id)}">
+                                    <button class="btn btn-primary" type="submit">
+                                        <fmt:message key='exhibition.buyTickets'/></button>
+                                </c:if>
                             </c:if>
-
+                            <c:if test="${exh.price == '-1'}">
+                                <button class="btn btn-dark disabled">
+                                    <fmt:message key='exhibition.alreadyCanceled'/></button>
+                            </c:if>
                         </form>
                     </c:if>
 
@@ -77,9 +81,17 @@
                             <button class="btn-success" type="button">
                                     ${exh.amountOfTickets()} <fmt:message key='exhibition.amountOfTickets'/>:
                             </button>
-                            <button class="btn btn-danger" type="submit" >
-                                <fmt:message key='exhibition.cancel'/>
-                            </button>
+
+                            <c:if test="${exh.price != '-1'}">
+                                <button class="btn btn-warning" type="submit" >
+                                    <fmt:message key='exhibition.cancel'/>
+                                </button>
+                            </c:if>
+                            <c:if test="${exh.price == '-1'}">
+                                <button class="btn btn-dark disabled">
+                                    <fmt:message key='exhibition.alreadyCanceled'/></button>
+                            </c:if>
+
                         </form>
                         <form action="${pageContext.request.contextPath}/index-servlet" method="put">
                             <input name="command" type="hidden" value="deleteExhibition_command">

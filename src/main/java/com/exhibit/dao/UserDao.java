@@ -2,7 +2,8 @@ package com.exhibit.dao;
 
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
-import com.exhibit.exeptions.DBException;
+
+import com.exhibit.exeptions.DaoException;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Ticket;
 import com.exhibit.model.User;
@@ -26,7 +27,7 @@ import static com.exhibit.util.constants.UserConstants.*;
 public class UserDao {
     static Mapper mapper = MapperFactory.getInstance().getUserMapper();
 
-    public static User findByLogin(String login) throws DBException {
+    public static User findByLogin(String login)  {
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement ps = conn.prepareStatement(FIND_USER_BY_LOGIN)){
             ps.setString(1, login);
@@ -35,12 +36,12 @@ public class UserDao {
                 return (User) mapper.extractFromResultSet(rs);
             }
         } catch (SQLException e) {
-            throw new DBException("Cannot find user", e);
+            throw new DaoException("Cannot find user", e);
         }
         return null;
     }
 
-    public static void add(User user) throws DBException {
+    public static void add(User user){
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement ps = conn.prepareStatement(ADD_USER_SQL)) {
             int i = 1;
@@ -59,7 +60,7 @@ public class UserDao {
                 rs.close();
             }
         } catch (SQLException e) {
-            throw new DBException("Invalid user input", e);
+            throw new DaoException("Invalid user input", e);
         }
 
     }
@@ -74,7 +75,7 @@ public class UserDao {
                 userList.add(user);
             }
         } catch (SQLException e) {
-            throw new DBException("Cannot find all users", e);
+            throw new DaoException("Cannot find all users", e);
         }
         return userList;
     }
@@ -101,7 +102,7 @@ public class UserDao {
             user.setMoney(user.getMoney() - exhibition.getPrice());
             update(user);
         } catch (SQLException e) {
-            throw new DBException("Invalid user input", e);
+            throw new DaoException("Invalid user input", e);
         }
 
         return "ok";
@@ -119,7 +120,7 @@ public class UserDao {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new DBException("Cannot update user", e);
+            throw new DaoException("Cannot update user", e);
         }
     }
 
@@ -134,8 +135,8 @@ public class UserDao {
                 tickets.add((Ticket) ticketMapper.extractFromResultSet(rs));
             }
 
-        } catch (SQLException | DBException e) {
-            throw new DBException("Cannot find all user tickets", e);
+        } catch (SQLException e) {
+            throw new DaoException("Cannot find all user tickets", e);
         }
         return tickets;
     }

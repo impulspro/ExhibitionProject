@@ -2,7 +2,7 @@ package com.exhibit.dao;
 
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
-import com.exhibit.exeptions.DBException;
+import com.exhibit.exeptions.DaoException;
 import com.exhibit.model.Hall;
 
 import java.sql.Connection;
@@ -24,8 +24,8 @@ public class HallDao {
             while (rs.next()) {
                 halls.add((Hall) mapperHall.extractFromResultSet(rs));
             }
-        } catch (SQLException | DBException e) {
-            throw new DBException("Cannot find all halls", e);
+        } catch (SQLException e) {
+            throw new DaoException("Cannot find all halls", e);
         }
         return halls;
     }

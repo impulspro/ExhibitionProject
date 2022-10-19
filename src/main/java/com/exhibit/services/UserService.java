@@ -1,10 +1,6 @@
 package com.exhibit.services;
 
-import com.exhibit.dao.DaoException;
 import com.exhibit.dao.UserDao;
-import com.exhibit.exeptions.DBException;
-import com.exhibit.model.Exhibition;
-import com.exhibit.model.Hall;
 import com.exhibit.model.Ticket;
 import com.exhibit.model.User;
 
@@ -15,7 +11,7 @@ public class UserService {
 
     static UserDao dao = new UserDao();
 
-    public void add(String login, String password) throws DBException {
+    public void add(String login, String password) {
         dao.add(new User(login, password));
     }
 
@@ -27,7 +23,7 @@ public class UserService {
         return dao.findAll();
     }
 
-    public void add(User user) throws DBException {
+    public void add(User user) {
         dao.add(user);
     }
 

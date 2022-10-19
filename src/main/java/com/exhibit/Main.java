@@ -1,17 +1,9 @@
 package com.exhibit;
 
-import com.exhibit.dao.DaoException;
+import com.exhibit.dao.PasswordHashing;
+import com.exhibit.exeptions.DaoException;
 import com.exhibit.model.Exhibition;
-import com.exhibit.model.Ticket;
-import com.exhibit.model.User;
 import com.exhibit.services.ExhibitionService;
-import com.exhibit.services.UserService;
-
-import java.sql.Date;
-import java.sql.Time;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) throws DaoException {
@@ -23,9 +15,18 @@ public class Main {
         tickets.stream().forEach(s-> System.out.println(s));
 
 */
-        ExhibitionService service = new ExhibitionService();
-        Exhibition exh = service.findById(8);
-        System.out.println(service.amountOfTickets(3));
+        String pass = "hello";
+
+        System.out.println(PasswordHashing.toMD5("admin"));
+        System.out.println(PasswordHashing.toMD5("password5"));
+        System.out.println(PasswordHashing.toMD5("password6"));
+        System.out.println(PasswordHashing.toMD5("password3"));
+        System.out.println(PasswordHashing.toMD5("password4"));
+
+
+        //ExhibitionService service = new ExhibitionService();
+        //Exhibition exh = service.findById(8);
+        //System.out.println(service.amountOfTickets(3));
        // exh.setTheme("NewTHHH");
       //  service.addExhibition(exh);
        // String [] halls = {"1","2"};

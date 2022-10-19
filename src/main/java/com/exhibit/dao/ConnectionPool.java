@@ -1,6 +1,5 @@
 package com.exhibit.dao;
 
-import com.exhibit.exeptions.DBException;
 import org.apache.commons.dbcp.BasicDataSource;
 
 import javax.naming.Context;
@@ -17,12 +16,12 @@ public class ConnectionPool {
 
     private static BasicDataSource dsBasic = new BasicDataSource();
     static {
-        dsBasic.setUrl("jdbc:mysql://localhost:3306/exhibition_db?serverTimezone=Europe/Minsk");
+        dsBasic.setUrl("jdbc:mysql://localhost:3306/exhibition_db?");
         dsBasic.setUsername("root");
         dsBasic.setPassword("root");
     }
 
-    public static Connection getConnection() throws DBException {
+    public static Connection getConnection(){
         try {
             return dsBasic.getConnection();
         } catch (SQLException e) {

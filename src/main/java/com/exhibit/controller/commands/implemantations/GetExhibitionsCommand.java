@@ -1,7 +1,7 @@
 package com.exhibit.controller.commands.implemantations;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.DaoException;
+import com.exhibit.exeptions.DaoException;
 import com.exhibit.model.Exhibition;
 import com.exhibit.services.ExhibitionService;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +25,7 @@ public class GetExhibitionsCommand implements Command {
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         logger.info("GetExhibitions Command start ");
 
-        String page = "index.jsp";
+        String page = "view/page/exhibitions.jsp";
         HttpSession session = req.getSession();
         String sortType = req.getParameter("sortType");
         System.out.println(sortType);
@@ -44,6 +43,7 @@ public class GetExhibitionsCommand implements Command {
                             && (e.getEndDate().after(exhDate) || e.getEndDate().equals(exhDate))).collect(Collectors.toList());
                     exhList = sortList;
                     if (sortList.isEmpty()){
+                        page = "index.jsp";
                         req.getSession().setAttribute("error_message", "no exhibition on this date");
                     }
                 }
@@ -63,9 +63,10 @@ public class GetExhibitionsCommand implements Command {
             }
             session.setAttribute("exhList", exhList);
             logger.info("GetExhibitions Command successfully");
-            page = "view/page/exhibitions.jsp";
+
         } catch (DaoException e) {
             logger.info("GetExhibitions Command failed");
+            page = "index.jsp";
             req.getSession().setAttribute("error_message", "problem with showing exhibitions");
         }
 

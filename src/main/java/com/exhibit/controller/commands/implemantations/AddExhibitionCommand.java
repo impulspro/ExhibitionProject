@@ -1,7 +1,7 @@
 package com.exhibit.controller.commands.implemantations;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.DaoException;
+import com.exhibit.exeptions.DaoException;
 import com.exhibit.dao.ExhibitionDao;
 import com.exhibit.model.Exhibition;
 import com.exhibit.services.ExhibitionService;
@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 
