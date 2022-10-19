@@ -16,6 +16,9 @@ public class CommandContainer {
         commands.put("getHalls_command", new GetHallsCommand());
         commands.put("getExhibitions_command", new GetExhibitionsCommand());
         commands.put("buyTicket_command", new BuyTicketCommand());
+        commands.put("addExhibition_command", new AddExhibitionCommand());
+        commands.put("cancelExhibition_command", new CancelExhibitionCommand());
+        commands.put("deleteExhibition_command", new DeleteExhibitionCommand());
        /* commands.put("error", new ExceptionCommand());
         commands.put("addExhibition", new AddExhibitionCommand());
         commands.put("buy", new BuyTicketCommand());

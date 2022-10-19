@@ -1,6 +1,6 @@
 package com.exhibit.exeptions;
 
-public class DBException extends RuntimeException {
+public class DBException extends RuntimeException{
 
     public DBException() {
         super();

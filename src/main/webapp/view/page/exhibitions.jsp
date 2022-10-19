@@ -27,14 +27,15 @@
 
             <div class="col-3 bg-info">
                 <div class="card-header bg-light">
-                    <b> <fmt:message key='index.exhibition.from'/>:</b> ${exh.startDate} <b><fmt:message
-                        key='index.exhibition.to'/>:</b> ${exh.endDate} Price = ${exh.price}</b>
+                    <fmt:message key='exhibition.from'/>: <b> ${exh.startDate} </b>
+                    <fmt:message key='exhibition.to'/>: <b> ${exh.endDate} </b>
+                    <fmt:message key='exhibition.price'/> <b> = ${exh.price}</b>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">${exh.theme}</h5>
                     <p class="card-text">${exh.details}</p>
                     <p> ${exh.startTime}-${exh.endTime}
-                        <b><fmt:message key='index.exhibition.place'/>:</b>
+                        <b><fmt:message key='exhibition.halls'/>:</b>
                         <c:forEach var="hall" items="${exh.getHalls()}">
                             ${hall.name}
                         </c:forEach>
@@ -43,8 +44,9 @@
                 </div>
                 <div class="row">
                     <c:if test="${sessionScope.user.role == null}">
-                            <button class="btn btn-primary" disabled>
-                               Registry for buying</button>
+                        <button class="btn btn-primary" disabled>
+                            <fmt:message key='exhibition.registryForBuying'/>:
+                        </button>
                     </c:if>
 
                     <c:if test="${sessionScope.user.role == 'user'}">
@@ -53,26 +55,41 @@
                             <input name="exhibition_id" type="hidden" value="${exh.id}">
 
                             <c:if test="${sessionScope.user.isTicketPresent(exh.id)}">
-                                <button class="btn btn-success" disabled >
-                                    Ticket bought</button>
+                                <button class="btn btn-success" disabled>
+                                    <fmt:message key='exhibition.alreadyBought'/>:
+                                </button>
                             </c:if>
 
                             <c:if test="${!sessionScope.user.isTicketPresent(exh.id)}">
                                 <button class="btn btn-primary" type="submit">
-                                    <fmt:message key='index.exhibition.buyTickets'/></button>
+                                    <fmt:message key='exhibition.buyTickets'/></button>
                             </c:if>
 
                         </form>
                     </c:if>
 
                     <c:if test="${sessionScope.user.role == 'admin'}">
-                        <form action="home" method="get">
+
+
+                        <form action="${pageContext.request.contextPath}/index-servlet" method="put">
                             <input name="command" type="hidden" value="cancelExhibition_command">
-                            <input name="canceledExhibitionId" type="hidden" value="${exhibition.id}">
-                            <button class="btn btn-primary" type="submit">
-                                <fmt:message key='index.exhibition.cancelExhibition'/></button>
+                            <input name="exhibition_id" type="hidden" value="${exh.id}">
+                            <button class="btn-success" type="button">
+                                    ${exh.amountOfTickets()} <fmt:message key='exhibition.amountOfTickets'/>:
+                            </button>
+                            <button class="btn btn-danger" type="submit" >
+                                <fmt:message key='exhibition.cancel'/>
+                            </button>
+                        </form>
+                        <form action="${pageContext.request.contextPath}/index-servlet" method="put">
+                            <input name="command" type="hidden" value="deleteExhibition_command">
+                            <input name="exhibition_id" type="hidden" value="${exh.id}">
+                            <button class="btn btn-danger" type="submit" >
+                                <fmt:message key='exhibition.delete'/>
+                            </button>
                         </form>
                     </c:if>
+
                 </div>
             </div>
 

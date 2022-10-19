@@ -39,6 +39,14 @@ public class Exhibition {
         return startDate;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+
     public Date getEndDate() {
         return endDate;
     }
@@ -58,6 +66,7 @@ public class Exhibition {
     public List<Hall> getHalls() {
         return new ExhibitionService().getHalls(id);
     }
+    public int amountOfTickets() {return new ExhibitionService().amountOfTickets(id);}
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

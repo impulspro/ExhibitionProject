@@ -21,6 +21,12 @@ public class IndexServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         logger.info("Initializing servlet");
+
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        commandManager(req, resp);
     }
 
     @Override
@@ -38,6 +44,7 @@ public class IndexServlet extends HttpServlet {
     }
 
     private void commandManager(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
         String page = "index.jsp";
         String commandName = req.getParameter("command");
         logger.info(commandName + " command");

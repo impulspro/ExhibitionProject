@@ -1,5 +1,7 @@
 package com.exhibit.dao;
 
+import java.util.Iterator;
+
 public class DaoException extends Exception {
 
     public DaoException() {

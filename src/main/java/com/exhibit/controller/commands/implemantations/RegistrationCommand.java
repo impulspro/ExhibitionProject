@@ -19,6 +19,7 @@ public class RegistrationCommand implements Command{
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
+        System.out.println(login + password);
         HttpSession session = req.getSession();
         try {
             UserService userService = new UserService();

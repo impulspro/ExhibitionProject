@@ -24,15 +24,21 @@ public class ExhibitionService {
         return  dao.findAll();
     }
 
-    public void setHalls(long exhibition_id, String[] halls_id) throws DaoException, DBException {
+    public void setHalls(long exhibition_id, String[] halls_id){
         dao.setHalls(exhibition_id, halls_id);
     }
 
+    public int amountOfTickets(long exhibition_id) {
+        return dao.amountOfTickets(exhibition_id);
+    }
     public List<Hall> getHalls(long id) {
         return dao.getHalls(id);
     }
 
     public Exhibition findById(long exhibition_id) {
         return  dao.findById(exhibition_id);
+    }
+    public void cancelExhibition(long exhibition_id){
+        dao.cancelExhibition(exhibition_id);
     }
 }

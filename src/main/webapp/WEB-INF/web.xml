@@ -25,8 +25,13 @@
         <param-name>log4jContextName</param-name>
         <param-value>appWithJndiSelector</param-value>
     </context-param>
-    <context-param>
-        <param-name>log4jConfiguration</param-name>
-        <param-value>file:///D:/conf/myLogging.xml</param-value>
-    </context-param>
+
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>com.exhibit.controller.filters.EncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>

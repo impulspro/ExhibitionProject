@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 import static com.exhibit.util.constants.ExhibitionConstants.*;
 
@@ -91,21 +90,20 @@ public class ExhibitionDao {
         return exhibitions;
     }
 
-    public void setHalls(long exhibition_id, String[] halls_id) throws DBException {
+    public void setHalls(long exhibition_id, String[] halls_id) {
         try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement prepSt = conn.prepareStatement(SET_HALLS_SQL)) {
-            prepSt.setLong(1, exhibition_id);
-            ResultSet rs = prepSt.executeQuery();
+             PreparedStatement ps = conn.prepareStatement(SET_HALLS_SQL);) {
+            ps.setLong(1, exhibition_id);
             for (String hall_id : halls_id) {
-                prepSt.setLong(2, Long.parseLong(hall_id));
-                prepSt.executeUpdate();
+                ps.setLong(2, Long.parseLong(hall_id));
+                ps.executeUpdate();
             }
         } catch (SQLException | DBException e) {
             throw new DBException("Cannot set halls for exhibition " + exhibition_id, e);
         }
     }
 
-    public void delete(long id) throws DBException {
+    public void delete(long id) {
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement prepSt = conn.prepareStatement(DELETE_EXHIBITION_BY_ID_SQL)) {
             prepSt.setLong(1, id);
@@ -133,5 +131,30 @@ public class ExhibitionDao {
             throw new DBException("Cannot find halls by exhibition id " + id, e);
         }
         return hallListById;
+    }
+    public int amountOfTickets(long exhibition_id){
+        try (Connection conn = ConnectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(FIND_AMOUNT_OF_TICKETS_BY_EXHIBITION_ID_SQL)) {
+            ps.setLong(1, exhibition_id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+               return rs.getInt(1);
+            } else {
+                return 0;
+            }
+        } catch (SQLException | DBException e) {
+            throw new DBException("Cannot find amount of tickets " + exhibition_id, e);
+        }
+    }
+
+    public void cancelExhibition(long exhibition_id) {
+        try (Connection conn = ConnectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(UPDATE_EXHIBITION_PRICE_BY_ID_SQL)) {
+            ps.setDouble(1, -1);
+            ps.setLong(2, exhibition_id);
+            ps.executeUpdate();
+        } catch (SQLException | DBException e) {
+            throw new DBException("Cannot update ticket price " + exhibition_id, e);
+        }
     }
 }

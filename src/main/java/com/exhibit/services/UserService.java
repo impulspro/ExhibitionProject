@@ -14,6 +14,7 @@ import java.util.Optional;
 public class UserService {
 
     static UserDao dao = new UserDao();
+
     public void add(String login, String password) throws DBException {
         dao.add(new User(login, password));
     }
@@ -22,9 +23,10 @@ public class UserService {
         return Optional.ofNullable(dao.findByLogin(login));
     }
 
-    public List<User> findAll(){
+    public List<User> findAll() {
         return dao.findAll();
     }
+
     public void add(User user) throws DBException {
         dao.add(user);
     }
@@ -33,7 +35,8 @@ public class UserService {
         return dao.buyTicket(user, exhibition_id);
     }
 
-    public List<Ticket> getUserTickets(User user){
+    public List<Ticket> getUserTickets(User user) {
         return dao.getUserTickets(user);
     }
 }
+   
