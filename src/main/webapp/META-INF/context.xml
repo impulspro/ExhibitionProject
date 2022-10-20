@@ -8,5 +8,5 @@
             username="root"
             password="root"
             driverClassName="com.mysql.cj.jdbc.Driver"
-            url="jdbc:mysql://localhost:3306/exhibition_db?serverTimezone=Europe/Minsk"/>
+            url="jdbc:mysql://localhost:3306/exhibition_db?"/>
 </Context>

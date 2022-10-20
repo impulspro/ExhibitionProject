@@ -36,7 +36,7 @@
                                         <div class="d-flex flex-row align-items-center mb-4">
 
                                             <div class="form-outline flex-fill mb-0">
-                                                <input type="text" name="login" id="form3Example1c"
+                                                <input type="text" name="login" required id="form3Example1c"
                                                        class="form-control"/>
                                                 <label class="form-label" for="form3Example1c"><fmt:message
                                                         key='registration.form.enterLogin'/></label>
@@ -45,7 +45,7 @@
                                         <div class="d-flex flex-row align-items-center mb-4">
 
                                             <div class="form-outline flex-fill mb-0">
-                                                <input type="password" name="password" id="form3Example1cc"
+                                                <input type="password" name="password"  required id="form3Example1cc"
                                                        class="form-control"/>
                                                 <label class="form-label" for="form3Example1cc"><fmt:message
                                                         key='registration.form.enterPassword'/></label>
@@ -81,7 +81,7 @@
         const password = document.regForm.password.value;
         const erPass = "<fmt:message key='registration.form.errorPassword'/>";
         const erLog = "<fmt:message key='registration.form.errorLogin'/>";
-        if (login==null || login=="" || login.length < 3 || login.length > 32){
+        if (login==null || login==="" || login.length < 3 || login.length > 32){
             alert(erLog);
             return false;
         }else if(password.length<6){
