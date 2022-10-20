@@ -44,15 +44,14 @@ public class IndexServlet extends HttpServlet {
     }
 
     private void commandManager(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-
-        String page = "index.jsp";
-        String commandName = req.getParameter("command");
-        logger.info(commandName + " command");
-        if (commandName == null) {
-            req.getRequestDispatcher(page).forward(req, resp);
-        } else {
+        try {
+            String commandName = req.getParameter("command");
+            logger.info(commandName + " command");
             Command command = CommandContainer.getCommand(commandName);
             command.execute(req, resp);
+        } catch (Exception e){
+            req.getSession().setAttribute("error_message", e);
+            resp.sendRedirect("index.jsp");
         }
     }
 }

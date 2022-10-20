@@ -32,7 +32,7 @@
                                     <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"><fmt:message
                                             key='registration.form.header'/></p>
 
-                                    <form action="${pageContext.request.contextPath}/index-servlet" method="post">
+                                    <form name = "regForm" action="${pageContext.request.contextPath}/index-servlet" method="post"  onsubmit="return validator()"  >
                                         <div class="d-flex flex-row align-items-center mb-4">
 
                                             <div class="form-outline flex-fill mb-0">
@@ -75,4 +75,19 @@
 </main>
 <%@include file="../template/message.jsp" %>
 </body>
+<script>
+    function validator(){
+        const login = document.regForm.login.value;
+        const password = document.regForm.password.value;
+        const erPass = "<fmt:message key='registration.form.errorPassword'/>";
+        const erLog = "<fmt:message key='registration.form.errorLogin'/>";
+        if (login==null || login=="" || login.length < 3 || login.length > 32){
+            alert(erLog);
+            return false;
+        }else if(password.length<6){
+            alert(erPass);
+            return false;
+        }
+    }
+</script>
 </html>

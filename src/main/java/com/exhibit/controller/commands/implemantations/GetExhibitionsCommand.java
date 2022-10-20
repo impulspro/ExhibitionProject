@@ -90,7 +90,6 @@ public class GetExhibitionsCommand implements Command {
         session.setAttribute("exhList", sublist);
         session.setAttribute("noOfPages", noOfPages);
         session.setAttribute("currentPage", currentPage);
-
         resp.sendRedirect(redirect);
     }
 }
