@@ -5,11 +5,18 @@
             <input name="command" type="hidden" value="home_command">
             <button class="btn btn-info"><i class="fa fa-home"></i> <fmt:message key='header.home'/></button>
         </form>
-        <form action="${pageContext.request.contextPath}/index-servlet" method="get">
-            <input name="sortType" type="hidden" value="sort">
-            <input name="command" type="hidden" value="getExhibitions_command">
-            <button class="btn btn-success" type="submit"><i class="fa fa-folder"></i> <fmt:message key='header.showExhibitions'/></button>
-        </form>
+
+        <div class="row">
+
+            <form action="${pageContext.request.contextPath}/index-servlet" method="get">
+                <input name="sortType" type="hidden" value="sort">
+                <input name="command" type="hidden" value="getExhibitions_command">
+                <button class="btn btn-success" type="submit"><i class="fa fa-folder"></i> <fmt:message key='header.showExhibitions'/></button>
+            </form>
+        </div>
+
+
+
         <form class="nav-link" action="${pageContext.request.contextPath}/index-servlet" method="get">
             <input name="command" type="hidden" value="getHalls_command">
             <button type="submit" class="btn btn-warning"><fmt:message key='header.showHalls'/></button>

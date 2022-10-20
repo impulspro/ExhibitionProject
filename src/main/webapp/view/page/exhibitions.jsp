@@ -11,7 +11,6 @@
     <title>Exhibition</title>
 
     <%@include file="../template/styles.jsp" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}static/css/index.css">
 </head>
 <body style="background-image: url('../img/back2.jpg');">
 
@@ -110,6 +109,16 @@
 
         </c:forEach>
     </c:if>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <c:forEach var="i" begin="1" end="${noOfPages}">
+
+                <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/index-servlet?command=getExhibitions_command&currentPage=${i}">${i}</a></li>
+            </c:forEach>
+        </ul>
+    </nav>
+
 </main>
 
 <%@include file="../template/message.jsp" %>

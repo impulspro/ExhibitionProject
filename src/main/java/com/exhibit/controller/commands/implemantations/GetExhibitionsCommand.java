@@ -25,10 +25,23 @@ public class GetExhibitionsCommand implements Command {
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         logger.info("GetExhibitions Command start ");
 
-        String page = "view/page/exhibitions.jsp";
+        int currentPage = 1;
+        int recordsPerPage = 3;
+        if(req.getParameter("currentPage") != null)
+            currentPage = Integer.parseInt(req.getParameter("currentPage"));
+
+
+        String redirect = "view/page/exhibitions.jsp";
         HttpSession session = req.getSession();
-        String sortType = req.getParameter("sortType");
-        System.out.println(sortType);
+
+        String sortType = null;
+        if (req.getParameter("sortType") != null){
+            sortType = req.getParameter("sortType");
+            session.setAttribute("sortType", sortType);
+        } else {
+            sortType = (String) session.getAttribute("sortType");
+        }
+
         try {
             exhList = new ExhibitionService().findAll();
 
@@ -43,7 +56,7 @@ public class GetExhibitionsCommand implements Command {
                             && (e.getEndDate().after(exhDate) || e.getEndDate().equals(exhDate))).collect(Collectors.toList());
                     exhList = sortList;
                     if (sortList.isEmpty()){
-                        page = "index.jsp";
+                        redirect = "index.jsp";
                         req.getSession().setAttribute("error_message", "no exhibition on this date");
                     }
                 }
@@ -61,16 +74,23 @@ public class GetExhibitionsCommand implements Command {
                         = (h1, h2) -> h1.getTheme().compareTo(h2.getTheme());
                 exhList.sort(comparator);
             }
-            session.setAttribute("exhList", exhList);
             logger.info("GetExhibitions Command successfully");
 
         } catch (DaoException e) {
             logger.info("GetExhibitions Command failed");
-            page = "index.jsp";
+            redirect = "index.jsp";
             req.getSession().setAttribute("error_message", "problem with showing exhibitions");
         }
 
+        int noOfRecords = exhList.size();
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        int lastIndex = currentPage * recordsPerPage < noOfRecords ? currentPage * recordsPerPage : noOfRecords;
+        System.out.println(lastIndex);
+        List<Exhibition> sublist = exhList.subList((currentPage - 1) * recordsPerPage, lastIndex);
+        session.setAttribute("exhList", sublist);
+        session.setAttribute("noOfPages", noOfPages);
+        session.setAttribute("currentPage", currentPage);
 
-        resp.sendRedirect(page);
+        resp.sendRedirect(redirect);
     }
 }
