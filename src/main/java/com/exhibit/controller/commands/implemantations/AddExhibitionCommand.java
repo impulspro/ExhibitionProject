@@ -20,7 +20,7 @@ public class AddExhibitionCommand implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String page = "view/template/addExhibition.jsp";
+        String page = "view/page/adminPanel.jsp";
         String theme = req.getParameter("theme");
         String details = req.getParameter("details");
         Date startDate = Date.valueOf(req.getParameter("startDate"));

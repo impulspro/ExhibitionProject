@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="customTag" uri="/WEB-INF/custom.tld" %>
 <%@ page isELIgnored="false" %>
 
 <fmt:setLocale value="${param.lang}"/>
@@ -19,10 +20,9 @@
 <%@include file="view/template/header.jsp" %>
 
 <main>
-
     <div class="container mt-3">
         <div class="d-flex justify-content-md-center bg-warning mb-5">
-             <h1><fmt:message key="index.welcome"/></h1>
+             <h1>  <fmt:message key="index.welcome"/><customTag:Hello message = "!" /></h1>
         </div>
         <div class="d-flex justify-content-md-center">
             <div class="row align-content-center">
