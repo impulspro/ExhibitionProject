@@ -15,7 +15,7 @@ public class SessionLocaleFilter implements Filter {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
 
     }
 

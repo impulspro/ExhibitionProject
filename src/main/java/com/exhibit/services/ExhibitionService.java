@@ -6,6 +6,7 @@ import com.exhibit.model.Exhibition;
 import com.exhibit.model.Hall;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public class ExhibitionService {
@@ -15,7 +16,7 @@ public class ExhibitionService {
         dao.add(exhibition);
     }
 
-    public Exhibition findByTheme(String theme) throws DaoException {
+    public Optional<Exhibition> findByTheme(String theme) throws DaoException {
         return  dao.findByTheme(theme);
     }
     public List<Exhibition> findAll() throws DaoException {
@@ -33,7 +34,7 @@ public class ExhibitionService {
         return dao.getHalls(id);
     }
 
-    public Exhibition findById(long exhibition_id) {
+    public Optional<Exhibition> findById(long exhibition_id) {
         return  dao.findById(exhibition_id);
     }
     public void cancelExhibition(long exhibition_id){

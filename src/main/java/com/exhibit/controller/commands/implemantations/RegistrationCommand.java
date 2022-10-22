@@ -14,8 +14,9 @@ import java.io.IOException;
 
 import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 
-public class RegistrationCommand implements Command{
+public class RegistrationCommand implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
+
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String login = req.getParameter("login");
@@ -27,8 +28,8 @@ public class RegistrationCommand implements Command{
         try {
             UserService userService = new UserService();
             User user = new User(login, password);
-            if (userService.findByLogin(login).isPresent()){
-                logger.info("Registration command execute failed for login because of existing user in base = " + login );
+            if (userService.findByLogin(login).isPresent()) {
+                logger.info("Registration command execute failed for login because of existing user in base = " + login);
                 redirectPage = "view/page/registration.jsp";
                 req.getSession().setAttribute("error_message", "user already exist");
             } else {
@@ -39,7 +40,7 @@ public class RegistrationCommand implements Command{
             }
 
         } catch (Exception e) {
-            logger.info("Registration command execute failed for login = " + login );
+            logger.info("Registration command execute failed for login = " + login);
             req.getSession().setAttribute("error_message", "registration error");
         }
         resp.sendRedirect(redirectPage);

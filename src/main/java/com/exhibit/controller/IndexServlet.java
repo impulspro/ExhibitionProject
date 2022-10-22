@@ -18,6 +18,7 @@ import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 @WebServlet(name = "indexServlet", value = {"/index-servlet"})
 public class IndexServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
+
     public void init() throws ServletException {
         super.init();
         logger.info("Initializing servlet");
@@ -25,16 +26,16 @@ public class IndexServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         commandManager(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         commandManager(req, resp);
     }
 
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         commandManager(req, resp);
     }
 
@@ -43,13 +44,13 @@ public class IndexServlet extends HttpServlet {
         logger.info("Destroying servlet");
     }
 
-    private void commandManager(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    private void commandManager(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             String commandName = req.getParameter("command");
             logger.info(commandName + " command");
             Command command = CommandContainer.getCommand(commandName);
             command.execute(req, resp);
-        } catch (Exception e){
+        } catch (Exception e) {
             req.getSession().setAttribute("error_message", e);
             resp.sendRedirect("index.jsp");
         }

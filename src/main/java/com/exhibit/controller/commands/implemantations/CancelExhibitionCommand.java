@@ -14,6 +14,7 @@ import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 
 public class CancelExhibitionCommand implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
+
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
@@ -23,7 +24,7 @@ public class CancelExhibitionCommand implements Command {
             service.cancelExhibition(Long.parseLong(exhibition_id));
             logger.info("CancelExhibition Command successfully");
             session.setAttribute("user_message", "you canceled exhibition with id =  " + exhibition_id);
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.info("CancelExhibition Command failed");
             session.setAttribute("error_message", "cannot cancel exhibition");
         }

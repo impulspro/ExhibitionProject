@@ -71,7 +71,6 @@ public class Exhibition {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         Exhibition that = (Exhibition) o;
         return Double.compare(that.price, price) == 0 && Objects.equals(theme, that.theme) && Objects.equals(details, that.details) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(startTime, that.startTime) && Objects.equals(endTime, that.endTime);
     }

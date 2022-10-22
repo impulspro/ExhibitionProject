@@ -14,6 +14,7 @@ import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 
 public class DeleteExhibitionCommand implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
+
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
@@ -23,7 +24,7 @@ public class DeleteExhibitionCommand implements Command {
             service.deleteExhibition(Long.parseLong(exhibition_id));
             logger.info("DeleteExhibition Command successfully");
             session.setAttribute("user_message", "you deleted exhibition with id =  " + exhibition_id);
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.info("DeleteExhibition Command failed");
             session.setAttribute("error_message", "cannot delete exhibition");
         }

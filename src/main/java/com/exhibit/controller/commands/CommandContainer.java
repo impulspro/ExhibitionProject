@@ -19,14 +19,6 @@ public class CommandContainer {
         commands.put("addExhibition_command", new AddExhibitionCommand());
         commands.put("cancelExhibition_command", new CancelExhibitionCommand());
         commands.put("deleteExhibition_command", new DeleteExhibitionCommand());
-       /* commands.put("error", new ExceptionCommand());
-        commands.put("addExhibition", new AddExhibitionCommand());
-        commands.put("buy", new BuyTicketCommand());
-        commands.put("statistics", new StatisticsCommand());
-        commands.put("cancel", new CancelExhibitionCommand());
-        commands.put("plan", new PlanExhibitionCommand());
-        commands.put("filter", new FilterByDateCommand());
-*/
     }
 
     private CommandContainer() {

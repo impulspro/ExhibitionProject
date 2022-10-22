@@ -7,11 +7,10 @@ import java.security.NoSuchAlgorithmException;
 
 //MD5 Hashing Technique
 public class PasswordHashing {
-    public static String toMD5(String crypt){
+    public static String toMD5(String crypt) {
         /* Plain-text password initialization. */
-        String encryptedpassword = null;
-        try
-        {
+        String encryptedpassword;
+        try {
             /* MessageDigest instance for MD5. */
             MessageDigest m = MessageDigest.getInstance("MD5");
 
@@ -23,17 +22,14 @@ public class PasswordHashing {
 
             /* The bytes array has bytes in decimal form. Converting it into hexadecimal format. */
             StringBuilder s = new StringBuilder();
-            for(int i=0; i< bytes.length ;i++)
-            {
-                s.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            for (byte aByte : bytes) {
+                s.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
             }
 
             /* Complete hashed password in hexadecimal format */
             encryptedpassword = s.toString();
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-           throw new DaoException("Cannot convert password", e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new DaoException("Cannot convert password", e);
         }
         return encryptedpassword;
     }

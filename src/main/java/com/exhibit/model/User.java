@@ -77,7 +77,6 @@ public class User implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         User user = (User) o;
         return Objects.equals(login, user.login) && Objects.equals(password, user.password);
     }

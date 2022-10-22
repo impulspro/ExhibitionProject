@@ -1,9 +1,5 @@
 package com.exhibit.dao.mappers;
 
-import com.exhibit.model.Ticket;
-
-import java.sql.SQLException;
-
 public final class MapperFactory {
     private static final MapperFactory instance = new MapperFactory();
 
@@ -22,6 +18,7 @@ public final class MapperFactory {
     public HallMapper getHallMapper() {
         return new HallMapper();
     }
+
     public TicketMapper getTicketMapper() {
         return new TicketMapper();
     }

@@ -16,7 +16,7 @@ public class UserService {
     }
 
     public Optional<User> findByLogin(String login) {
-        return Optional.ofNullable(dao.findByLogin(login));
+        return dao.findByLogin(login);
     }
 
     public List<User> findAll() {

@@ -5,6 +5,7 @@ import com.exhibit.dao.mappers.MapperFactory;
 import com.exhibit.exeptions.DaoException;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Hall;
+import com.exhibit.services.ExhibitionService;
 import com.exhibit.services.HallService;
 
 import java.sql.Connection;
@@ -13,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.exhibit.util.constants.ExhibitionConstants.*;
@@ -33,40 +35,42 @@ public class ExhibitionDao {
             prepSt.setTime(i++, exhibition.getEndTime());
             prepSt.setDouble(i++, exhibition.getPrice());
             prepSt.executeUpdate();
+            ExhibitionService service = new ExhibitionService();
+            exhibition.setId(service.findByTheme(exhibition.getTheme()).get().getId());
         } catch (SQLException e) {
             throw new DaoException("Invalid exhibition input", e);
         }
     }
 
-    public Exhibition findById(long id) throws DaoException {
+    public Optional<Exhibition> findById(long id) throws DaoException {
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement prepSt = conn.prepareStatement(FIND_EXHIBITION_BY_THEME_ID)) {
             prepSt.setLong(1, id);
             ResultSet rs = prepSt.executeQuery();
             if (rs.next()) {
-                return (Exhibition) mapper.extractFromResultSet(rs);
+                return Optional.of((Exhibition) mapper.extractFromResultSet(rs));
             }
         } catch (SQLException | DaoException e) {
             throw new DaoException("Cannot find exhibition by id " + id, e);
         }
-        return null;
+        return Optional.empty();
     }
 
-    public Exhibition findByTheme(String theme){
+    public Optional<Exhibition> findByTheme(String theme) {
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement prepSt = conn.prepareStatement(FIND_EXHIBITION_BY_THEME_SQL)) {
             prepSt.setString(1, theme);
             ResultSet rs = prepSt.executeQuery();
             if (rs.next()) {
-                return (Exhibition) mapper.extractFromResultSet(rs);
+                return Optional.of((Exhibition) mapper.extractFromResultSet(rs));
             }
         } catch (SQLException e) {
             throw new DaoException("Cannot find exhibition by theme " + theme, e);
         }
-        return null;
+        return Optional.empty();
     }
 
-    public List<Exhibition> findAll(){
+    public List<Exhibition> findAll() {
         List<Exhibition> exhibitions = new CopyOnWriteArrayList<>();
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement psExs = conn.prepareStatement(FIND_ALL_EXHIBITIONS_SQL);
@@ -117,18 +121,19 @@ public class ExhibitionDao {
                         .findFirst().get();
                 hallListById.add(hall);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DaoException("Cannot find halls by exhibition id " + id, e);
         }
         return hallListById;
     }
-    public int amountOfTickets(long exhibition_id){
+
+    public int amountOfTickets(long exhibition_id) {
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement ps = conn.prepareStatement(FIND_AMOUNT_OF_TICKETS_BY_EXHIBITION_ID_SQL)) {
             ps.setLong(1, exhibition_id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-               return rs.getInt(1);
+                return rs.getInt(1);
             } else {
                 return 0;
             }
@@ -143,11 +148,12 @@ public class ExhibitionDao {
             ps.setDouble(1, -1.0);
             ps.setLong(2, exhibition_id);
             ps.executeUpdate();
-        } catch (SQLException  e) {
+        } catch (SQLException e) {
             throw new DaoException("Cannot update ticket price " + exhibition_id, e);
         }
     }
-    public void deleteExhibition(long exhibition_id){
+
+    public void deleteExhibition(long exhibition_id) {
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement prepSt = conn.prepareStatement(DELETE_EXHIBITION_BY_ID_SQL)) {
             prepSt.setLong(1, exhibition_id);
