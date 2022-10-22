@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.UtilConstants.INFO_LOGGER;
 
 public class SecurityFilter implements Filter {
 

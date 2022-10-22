@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.UtilConstants.INFO_LOGGER;
 
 public class LogoutCommand implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);

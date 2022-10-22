@@ -1,7 +1,7 @@
 package com.exhibit.controller.commands.implemantations;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.PasswordHashing;
+import com.exhibit.util.PasswordHashing;
 import com.exhibit.model.User;
 import com.exhibit.services.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.UtilConstants.INFO_LOGGER;
 
 public class LoginCommand implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
@@ -25,8 +25,12 @@ public class LoginCommand implements Command {
         String page = "index.jsp";
 
         try {
-            Optional<User> user = new UserService().findByLogin(login);
-            if (new UserService().findByLogin(login).get().getPassword().equals(password)) {
+            UserService userService = new UserService();
+            Optional<User> user;
+            user = userService.findByLogin(login);
+            if (userService.findByLogin(login).isPresent()
+                    && userService.findByLogin(login).get().getPassword().equals(password)
+                    && user.isPresent()){
                 req.getSession().setAttribute("user", user.get());
                 logger.info("Login command execute successful for login = " + login);
             }

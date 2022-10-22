@@ -48,8 +48,12 @@ class ExhibitionServiceTest {
 
 
         service.addExhibition(expectedExh);
-        Exhibition actualExh = service.findById(expectedExh.getId()).get();
-        assertEquals(expectedExh, actualExh);
+        if (service.findById(expectedExh.getId()).isPresent()) {
+            Exhibition actualExh = service.findById(expectedExh.getId()).get();
+            assertEquals(expectedExh, actualExh);
+        } else {
+            fail();
+        }
 
         String[] halls = {"1", "3", "5"};
         service.setHalls(expectedExh.getId(), halls);
@@ -62,8 +66,9 @@ class ExhibitionServiceTest {
 
     @Test
     void numberOfExhibitions() {
-        service.findAll();
-        Exhibition exhibition = service.findById(1).get();
+        List<Exhibition> exhibitionList = service.findAll();
+        Exhibition exhibition = exhibitionList.get(1);
+
         long expected = service.findAll().size() + 2;
         service.addExhibition(exhibition);
         service.addExhibition(exhibition);
@@ -111,8 +116,13 @@ class ExhibitionServiceTest {
         service.addExhibition(expectedExh);
         service.cancelExhibition(expectedExh.getId());
 
-        double actualPrice = service.findById(expectedExh.getId()).get().getPrice();
-        assertEquals(-1D, actualPrice);
+        if (service.findById(expectedExh.getId()).isPresent()) {
+            double actualPrice = service.findById(expectedExh.getId()).get().getPrice();
+            assertEquals(-1D, actualPrice);
+        } else {
+            fail();
+        }
+
     }
 
     @Test
@@ -136,9 +146,14 @@ class ExhibitionServiceTest {
 
         service.addExhibition(expectedExh);
         assertTrue(service.findById(expectedExh.getId()).isPresent());
+        String[] halls = {"1", "3", "5"};
+        service.setHalls(expectedExh.getId(), halls);
 
         service.deleteExhibition(expectedExh.getId());
         assertFalse(service.findById(expectedExh.getId()).isPresent());
+
+        List<Hall> hallListNull = service.getHalls(expectedExh.getId());
+        assertTrue(hallListNull.isEmpty());
     }
 
     String randomString() {

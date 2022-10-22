@@ -1,4 +1,4 @@
-package com.exhibit.util.constants;
+package com.exhibit.util;
 
 public class UserConstants {
     public static final String AUTHORIZED_USER = "user";

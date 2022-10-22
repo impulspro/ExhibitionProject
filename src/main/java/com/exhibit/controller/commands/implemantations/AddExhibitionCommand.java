@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 
-import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.UtilConstants.INFO_LOGGER;
 
 public class AddExhibitionCommand implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);

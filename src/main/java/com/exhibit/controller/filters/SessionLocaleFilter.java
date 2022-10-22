@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.UtilConstants.INFO_LOGGER;
 
 @WebFilter("/*")
 public class SessionLocaleFilter implements Filter {

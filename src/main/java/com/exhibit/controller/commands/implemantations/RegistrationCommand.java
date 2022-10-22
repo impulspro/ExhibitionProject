@@ -1,7 +1,7 @@
 package com.exhibit.controller.commands.implemantations;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.PasswordHashing;
+import com.exhibit.util.PasswordHashing;
 import com.exhibit.model.User;
 import com.exhibit.services.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.UtilConstants.INFO_LOGGER;
 
 public class RegistrationCommand implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);

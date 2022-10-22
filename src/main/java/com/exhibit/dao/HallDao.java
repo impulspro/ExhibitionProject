@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.exhibit.util.constants.ExhibitionConstants.FIND_ALL_HALLS_SQL;
+import static com.exhibit.util.ExhibitionConstants.FIND_ALL_HALLS_SQL;
 
 public class HallDao {
     public List<Hall> findAll() {
@@ -20,9 +20,9 @@ public class HallDao {
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement prepSt = conn.prepareStatement(FIND_ALL_HALLS_SQL)) {
             ResultSet rs = prepSt.executeQuery();
-            Mapper mapperHall = MapperFactory.getInstance().getHallMapper();
+            Mapper<Hall> mapperHall = MapperFactory.getInstance().getHallMapper();
             while (rs.next()) {
-                halls.add((Hall) mapperHall.extractFromResultSet(rs));
+                halls.add(mapperHall.extractFromResultSet(rs));
             }
         } catch (SQLException e) {
             throw new DaoException("Cannot find all halls", e);

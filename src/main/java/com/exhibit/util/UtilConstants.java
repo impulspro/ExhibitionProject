@@ -1,4 +1,4 @@
-package com.exhibit.util.constants;
+package com.exhibit.util;
 
 public class UtilConstants {
     public static final String DEBUG_LOGGER = "debug";

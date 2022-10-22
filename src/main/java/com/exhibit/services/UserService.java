@@ -11,10 +11,6 @@ public class UserService {
 
     static UserDao dao = new UserDao();
 
-    public void add(String login, String password) {
-        dao.add(new User(login, password));
-    }
-
     public Optional<User> findByLogin(String login) {
         return dao.findByLogin(login);
     }

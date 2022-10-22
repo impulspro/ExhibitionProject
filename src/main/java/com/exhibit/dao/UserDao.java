@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.exhibit.util.constants.UserConstants.*;
+import static com.exhibit.util.UserConstants.*;
 
 
 public class UserDao {
     static Mapper<User> mapper = MapperFactory.getInstance().getUserMapper();
 
-    public static Optional<User> findByLogin(String login) {
+    public Optional<User> findByLogin(String login) {
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement ps = conn.prepareStatement(FIND_USER_BY_LOGIN)) {
             ps.setString(1, login);
@@ -36,7 +36,7 @@ public class UserDao {
         return Optional.empty();
     }
 
-    public static void add(User user) {
+    public void add(User user) {
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement ps = conn.prepareStatement(ADD_USER_SQL)) {
             int i = 1;
@@ -76,7 +76,14 @@ public class UserDao {
     }
 
     public String buyTicket(User user, long exhibition_id) {
-        Exhibition exhibition = new ExhibitionService().findById(exhibition_id).get();
+        ExhibitionService exhibitionService = new ExhibitionService();
+        Exhibition exhibition;
+        if (exhibitionService.findById(exhibition_id).isPresent()) {
+            exhibition = exhibitionService.findById(exhibition_id).get();
+        } else {
+            return "No such exhibition found";
+        }
+
         List<Ticket> tickets = getUserTickets(user);
         if (tickets != null && !tickets.isEmpty()) {
             Optional<Ticket> ticket = tickets.stream().filter(t -> t.getExhibition_id() == exhibition_id).findFirst();
@@ -140,10 +147,13 @@ public class UserDao {
 
         Optional<User> user = findByLogin(login);
 
-        List<Ticket> tickets = getUserTickets(user.get());
+        if (user.isPresent()) {
+            List<Ticket> tickets = getUserTickets(user.get());
+            Optional<Ticket> ticket = tickets.stream().filter(t -> t.getExhibition_id() == exhibition_id).findFirst();
+            return ticket.isPresent();
+        } else {
+            return false;
+        }
 
-        Optional<Ticket> ticket = tickets.stream().filter(t -> t.getExhibition_id() == exhibition_id).findFirst();
-
-        return ticket.isPresent();
     }
 }

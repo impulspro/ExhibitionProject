@@ -1,9 +1,7 @@
 package com.exhibit;
 
-import com.exhibit.dao.PasswordHashing;
+import com.exhibit.util.PasswordHashing;
 import com.exhibit.exeptions.DaoException;
-import com.exhibit.model.Exhibition;
-import com.exhibit.services.ExhibitionService;
 
 public class Main {
     public static void main(String[] args) throws DaoException {

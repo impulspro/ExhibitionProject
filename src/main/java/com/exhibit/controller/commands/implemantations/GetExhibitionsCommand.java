@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.UtilConstants.INFO_LOGGER;
 
 public class GetExhibitionsCommand implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);

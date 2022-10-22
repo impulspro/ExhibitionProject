@@ -1,4 +1,4 @@
-package com.exhibit.dao;
+package com.exhibit.util;
 
 import com.exhibit.exeptions.DaoException;
 
