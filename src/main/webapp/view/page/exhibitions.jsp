@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
@@ -21,14 +21,14 @@
     <div class="container mt-3">
         <c:if test="${sessionScope.exhList != null}">
             <c:set var="i" value="1"/>
-            <c:forEach var="exh" items="${exhList}">
+            <c:forEach var="exh" items="${sessionScope.exhList}">
                 <div class="d-flex justify-content-md-center">
 
                     <div class="col-6 card align-content-center text-center bg-info">
                         <div class="card-header bg-light">
                             <fmt:message key='exhibition.from'/>: <b> ${exh.startDate} </b>
                             <fmt:message key='exhibition.to'/>: <b> ${exh.endDate} </b>
-                            <fmt:message key='exhibition.price'/> <b> = ${exh.price}</b>
+                            <fmt:message key='exhibition.price'/> <b> = ${exh.price}$</b>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">${exh.theme}</h5>
@@ -77,7 +77,7 @@
 
                                     <c:if test="${sessionScope.user.role == 'admin'}">
                                         <form action="${pageContext.request.contextPath}/index-servlet"
-                                              method="put">
+                                              method="post">
                                             <input name="command" type="hidden" value="cancelExhibition_command">
                                             <input name="exhibition_id" type="hidden" value="${exh.id}">
 
@@ -98,7 +98,7 @@
 
                                         </form>
                                         <form action="${pageContext.request.contextPath}/index-servlet"
-                                              method="put">
+                                              method="post">
                                             <input name="command" type="hidden" value="deleteExhibition_command">
                                             <input name="exhibition_id" type="hidden" value="${exh.id}">
                                             <button class="btn btn-danger" type="submit">
@@ -120,7 +120,7 @@
         <div class="d-flex justify-content-md-center">
             <nav class="align-content-center align-items-center">
                 <ul class="pagination">
-                    <c:forEach var="i" begin="1" end="${noOfPages}">
+                    <c:forEach var="i" begin="1" end="${sessionScope.noOfPages}">
 
                         <li class="page-item"><a class="page-link"
                                                  href="${pageContext.request.contextPath}/index-servlet?command=getExhibitions_command&currentPage=${i}">${i}</a>

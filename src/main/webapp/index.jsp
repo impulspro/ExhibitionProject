@@ -51,7 +51,7 @@
                         <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet" method="get">
                             <input name="command" type="hidden" value="getExhibitions_command">
                             <input name="sortType" type="hidden" value="sortByDate">
-                            <input type="date" name="exhDate" id="exhDate">
+                            <label for="exhDate"></label><input type="date" name="exhDate" id="exhDate">
                             <button class="btn btn-dark" type="submit"><fmt:message
                                     key='index.exhibition.byDate'/></button>
                         </form>
@@ -61,7 +61,7 @@
                             <input name="sortType" type="hidden" value="sortByHall">
                             <input name="command" type="hidden" value="getExhibitions_command">
                             <div class="form-group">
-                                <select name="hall_id" class="form-control" id="hallId" required>
+                                <label for="hallId"></label><select name="hall_id" class="form-control" id="hallId" required>
                                     <c:forEach items="${hallList}" var="hall">
                                         <option value="${hall.id}">${hall.name}</option>
                                         <br>

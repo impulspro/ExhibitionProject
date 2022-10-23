@@ -28,16 +28,18 @@ public class LoginCommand implements Command {
             UserService userService = new UserService();
             Optional<User> user;
             user = userService.findByLogin(login);
-            if (userService.findByLogin(login).isPresent()
-                    && userService.findByLogin(login).get().getPassword().equals(password)
-                    && user.isPresent()){
-                req.getSession().setAttribute("user", user.get());
-                logger.info("Login command execute successful for login = " + login);
+            if (user.isPresent()){
+                if (user.get().getPassword().equals(password)){
+                    req.getSession().setAttribute("user", user.get());
+                    logger.info("Login command execute successful for login = " + login);
+                }
+            } else {
+                req.getSession().setAttribute("error_message", "login/password dont match with db");
             }
             page = req.getHeader("Referer");
         } catch (Exception e) {
             logger.info("Login command execute failed for login = " + login);
-            req.getSession().setAttribute("error_message", "login/password dont match with db");
+            req.getSession().setAttribute("error_message", "problems in LoginCommand");
         }
         resp.sendRedirect(page);
     }

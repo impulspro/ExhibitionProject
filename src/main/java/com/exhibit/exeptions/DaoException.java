@@ -1,13 +1,6 @@
 package com.exhibit.exeptions;
 
-import java.util.Iterator;
-
 public class DaoException extends RuntimeException {
-
-    public DaoException() {
-        super();
-    }
-
     public DaoException(String message) {
         super(message);
     }
@@ -16,7 +9,4 @@ public class DaoException extends RuntimeException {
         super(message, cause);
     }
 
-    public DaoException(Throwable cause) {
-        super(cause);
-    }
 }
