@@ -7,14 +7,12 @@
         </form>
 
         <div class="row">
-
             <form action="${pageContext.request.contextPath}/index-servlet" method="get">
                 <input name="sortType" type="hidden" value="sort">
                 <input name="command" type="hidden" value="getExhibitions_command">
                 <button class="btn btn-success" type="submit"><i class="fa fa-folder"></i> <fmt:message key='header.showExhibitions'/></button>
             </form>
         </div>
-
 
 
         <form class="nav-link" action="${pageContext.request.contextPath}/index-servlet" method="get">
@@ -32,8 +30,12 @@
                     <c:when test="${sessionScope.user == null}">
                         <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet" method="post">
                             <input name="command" type="hidden" value="login_command">
-                            <input type="text" placeholder="<fmt:message key='header.user.loginLabel'/>" name="login">
-                            <input type="password" placeholder="<fmt:message key='header.user.passwordLabel'/>" name="password">
+                            <label>
+                                <input type="text" placeholder="<fmt:message key='header.user.loginLabel'/>" name="login">
+                            </label>
+                            <label>
+                                <input type="password" placeholder="<fmt:message key='header.user.passwordLabel'/>" name="password">
+                            </label>
                             <button class="btn-success" type="submit"> <fmt:message key='header.user.logIn'/></button>
                         </form>
                     </c:when>
@@ -46,6 +48,13 @@
                                 <button class="btn-info" disabled>${sessionScope.user.money}$</button>
                             </c:if>
                         </form>
+
+                        <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet" method="get">
+                            <input name="command" type="hidden" value="printPdf_command">
+                            <button class="btn-light" type="submit"><fmt:message key='header.printPdf'/></button>
+                        </form>
+
+
                     </c:otherwise>
                 </c:choose>
             </div>

@@ -22,6 +22,7 @@ public class CommandContainer {
         commands.put("searchUser_command", new SearchUserCommand());
         commands.put("listOfAllUsers_command", new ListOfAllUsersCommand());
         commands.put("deleteUser_command", new DeleteUserCommand());
+        commands.put("printPdf_command", new PrintPdfCommand());
     }
 
     private CommandContainer() {

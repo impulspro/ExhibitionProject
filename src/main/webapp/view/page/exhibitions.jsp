@@ -45,7 +45,7 @@
                                 <div class="row">
 
                                     <c:if test="${sessionScope.user.role == null}">
-                                        <button class="btn btn-primary" disabled>
+                                        <button class="btn btn-primary" disabled type="button">
                                             <fmt:message key='exhibition.registryForBuying'/>:
                                         </button>
                                     </c:if>
@@ -57,7 +57,7 @@
                                             <input name="exhibition_id" type="hidden" value="${exh.id}">
 
                                             <c:if test="${sessionScope.user.isTicketPresent(exh.id)}">
-                                                <button class="btn btn-success" disabled>
+                                                <button class="btn btn-success" type="button" disabled >
                                                     <fmt:message key='exhibition.alreadyBought'/>:
                                                 </button>
                                             </c:if>
@@ -69,7 +69,7 @@
                                                 </c:if>
                                             </c:if>
                                             <c:if test="${exh.price == '-1'}">
-                                                <button class="btn btn-dark disabled">
+                                                <button class="btn btn-dark" disabled type="button">
                                                     <fmt:message key='exhibition.alreadyCanceled'/></button>
                                             </c:if>
                                         </form>
@@ -92,7 +92,7 @@
                                                 </button>
                                             </c:if>
                                             <c:if test="${exh.price == '-1'}">
-                                                <button class="btn btn-dark disabled">
+                                                <button class="btn btn-dark disabled" disabled type="button">
                                                     <fmt:message key='exhibition.alreadyCanceled'/></button>
                                             </c:if>
 
