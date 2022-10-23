@@ -23,6 +23,10 @@ public class UserService {
         dao.add(user);
     }
 
+    public void delete(User user) {
+        dao.delete(user);
+    }
+
     public String buyTicket(User user, long exhibition_id) {
         return dao.buyTicket(user, exhibition_id);
     }

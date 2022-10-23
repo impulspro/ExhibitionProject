@@ -19,6 +19,9 @@ public class CommandContainer {
         commands.put("addExhibition_command", new AddExhibitionCommand());
         commands.put("cancelExhibition_command", new CancelExhibitionCommand());
         commands.put("deleteExhibition_command", new DeleteExhibitionCommand());
+        commands.put("searchUser_command", new SearchUserCommand());
+        commands.put("listOfAllUsers_command", new ListOfAllUsersCommand());
+        commands.put("deleteUser_command", new DeleteUserCommand());
     }
 
     private CommandContainer() {

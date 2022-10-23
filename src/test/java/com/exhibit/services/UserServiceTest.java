@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest {
     UserService service;
@@ -41,6 +41,27 @@ class UserServiceTest {
 
         List<User> userListActual = service.findAll();
         assertEquals(userListExpected, userListActual);
+    }
+
+    @Test
+    void deleteUser() {
+        String login = randomString();
+        String password = PasswordHashing.toMD5(randomString());
+        Optional<User> expectedUser = Optional.of(new User(login, password));
+
+        List<User> userListExpected = service.findAll();
+        service.add(expectedUser.get());
+        userListExpected.add(expectedUser.get());
+
+        Optional<User> actualUser = service.findByLogin(login);
+        assertEquals(expectedUser, actualUser);
+
+        List<User> userListActual = service.findAll();
+        assertEquals(userListExpected, userListActual);
+
+        service.delete(expectedUser.get());
+        Optional<User> deletedUser = service.findByLogin(expectedUser.get().getLogin());
+        assertFalse(deletedUser.isPresent());
     }
 
     @Test

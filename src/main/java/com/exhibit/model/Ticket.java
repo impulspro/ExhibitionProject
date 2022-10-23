@@ -1,5 +1,9 @@
 package com.exhibit.model;
 
+import com.exhibit.services.ExhibitionService;
+
+import java.util.Optional;
+
 public class Ticket{
     private long id;
     private long user_id;
@@ -23,6 +27,16 @@ public class Ticket{
 
     public long getExhibition_id() {
         return exhibition_id;
+    }
+    public Exhibition getExhibition()
+    {
+        ExhibitionService service = new ExhibitionService();
+        if (service.findById(exhibition_id).isPresent()){
+            return service.findById(exhibition_id).get();
+        } else {
+            return null;
+        }
+
     }
 
     public void setExhibition_id(long exhibition_id) {

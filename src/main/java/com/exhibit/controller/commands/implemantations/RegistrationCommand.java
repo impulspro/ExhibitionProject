@@ -22,7 +22,6 @@ public class RegistrationCommand implements Command {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         password = PasswordHashing.toMD5(password);
-        System.out.println(login + password);
         HttpSession session = req.getSession();
         String redirectPage = "index.jsp";
         try {

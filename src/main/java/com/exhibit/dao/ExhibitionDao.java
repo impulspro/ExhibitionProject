@@ -60,17 +60,18 @@ public class ExhibitionDao {
     }
 
     public Optional<Exhibition> findByTheme(String theme) {
+        Optional<Exhibition> exhibition = Optional.empty();
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement prepSt = conn.prepareStatement(FIND_EXHIBITION_BY_THEME_SQL)) {
             prepSt.setString(1, theme);
             ResultSet rs = prepSt.executeQuery();
-            if (rs.next()) {
-                return Optional.of(mapper.extractFromResultSet(rs));
+            while (rs.next()) {
+                exhibition = Optional.of(mapper.extractFromResultSet(rs));
             }
+            return exhibition;
         } catch (SQLException e) {
             throw new DaoException("Cannot find exhibition by theme " + theme, e);
         }
-        return Optional.empty();
     }
 
     public List<Exhibition> findAll() {

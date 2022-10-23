@@ -156,4 +156,14 @@ public class UserDao {
         }
 
     }
+
+    public void delete(User user) {
+        try (Connection conn = ConnectionPool.getConnection();
+             PreparedStatement ps = conn.prepareStatement(DELETE_USER_BY_ID_SQL)) {
+            ps.setLong(1, user.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Cannot delete user", e);
+        }
+    }
 }

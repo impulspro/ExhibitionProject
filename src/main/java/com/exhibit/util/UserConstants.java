@@ -13,6 +13,8 @@ public class UserConstants {
             "UPDATE user SET login = ?, password = ?, role = ?, money = ? WHERE id = ?";
     public static final String FIND_USER_BY_LOGIN =
             "SELECT * FROM user WHERE login = ?";
+    public static final String DELETE_USER_BY_ID_SQL =
+            "DELETE FROM user WHERE id = ?";
     private UserConstants() {
     }
 }

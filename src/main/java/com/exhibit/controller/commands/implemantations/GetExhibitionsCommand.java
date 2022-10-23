@@ -30,8 +30,9 @@ public class GetExhibitionsCommand implements Command {
 
         int currentPage = 1;
         int recordsPerPage = 3;
-        if (req.getParameter("currentPage") != null)
+        if (req.getParameter("currentPage") != null) {
             currentPage = Integer.parseInt(req.getParameter("currentPage"));
+        }
 
 
         String redirect = "view/page/exhibitions.jsp";
@@ -49,7 +50,7 @@ public class GetExhibitionsCommand implements Command {
             exhList = new ExhibitionService().findAll();
             switch (sortType) {
                 case "sortByDate":
-                    if (req.getParameter("exhDate").isEmpty()) {
+                    if (req.getParameter("exhDate") == null || req.getParameter("exhDate").isEmpty()) {
                         Comparator<Exhibition> comparator
                                 = Comparator.comparing(Exhibition::getStartDate);
                         exhList.sort(comparator);

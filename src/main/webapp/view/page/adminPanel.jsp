@@ -1,6 +1,9 @@
 <%@ page import="com.exhibit.model.Hall" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.exhibit.services.HallService" %>
+<%@ page import="com.exhibit.model.Ticket" %>
+<%@ page import="com.exhibit.services.UserService" %>
+<%@ page import="com.exhibit.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -26,11 +29,84 @@
 %>
 <main>
 
-    <div class="container-fluid d-flex h-100 justify-content-center align-items-center p-0">
+    <div class="container-fluid d-flex justify-content-center align-items-center p-0">
 
         <div class="row bg-white shadow-sm">
 
-            <div class="col border rounded p-4 bg-info">
+            <div class="col-4">
+                <form name="searchUserForm" action="${pageContext.request.contextPath}/index-servlet" method="get">
+                    <div class="input-group">
+                        <div class="form-inline">
+                            <input type="search" name="login" id="form1" class="form-control" required/>
+                            <input name="command" type="hidden" value="searchUser_command">
+                            <label class="form-label" for="form1"></label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <fmt:message key='adminPanel.searchUser'/>
+                        </button>
+                    </div>
+                </form>
+                <c:if test="${sessionScope.search_user != null}">
+                    <p><b>${sessionScope.search_user.login} ${sessionScope.search_user.money}$ </b>
+                    </p>
+                    <b><fmt:message key='adminPanel.userExhibitions'/>:</b>
+                    <br>
+                    <c:forEach var="ticket" items="${sessionScope.search_user.getUserTickets()}">
+                        ${ticket.getExhibition().theme}
+                        <br>
+                    </c:forEach>
+                </c:if>
+            </div>
+
+            <div class="col-4">
+                <form name="listOfAllUsers" action="${pageContext.request.contextPath}/index-servlet" method="get">
+                    <div class="input-group">
+                        <div class="form-inline">
+                            <input name="command" type="hidden" value="listOfAllUsers_command">
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <fmt:message key='adminPanel.allUsers'/>
+                        </button>
+                    </div>
+                </form>
+                <c:if test="${sessionScope.userList != null}">
+                    <br>
+                    <div class="col">
+                        <c:set var="i" value="1"/>
+                        <c:forEach var="userI" items="${sessionScope.userList}">
+                            <div class="row">
+                                <form name="userProperties" action="${pageContext.request.contextPath}/index-servlet"
+                                      method="get">
+                                    <div class="input-group">
+                                        <div class="form-inline">
+                                            <input name="login" type="hidden" value="${userI.login}">
+                                            <input name="command" type="hidden" value="searchUser_command">
+                                        </div>
+                                        <button type="submit" class="btn btn-warning">
+                                                ${i} ${userI.login} ${userI.role} ${userI.money}$
+                                        </button>
+                                    </div>
+                                </form>
+                                <form name="deleteUser" action="${pageContext.request.contextPath}/index-servlet"
+                                      method="post">
+                                    <div class="input-group">
+                                        <div class="form-inline">
+                                            <input name="login" type="hidden" value="${userI.login}">
+                                            <input name="command" type="hidden" value="deleteUser_command">
+                                        </div>
+                                        <button type="submit" class="btn btn-danger">
+                                            <fmt:message key='adminPanel.deleteUser'/>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <c:set var="i" value="${i+1}"/>
+                        </c:forEach>
+                    </div>
+                </c:if>
+            </div>
+
+            <div class="col-4 border rounded bg-success">
 
                 <form name="addExhForm" action="${pageContext.request.contextPath}/index-servlet" method="post"
                       onsubmit="return validator()">
@@ -146,7 +222,7 @@
             alert(erTime);
             return false;
         }
-        if (startDate < today || endDate < today ) {
+        if (startDate < today || endDate < today) {
             alert(erDatePast);
             return false;
         }
