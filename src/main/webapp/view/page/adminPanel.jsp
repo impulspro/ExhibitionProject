@@ -1,7 +1,7 @@
 <%@ page import="com.exhibit.model.Hall" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.exhibit.services.HallService" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tf" %>
@@ -127,8 +127,6 @@
         const erTime = "<fmt:message key='addExhibition.form.errorTime'/>";
         const erDatePast = "<fmt:message key='addExhibition.form.errorDatePast'/>";
         const today = formatDate();
-        alert(today);
-        alert(startDate);
         const erPrice = "<fmt:message key='addExhibition.form.errorPrice'/>";
 
         if (theme.length < 5 || theme.length > 255) {

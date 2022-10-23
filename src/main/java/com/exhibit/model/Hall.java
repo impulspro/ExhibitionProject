@@ -66,6 +66,7 @@ public class Hall {
         return new Hall().new Builder();
     }
 
+
     public class Builder {
         private Builder() {
         }

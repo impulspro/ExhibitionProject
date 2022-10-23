@@ -3,6 +3,7 @@ package com.exhibit.controller.commands.implemantations;
 import com.exhibit.controller.commands.Command;
 import com.exhibit.exeptions.DaoException;
 import com.exhibit.model.Exhibition;
+import com.exhibit.model.Hall;
 import com.exhibit.services.ExhibitionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import static com.exhibit.util.UtilConstants.INFO_LOGGER;
@@ -45,36 +47,51 @@ public class GetExhibitionsCommand implements Command {
 
         try {
             exhList = new ExhibitionService().findAll();
-
-            if (sortType.equals("sortByDate")) {
-                if (req.getParameter("exhDate").isEmpty()) {
-                    Comparator<Exhibition> comparator
-                            = Comparator.comparing(Exhibition::getStartDate);
-                    exhList.sort(comparator);
-                } else {
-                    Date exhDate = Date.valueOf(req.getParameter("exhDate"));
-                    List<Exhibition> sortList = exhList.stream().filter(e -> (e.getStartDate().before(exhDate) || e.getStartDate().equals(exhDate))
-                            && (e.getEndDate().after(exhDate) || e.getEndDate().equals(exhDate))).collect(Collectors.toList());
-                    exhList = sortList;
-                    if (sortList.isEmpty()) {
-                        redirect = "index.jsp";
-                        req.getSession().setAttribute("error_message", "no exhibition on this date");
+            switch (sortType) {
+                case "sortByDate":
+                    if (req.getParameter("exhDate").isEmpty()) {
+                        Comparator<Exhibition> comparator
+                                = Comparator.comparing(Exhibition::getStartDate);
+                        exhList.sort(comparator);
+                    } else {
+                        Date exhDate = Date.valueOf(req.getParameter("exhDate"));
+                        List<Exhibition> sortList = exhList.stream().filter(e -> (e.getStartDate().before(exhDate) || e.getStartDate().equals(exhDate))
+                                && (e.getEndDate().after(exhDate) || e.getEndDate().equals(exhDate))).collect(Collectors.toList());
+                        exhList = sortList;
+                        if (sortList.isEmpty()) {
+                            redirect = "index.jsp";
+                            req.getSession().setAttribute("error_message", "no exhibition on this date");
+                        }
                     }
-                }
-
-
+                    break;
+                case "sortByTheme":
+                    Comparator<Exhibition> comparatorT
+                            = Comparator.comparing(Exhibition::getTheme);
+                    exhList.sort(comparatorT);
+                    break;
+                case "sortByPrice":
+                    Comparator<Exhibition> comparatorP
+                            = Comparator.comparingDouble(Exhibition::getPrice);
+                    exhList.sort(comparatorP);
+                    break;
+                case "sortByHall":
+                    ExhibitionService service = new ExhibitionService();
+                    List<Exhibition> hallExhibition = new CopyOnWriteArrayList<>();
+                    long hall_id = Long.parseLong(req.getParameter("hall_id"));
+                    for (Exhibition exh : exhList) {
+                        List<Hall> halls = service.getHalls(exh.getId());
+                        for (Hall hall : halls) {
+                            if (hall.getId() == hall_id) {
+                                hallExhibition.add(exh);
+                                break;
+                            }
+                        }
+                    }
+                    exhList = hallExhibition;
+                    break;
+                default:
             }
-            if (sortType.equals("sortByPrice")) {
-                Comparator<Exhibition> comparator
-                        = Comparator.comparingDouble(Exhibition::getPrice);
-                exhList.sort(comparator);
-            }
 
-            if (sortType.equals("sortByTheme")) {
-                Comparator<Exhibition> comparator
-                        = Comparator.comparing(Exhibition::getTheme);
-                exhList.sort(comparator);
-            }
             logger.info("GetExhibitions Command successfully");
 
         } catch (DaoException e) {
