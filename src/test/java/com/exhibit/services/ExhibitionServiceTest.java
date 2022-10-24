@@ -1,5 +1,7 @@
 package com.exhibit.services;
 
+import com.exhibit.dao.ExhibitionDao;
+import com.exhibit.dao.UserDao;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Hall;
 import com.exhibit.model.User;
@@ -17,11 +19,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ExhibitionServiceTest {
 
-    private ExhibitionService service;
+    ExhibitionService service;
 
     @BeforeEach
     void setUp() {
-        service = new ExhibitionService();
+        service = new ExhibitionDao();
     }
 
     @AfterEach
@@ -47,7 +49,7 @@ class ExhibitionServiceTest {
                 .build();
 
 
-        service.addExhibition(expectedExh);
+        service.add(expectedExh);
         if (service.findById(expectedExh.getId()).isPresent()) {
             Exhibition actualExh = service.findById(expectedExh.getId()).get();
             assertEquals(expectedExh, actualExh);
@@ -70,8 +72,8 @@ class ExhibitionServiceTest {
         Exhibition exhibition = exhibitionList.get(1);
 
         long expected = service.findAll().size() + 2;
-        service.addExhibition(exhibition);
-        service.addExhibition(exhibition);
+        service.add(exhibition);
+        service.add(exhibition);
         long actual = service.findAll().size();
         assertEquals(expected, actual);
 
@@ -80,15 +82,16 @@ class ExhibitionServiceTest {
     @Test
     void amountOfTickets() {
         User user = new User(randomString(), randomString());
-        UserService userService = new UserService();
+        UserService userService = new UserDao();
         userService.add(user);
+        List<Exhibition> exhibitionList = service.findAll().subList(0,2);
 
-        long expectedAmount = service.amountOfTickets(1) + service.amountOfTickets(2) + 2;
+        long expectedAmount = service.amountOfTickets(exhibitionList.get(0).getId()) + service.amountOfTickets(exhibitionList.get(1).getId()) + 2;
 
-        userService.buyTicket(user, 1);
-        userService.buyTicket(user, 2);
+        userService.buyTicket(user, exhibitionList.get(0).getId());
+        userService.buyTicket(user, exhibitionList.get(1).getId());
 
-        long actualAmount = service.amountOfTickets(1) + service.amountOfTickets(2);
+        long actualAmount = service.amountOfTickets(exhibitionList.get(0).getId()) + service.amountOfTickets(exhibitionList.get(1).getId());
 
         assertEquals(expectedAmount, actualAmount);
 
@@ -113,8 +116,8 @@ class ExhibitionServiceTest {
                 .build();
 
 
-        service.addExhibition(expectedExh);
-        service.cancelExhibition(expectedExh.getId());
+        service.add(expectedExh);
+        service.cancel(expectedExh.getId());
 
         if (service.findById(expectedExh.getId()).isPresent()) {
             double actualPrice = service.findById(expectedExh.getId()).get().getPrice();
@@ -144,19 +147,20 @@ class ExhibitionServiceTest {
                 .build();
 
 
-        service.addExhibition(expectedExh);
+        service.add(expectedExh);
         assertTrue(service.findById(expectedExh.getId()).isPresent());
         String[] halls = {"1", "3", "5"};
         service.setHalls(expectedExh.getId(), halls);
 
-        service.deleteExhibition(expectedExh.getId());
+        service.delete(expectedExh.getId());
         assertFalse(service.findById(expectedExh.getId()).isPresent());
 
         List<Hall> hallListNull = service.getHalls(expectedExh.getId());
         assertTrue(hallListNull.isEmpty());
+
     }
 
-    String randomString() {
+    private String randomString() {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
         int targetStringLength = 10;
@@ -167,4 +171,7 @@ class ExhibitionServiceTest {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
     }
+
 }
+
+

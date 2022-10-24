@@ -1,6 +1,7 @@
-package com.exhibit.controller.commands.implemantations;
+package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
+import com.exhibit.dao.ExhibitionDao;
 import com.exhibit.exeptions.DaoException;
 import com.exhibit.model.Exhibition;
 import com.exhibit.services.ExhibitionService;
@@ -13,13 +14,13 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 
-import static com.exhibit.util.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.UtilConstants.*;
 
-public class AddExhibitionCommand implements Command {
+public class AddExhibition implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void execute(final HttpServletRequest req, final HttpServletResponse resp){
         String page = "view/page/adminPanel.jsp";
         String theme = req.getParameter("theme");
         String details = req.getParameter("details");
@@ -28,9 +29,9 @@ public class AddExhibitionCommand implements Command {
         Time startTime = Time.valueOf(req.getParameter("startTime") + ":00");
         Time endTime = Time.valueOf(req.getParameter("endTime") + ":00");
         double price = Double.parseDouble(req.getParameter("price"));
-        String[] halls_id = req.getParameterValues("halls_id");
+        String[] hallsId = req.getParameterValues("halls_id");
 
-        ExhibitionService service = new ExhibitionService();
+        ExhibitionService service = new ExhibitionDao();
         Exhibition exhibition = Exhibition.newBuilder()
                 .setTheme(theme)
                 .setDetails(details)
@@ -41,15 +42,19 @@ public class AddExhibitionCommand implements Command {
                 .setPrice(price)
                 .build();
         try {
-            service.addExhibition(exhibition);
-            service.setHalls(exhibition.getId(), halls_id);
+            service.add(exhibition);
+            service.setHalls(exhibition.getId(), hallsId);
             logger.info("AddExhibition command execute successful");
-            req.getSession().setAttribute("user_message", "you successfully add exhibition");
+            req.getSession().setAttribute(USER_MESSAGE, "you successfully add exhibition");
         } catch (DaoException e) {
             logger.info("AddExhibition command failed");
-            req.getSession().setAttribute("error_message", "something gone wrong");
+            req.getSession().setAttribute(ERROR_MESSAGE, "something gone wrong");
         }
 
-        resp.sendRedirect(page);
+        try {
+            resp.sendRedirect(page);
+        } catch (IOException e) {
+            logger.info("AddExhibition redirect failed");
+        }
     }
 }

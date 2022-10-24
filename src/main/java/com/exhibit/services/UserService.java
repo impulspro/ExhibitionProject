@@ -1,38 +1,22 @@
 package com.exhibit.services;
 
-import com.exhibit.dao.UserDao;
 import com.exhibit.model.Ticket;
 import com.exhibit.model.User;
 
 import java.util.List;
 import java.util.Optional;
 
-public class UserService {
+public interface UserService {
+    Optional<User> findByLogin(String login);
 
-    static UserDao dao = new UserDao();
+    List<User> findAll();
 
-    public Optional<User> findByLogin(String login) {
-        return dao.findByLogin(login);
-    }
+    void add(User user);
 
-    public List<User> findAll() {
-        return dao.findAll();
-    }
+    void delete(User user);
 
-    public void add(User user) {
-        dao.add(user);
-    }
+    String buyTicket(User user, long exhibitionId);
 
-    public void delete(User user) {
-        dao.delete(user);
-    }
-
-    public String buyTicket(User user, long exhibition_id) {
-        return dao.buyTicket(user, exhibition_id);
-    }
-
-    public List<Ticket> getUserTickets(User user) {
-        return dao.getUserTickets(user);
-    }
+    List<Ticket> getUserTickets(User user);
 }
    

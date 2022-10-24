@@ -1,6 +1,7 @@
-package com.exhibit.controller.commands.implemantations;
+package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
+import com.exhibit.dao.HallDao;
 import com.exhibit.model.Hall;
 import com.exhibit.services.HallService;
 import org.apache.logging.log4j.LogManager;
@@ -11,25 +12,30 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static com.exhibit.util.UtilConstants.ERROR_MESSAGE;
 import static com.exhibit.util.UtilConstants.INFO_LOGGER;
 
-public class GetHallsCommand implements Command {
+public class GetHalls implements Command {
 
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void execute(final HttpServletRequest req, final HttpServletResponse resp){
         String page = "view/page/halls.jsp";
         try {
-            HallService service = new HallService();
+            HallService service = new HallDao();
             List<Hall> hallList = service.findAll();
             req.getSession().setAttribute("hallList", hallList);
             logger.info("GetHalls command successful");
         } catch (Exception e) {
             logger.info("GetHalls command failed");
             page = "index.jsp";
-            req.getSession().setAttribute("error_message", "GetHalls command failed");
+            req.getSession().setAttribute(ERROR_MESSAGE, "GetHalls command failed");
         }
-        resp.sendRedirect(page);
+        try {
+            resp.sendRedirect(page);
+        } catch (IOException e) {
+            logger.info("GetHalls redirect failed");
+        }
     }
 }

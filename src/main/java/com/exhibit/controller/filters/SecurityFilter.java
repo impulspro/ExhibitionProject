@@ -11,14 +11,12 @@ import java.io.IOException;
 
 import static com.exhibit.util.UtilConstants.INFO_LOGGER;
 
+/**
+ * Security access filter denying access to admin tools from user account
+ */
 public class SecurityFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
-
-    @Override
-    public void init(FilterConfig filterConfig)  {
-
-    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
@@ -27,7 +25,7 @@ public class SecurityFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         String path = req.getRequestURI();
 
-        if(path.contains("addExhibition")
+        if (path.contains("addExhibition")
                 || path.contains("adminPanel")) {
             User user = (User) req.getSession().getAttribute("user");
             if (user == null || !user.getRole().equals("admin")) {
@@ -36,16 +34,12 @@ public class SecurityFilter implements Filter {
 
             } else {
                 logger.info("Admin access");
-                chain.doFilter(servletRequest,servletResponse);
+                chain.doFilter(servletRequest, servletResponse);
             }
         } else {
             chain.doFilter(servletRequest, servletResponse);
         }
     }
 
-    @Override
-    public void destroy() {
-
-    }
 }
 

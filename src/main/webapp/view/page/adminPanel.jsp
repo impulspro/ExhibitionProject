@@ -1,9 +1,8 @@
+<!DOCTYPE html>
 <%@ page import="com.exhibit.model.Hall" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.exhibit.services.HallService" %>
-<%@ page import="com.exhibit.model.Ticket" %>
-<%@ page import="com.exhibit.services.UserService" %>
-<%@ page import="com.exhibit.model.User" %>
+<%@ page import="com.exhibit.dao.HallDao" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -12,8 +11,9 @@
 
 <fmt:setLocale value="${param.lang}"/>
 <fmt:setBundle basename="text"/>
-
+<%@include file="/view/template/styles.jsp" %>
 <html lang="${param.lang}">
+
 <head>
     <title>Exhibition</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -24,7 +24,8 @@
 
 <%@include file="/view/template/header.jsp" %>
 <%
-    List<Hall> hallList = new HallService().findAll();
+    HallService service = new HallDao();
+    List<Hall> hallList = service.findAll();
     session.setAttribute("hallList", hallList);
 %>
 <main>
@@ -47,9 +48,9 @@
                     </div>
                 </form>
                 <c:if test="${sessionScope.search_user != null}">
-                    <p><b>${sessionScope.search_user.login} ${sessionScope.search_user.money}$ </b>
+                    <p><strong>${sessionScope.search_user.login} ${sessionScope.search_user.money}$ </strong>
                     </p>
-                    <b><fmt:message key='adminPanel.userExhibitions'/>:</b>
+                    <strong><fmt:message key='adminPanel.userExhibitions'/>:</strong>
                     <br>
                     <c:forEach var="ticket" items="${sessionScope.search_user.getUserTickets()}">
                         ${ticket.getExhibition().theme}
@@ -82,24 +83,31 @@
                                             <input name="login" type="hidden" value="${userI.login}">
                                             <input name="command" type="hidden" value="searchUser_command">
                                         </div>
-                                        <button type="submit" class="btn btn-warning">
+                                        <button type="submit" class="btn btn-light">
                                                 ${i} ${userI.login} ${userI.role} ${userI.money}$
                                         </button>
                                     </div>
                                 </form>
-                                <form name="deleteUser" action="${pageContext.request.contextPath}/index-servlet"
-                                      method="post">
-                                    <div class="input-group">
-                                        <div class="form-inline">
-                                            <input name="login" type="hidden" value="${userI.login}">
-                                            <input name="command" type="hidden" value="deleteUser_command">
-                                        </div>
-                                        <button type="submit" class="btn btn-danger">
-                                            <fmt:message key='adminPanel.deleteUser'/>
-                                        </button>
-                                    </div>
-                                </form>
+
+                                <div class="float-right">
+                                    <c:if test="${userI.role != 'admin'}">
+                                        <form name="deleteUser"
+                                              action="${pageContext.request.contextPath}/index-servlet"
+                                              method="post">
+                                            <div class="input-group">
+                                                <div class="form-inline">
+                                                    <input name="login" type="hidden" value="${userI.login}">
+                                                    <input name="command" type="hidden" value="deleteUser_command">
+                                                </div>
+                                                <button type="submit" class="btn btn-danger">
+                                                    <fmt:message key='adminPanel.deleteUser'/>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </c:if>
+                                </div>
                             </div>
+
                             <c:set var="i" value="${i+1}"/>
                         </c:forEach>
                     </div>

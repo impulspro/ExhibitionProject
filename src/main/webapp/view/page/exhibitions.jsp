@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -26,15 +27,15 @@
 
                     <div class="col-6 card align-content-center text-center bg-info">
                         <div class="card-header bg-light">
-                            <fmt:message key='exhibition.from'/>: <b> ${exh.startDate} </b>
-                            <fmt:message key='exhibition.to'/>: <b> ${exh.endDate} </b>
-                            <fmt:message key='exhibition.price'/> <b> = ${exh.price}$</b>
+                            <fmt:message key='exhibition.from'/>: <strong> ${exh.startDate} </strong>
+                            <fmt:message key='exhibition.to'/>: <strong> ${exh.endDate} </strong>
+                            <fmt:message key='exhibition.price'/> <strong> = ${exh.price}$</strong>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">${exh.theme}</h5>
                             <p class="card-text">${exh.details}</p>
                             <p> ${exh.startTime}-${exh.endTime}
-                                <b><fmt:message key='exhibition.halls'/>:</b>
+                                <strong><fmt:message key='exhibition.halls'/>:</strong>
                                 <c:forEach var="hall" items="${exh.getHalls()}">
                                     ${hall.name}
                                 </c:forEach>

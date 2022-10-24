@@ -7,6 +7,7 @@ import com.exhibit.model.Exhibition;
 import com.exhibit.model.Ticket;
 import com.exhibit.model.User;
 import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.UserService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static com.exhibit.util.UserConstants.*;
 
 
-public class UserDao {
+public class UserDao implements UserService {
     static Mapper<User> mapper = MapperFactory.getInstance().getUserMapper();
 
     public Optional<User> findByLogin(String login) {
@@ -49,8 +50,8 @@ public class UserDao {
                 ps2.setString(1, user.getLogin());
                 ResultSet rs = ps2.executeQuery();
                 if (rs.next()) {
-                    long real_id = rs.getLong("id");
-                    user.setId(real_id);
+                    long realId = rs.getLong("id");
+                    user.setId(realId);
                 }
                 rs.close();
             }
@@ -75,33 +76,31 @@ public class UserDao {
         return userList;
     }
 
-    public String buyTicket(User user, long exhibition_id) {
-        ExhibitionService exhibitionService = new ExhibitionService();
-        Exhibition exhibition;
-        if (exhibitionService.findById(exhibition_id).isPresent()) {
-            exhibition = exhibitionService.findById(exhibition_id).get();
-        } else {
+    public String buyTicket(User user, long exhibitionId) {
+        ExhibitionService exhibitionService = new ExhibitionDao();
+        Optional<Exhibition> exhibition = exhibitionService.findById(exhibitionId);
+        if (!exhibition.isPresent()) {
             return "No such exhibition found";
         }
 
         List<Ticket> tickets = getUserTickets(user);
         if (tickets != null && !tickets.isEmpty()) {
-            Optional<Ticket> ticket = tickets.stream().filter(t -> t.getExhibition_id() == exhibition_id).findFirst();
+            Optional<Ticket> ticket = tickets.stream().filter(t -> t.getExhibitionId() == exhibitionId).findFirst();
             if (ticket.isPresent()) {
                 return "You already buy a ticket to this exhibition";
             }
         }
 
-        if (exhibition.getPrice() > user.getMoney()) {
+        if (exhibition.get().getPrice() > user.getMoney()) {
             return "Not enough money on your account";
         }
         try (Connection conn = ConnectionPool.getConnection();
              PreparedStatement ps = conn.prepareStatement(ADD_USER_TICKET_SQL)) {
             int i = 1;
             ps.setLong(i++, user.getId());
-            ps.setLong(i, exhibition_id);
+            ps.setLong(i, exhibitionId);
             ps.executeUpdate();
-            user.setMoney(user.getMoney() - exhibition.getPrice());
+            user.setMoney(user.getMoney() - exhibition.get().getPrice());
             update(user);
         } catch (SQLException e) {
             throw new DaoException("Invalid user input", e);
@@ -143,13 +142,13 @@ public class UserDao {
         return tickets;
     }
 
-    public boolean isTicketPreset(String login, long exhibition_id) {
+    public boolean isTicketPreset(String login, long exhibitionId) {
 
         Optional<User> user = findByLogin(login);
 
         if (user.isPresent()) {
             List<Ticket> tickets = getUserTickets(user.get());
-            Optional<Ticket> ticket = tickets.stream().filter(t -> t.getExhibition_id() == exhibition_id).findFirst();
+            Optional<Ticket> ticket = tickets.stream().filter(t -> t.getExhibitionId() == exhibitionId).findFirst();
             return ticket.isPresent();
         } else {
             return false;

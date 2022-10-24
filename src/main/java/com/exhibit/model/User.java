@@ -58,10 +58,6 @@ public class User implements Serializable {
         return role;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public double getMoney() {
         return money;
     }
@@ -70,13 +66,13 @@ public class User implements Serializable {
         this.money = money;
     }
 
-    public boolean isTicketPresent(long exhibition_id){
+    public boolean isTicketPresent(long exhibitionId){
         UserDao dao = new UserDao();
-        return dao.isTicketPreset(getLogin(), exhibition_id);
+        return dao.isTicketPreset(getLogin(), exhibitionId);
     }
 
     public List<Ticket> getUserTickets(){
-        UserService service = new UserService();
+        UserService service = new UserDao();
         return service.getUserTickets(this);
     }
     @Override

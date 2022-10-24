@@ -15,24 +15,15 @@ public class SessionLocaleFilter implements Filter {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void init(FilterConfig filterConfig) {
-
-    }
-
-    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
 
         if (req.getParameter("lang") != null) {
             req.getSession().setAttribute("lang", req.getParameter("lang"));
-            logger.info("Language filter " + req.getParameter("lang"));
+            String info = "Language filter " + req.getParameter("lang");
+            logger.info(info);
         }
         chain.doFilter(request, response);
-    }
-
-    @Override
-    public void destroy() {
-
     }
 }

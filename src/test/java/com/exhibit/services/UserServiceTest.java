@@ -1,5 +1,7 @@
 package com.exhibit.services;
 
+import com.exhibit.dao.ExhibitionDao;
+import com.exhibit.dao.UserDao;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Ticket;
 import com.exhibit.model.User;
@@ -19,7 +21,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new UserService();
+        service = new UserDao();
     }
 
     @AfterEach
@@ -71,7 +73,8 @@ class UserServiceTest {
         Optional<User> user = Optional.of(new User(login, password));
 
         service.add(user.get());
-        List<Exhibition> exhibitionList = new ExhibitionService().findAll();
+        ExhibitionService exhibitionService = new ExhibitionDao();
+        List<Exhibition> exhibitionList = exhibitionService.findAll();
         for (int i = 0; i < 3; i++) {
             String answer = service.buyTicket(user.get(), exhibitionList.get(i).getId());
             assertEquals("ok", answer);
@@ -80,7 +83,7 @@ class UserServiceTest {
 
         List<Ticket> ticketList = service.getUserTickets(user.get());
         for (int i = 0; i < ticketList.size(); i++) {
-            assertEquals(ticketList.get(i).getExhibition_id(), exhibitionList.get(i).getId());
+            assertEquals(ticketList.get(i).getExhibitionId(), exhibitionList.get(i).getId());
         }
 
     }

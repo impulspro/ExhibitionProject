@@ -1,8 +1,9 @@
 package com.exhibit.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Hall {
+public class Hall implements Serializable {
     private long id;
     private String name;
     private String details;

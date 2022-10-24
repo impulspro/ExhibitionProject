@@ -1,7 +1,9 @@
 package com.exhibit.model;
 
+import com.exhibit.dao.ExhibitionDao;
 import com.exhibit.services.ExhibitionService;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.Objects;
 /**
  * Builder pattern realization
  */
-public class Exhibition {
+public class Exhibition implements Serializable {
     private long id;
     private String theme;
     private String details;
@@ -24,11 +26,24 @@ public class Exhibition {
     private Exhibition() {
     }
 
+    public static Builder newBuilder() {
+        return new Exhibition().new Builder();
+    }
+
     public long getId() {
         return id;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getTheme() {
         return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
 
     public String getDetails() {
@@ -37,14 +52,6 @@ public class Exhibition {
 
     public Date getStartDate() {
         return startDate;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setTheme(String theme) {
-        this.theme = theme;
     }
 
     public Date getEndDate() {
@@ -64,9 +71,15 @@ public class Exhibition {
     }
 
     public List<Hall> getHalls() {
-        return new ExhibitionService().getHalls(id);
+        ExhibitionService service = new ExhibitionDao();
+        return service.getHalls(id);
     }
-    public int amountOfTickets() {return new ExhibitionService().amountOfTickets(id);}
+
+    public int amountOfTickets() {
+        ExhibitionService service = new ExhibitionDao();
+        return service.amountOfTickets(id);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -93,12 +106,6 @@ public class Exhibition {
                 ", id=" + id +
                 '}';
     }
-
-    public static Builder newBuilder() {
-        return new Exhibition().new Builder();
-    }
-
-
 
     public class Builder {
         private Builder() {

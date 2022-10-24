@@ -1,7 +1,5 @@
 package com.exhibit.services;
 
-import com.exhibit.exeptions.DaoException;
-import com.exhibit.dao.ExhibitionDao;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Hall;
 
@@ -9,39 +7,23 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class ExhibitionService {
+public interface ExhibitionService {
+    void add(Exhibition exhibition);
 
-    ExhibitionDao dao = new ExhibitionDao();
-    public void addExhibition(Exhibition exhibition) throws DaoException {
-        dao.add(exhibition);
-    }
 
-    public Optional<Exhibition> findByTheme(String theme) throws DaoException {
-        return  dao.findByTheme(theme);
-    }
-    public List<Exhibition> findAll() throws DaoException {
-        return  dao.findAll();
-    }
+    Optional<Exhibition> findByTheme(String theme);
 
-    public void setHalls(long exhibition_id, String[] halls_id){
-        dao.setHalls(exhibition_id, halls_id);
-    }
+    List<Exhibition> findAll();
 
-    public int amountOfTickets(long exhibition_id) {
-        return dao.amountOfTickets(exhibition_id);
-    }
-    public List<Hall> getHalls(long id) {
-        return dao.getHalls(id);
-    }
+    void setHalls(long exhibitionId, String[] hallsId);
 
-    public Optional<Exhibition> findById(long exhibition_id) {
-        return  dao.findById(exhibition_id);
-    }
-    public void cancelExhibition(long exhibition_id){
-        dao.cancelExhibition(exhibition_id);
-    }
+    int amountOfTickets(long exhibitionId);
 
-    public void deleteExhibition(long exhibition_id) {
-        dao.deleteExhibition(exhibition_id);
-    }
+    List<Hall> getHalls(long id);
+
+    Optional<Exhibition> findById(long exhibitionId);
+
+    void cancel(long exhibitionId);
+
+    void delete(long exhibitionId);
 }

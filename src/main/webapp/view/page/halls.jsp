@@ -1,6 +1,8 @@
+<!DOCTYPE html>
 <%@ page import="com.exhibit.model.Hall" %>
 <%@ page import="com.exhibit.services.HallService" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.exhibit.dao.HallDao" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -16,7 +18,8 @@
     <%@include file="../template/styles.jsp" %>
     <%@include file="../template/header.jsp" %>
     <%
-        List<Hall> hallList = new HallService().findAll();
+        HallService service = new HallDao();
+        List<Hall> hallList = service.findAll();
         session.setAttribute("hallList", hallList);
     %>
 </head>

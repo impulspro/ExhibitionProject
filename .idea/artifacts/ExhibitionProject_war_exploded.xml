@@ -40,6 +40,7 @@
           <element id="library" level="project" name="Maven: com.itextpdf:sign:7.2.3" />
           <element id="library" level="project" name="Maven: com.itextpdf:styled-xml-parser:7.2.3" />
           <element id="library" level="project" name="Maven: com.itextpdf:svg:7.2.3" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-simple:2.0.3" />
         </element>
       </element>
       <element id="directory" name="META-INF">

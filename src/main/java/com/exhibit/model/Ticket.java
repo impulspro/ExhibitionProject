@@ -1,13 +1,22 @@
 package com.exhibit.model;
 
+import com.exhibit.dao.ExhibitionDao;
 import com.exhibit.services.ExhibitionService;
 
+import java.io.Serializable;
 import java.util.Optional;
 
-public class Ticket{
+public class Ticket implements Serializable {
     private long id;
-    private long user_id;
-    private long exhibition_id;
+    private long userId;
+    private long exhibitionId;
+
+    private Ticket() {
+    }
+
+    public static Ticket.Builder newBuilder() {
+        return new Ticket().new Builder();
+    }
 
     public long getId() {
         return id;
@@ -17,44 +26,33 @@ public class Ticket{
         this.id = id;
     }
 
-    public long getUser_id() {
-        return user_id;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(long user_id) {
-        this.user_id = user_id;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
-    public long getExhibition_id() {
-        return exhibition_id;
-    }
-    public Exhibition getExhibition()
-    {
-        ExhibitionService service = new ExhibitionService();
-        if (service.findById(exhibition_id).isPresent()){
-            return service.findById(exhibition_id).get();
-        } else {
-            return null;
-        }
-
+    public long getExhibitionId() {
+        return exhibitionId;
     }
 
-    public void setExhibition_id(long exhibition_id) {
-        this.exhibition_id = exhibition_id;
+    public void setExhibitionId(long exhibitionId) {
+        this.exhibitionId = exhibitionId;
     }
 
-    private Ticket() {
-    }
-
-    public static Ticket.Builder newBuilder() {
-        return new Ticket().new Builder();
+    public Exhibition getExhibition() {
+        ExhibitionService service = new ExhibitionDao();
+        Optional<Exhibition> exhibition = service.findById(exhibitionId);
+        return exhibition.orElse(null);
     }
 
     @Override
     public String toString() {
         return "Ticket{" +
-                "user_id=" + user_id +
-                ", exhibition_id=" + exhibition_id +
+                "user_id=" + userId +
+                ", exhibition_id=" + exhibitionId +
                 '}';
     }
 
@@ -66,12 +64,14 @@ public class Ticket{
             Ticket.this.id = id;
             return this;
         }
-        public Builder setUserId(long user_id) {
-            Ticket.this.user_id = user_id;
+
+        public Builder setUserId(long userId) {
+            Ticket.this.userId = userId;
             return this;
         }
-        public Builder setExhibitionId(long exhibition_id) {
-            Ticket.this.exhibition_id = exhibition_id;
+
+        public Builder setExhibitionId(long exhibitionId) {
+            Ticket.this.exhibitionId = exhibitionId;
             return this;
         }
 

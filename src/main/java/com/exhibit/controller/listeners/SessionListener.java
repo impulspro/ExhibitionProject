@@ -1,6 +1,5 @@
 package com.exhibit.controller.listeners;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,7 +8,6 @@ import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 
 import static com.exhibit.util.UtilConstants.INFO_LOGGER;
-
 
 /**
  * Session attribute listener.

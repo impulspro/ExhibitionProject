@@ -1,6 +1,7 @@
-package com.exhibit.controller.commands.implemantations;
+package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
+import com.exhibit.dao.UserDao;
 import com.exhibit.model.User;
 import com.exhibit.services.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -12,30 +13,37 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.exhibit.util.UtilConstants.ERROR_MESSAGE;
 import static com.exhibit.util.UtilConstants.INFO_LOGGER;
 
-public class SearchUserCommand implements Command {
+public class SearchUser implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void execute(final HttpServletRequest req, final HttpServletResponse resp){
         String login = req.getParameter("login");
         HttpSession session = req.getSession();
         String redirectPage = "view/page/adminPanel.jsp";
         try {
-            UserService userService = new UserService();
+            UserService userService = new UserDao();
             Optional<User> user = userService.findByLogin(login);
             if (user.isPresent()) {
-                logger.info("SearchUser command execute successful = " + login);
+                String info = "SearchUser command execute successful = " + login;
+                logger.info(info);
                 req.getSession().setAttribute("search_user", user.get());
             } else {
-                session.setAttribute("error_message", "no such user in base");
+                session.setAttribute(ERROR_MESSAGE, "no such user in base");
             }
 
         } catch (Exception e) {
-            logger.info("SearchUser command execute failed for login = " + login);
-            req.getSession().setAttribute("error_message", "SearchUser error");
+            String info = "SearchUser command execute failed for login = " + login;
+            logger.info(info);
+            req.getSession().setAttribute(ERROR_MESSAGE, "SearchUser error");
         }
-        resp.sendRedirect(redirectPage);
+        try {
+            resp.sendRedirect(redirectPage);
+        } catch (IOException e) {
+            logger.info("SearchUser redirect failed");
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.exhibit.controller.commands.implemantations;
+package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
 import org.apache.logging.log4j.LogManager;
@@ -11,13 +11,17 @@ import java.io.IOException;
 
 import static com.exhibit.util.UtilConstants.INFO_LOGGER;
 
-public class LogoutCommand implements Command {
+public class LogOut implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void execute(final HttpServletRequest req, final HttpServletResponse resp){
         logger.info("Logout command");
         HttpSession session = req.getSession();
         session.invalidate();
-        resp.sendRedirect("index.jsp");
+        try {
+            resp.sendRedirect("index.jsp");
+        } catch (IOException e) {
+            logger.info("Logout redirect failed");
+        }
     }
 }
