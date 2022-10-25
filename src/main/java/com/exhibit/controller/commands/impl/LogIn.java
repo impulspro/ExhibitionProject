@@ -50,3 +50,5 @@ public class LogIn implements Command {
         } catch (IOException e) {
             logger.info("problems with Redirect");
         }
+    }
+}

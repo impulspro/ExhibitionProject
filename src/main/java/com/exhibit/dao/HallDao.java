@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.exhibit.util.ExhibitionConstants.FIND_ALL_HALLS_SQL;
+import static com.exhibit.util.constants.ExhibitionConstants.FIND_ALL_HALLS_SQL;
 
 public class HallDao implements HallService {
     public List<Hall> findAll() {

@@ -19,7 +19,7 @@ public class Registration implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(final HttpServletRequest req, final HttpServletResponse resp){
+    public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         password = PasswordHashing.toMD5(password);
@@ -51,3 +51,5 @@ public class Registration implements Command {
         } catch (IOException e) {
             logger.info("Registration failed redirect");
         }
+    }
+}

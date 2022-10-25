@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.exhibit.util.ExhibitionConstants.*;
+import static com.exhibit.util.constants.ExhibitionConstants.*;
 
 
 public class ExhibitionDao implements ExhibitionService {

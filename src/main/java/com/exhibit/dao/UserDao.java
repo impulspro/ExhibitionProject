@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.constants.UtilConstants.*;
 import static com.exhibit.util.constants.UserConstants.*;
 
 

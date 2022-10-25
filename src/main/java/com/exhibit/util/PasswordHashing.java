@@ -7,7 +7,9 @@ import java.security.NoSuchAlgorithmException;
 
 //MD5 Hashing Technique
 public class PasswordHashing {
-    private PasswordHashing(){}
+    private PasswordHashing() {
+    }
+
     public static String toMD5(String crypticString) {
         /* Plain-text password initialization. */
         String hashOfString;
@@ -33,3 +35,5 @@ public class PasswordHashing {
             throw new DaoException("Cannot convert password", e);
         }
         return hashOfString;
+    }
+}
