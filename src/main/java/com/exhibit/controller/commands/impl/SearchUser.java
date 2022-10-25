@@ -30,7 +30,7 @@ public class SearchUser implements Command {
             if (user.isPresent()) {
                 String info = "SearchUser command execute successful = " + login;
                 logger.info(info);
-                req.getSession().setAttribute("search_user", user.get());
+                req.getSession().setAttribute("searchUser", user.get());
             } else {
                 session.setAttribute(ERROR_MESSAGE, "no such user in base");
             }

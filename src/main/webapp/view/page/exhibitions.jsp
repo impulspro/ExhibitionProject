@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
-
+<%@ page import="java.time.temporal.ChronoUnit" %>
 <fmt:setLocale value="${param.lang}"/>
 <fmt:setBundle basename="text"/>
 
@@ -34,12 +35,14 @@
                         <div class="card-body">
                             <h5 class="card-title">${exh.theme}</h5>
                             <p class="card-text">${exh.details}</p>
-                            <p> ${exh.startTime}-${exh.endTime}
-                                <strong><fmt:message key='exhibition.halls'/>:</strong>
-                                <c:forEach var="hall" items="${exh.getHalls()}">
-                                    ${hall.name}
-                                </c:forEach>
+                            <p> <strong> ${exh.startTime.toLocalTime().truncatedTo(ChronoUnit.SECONDS)} </strong>
+                                <fmt:message key='exhibition.to'/>
+                                <strong> ${exh.endTime.toLocalTime().truncatedTo(ChronoUnit.SECONDS)} </strong>
                             </p>
+                            <strong><fmt:message key='exhibition.halls'/>:</strong>
+                            <c:forEach var="hall" items="${exh.getHalls()}">
+                                ${hall.name}
+                            </c:forEach>
                         </div>
                         <div class="card-footer align-items-center">
                             <div class="d-flex justify-content-md-center">
@@ -54,8 +57,8 @@
                                     <c:if test="${sessionScope.user.role == 'user'}">
                                         <form action="${pageContext.request.contextPath}/index-servlet"
                                               method="post">
-                                            <input name="command" type="hidden" value="buyTicket_command">
-                                            <input name="exhibition_id" type="hidden" value="${exh.id}">
+                                            <input name="command" type="hidden" value="buyTicketCommand">
+                                            <input name="exhibitionId" type="hidden" value="${exh.id}">
 
                                             <c:if test="${sessionScope.user.isTicketPresent(exh.id)}">
                                                 <button class="btn btn-success" type="button" disabled >
@@ -79,8 +82,8 @@
                                     <c:if test="${sessionScope.user.role == 'admin'}">
                                         <form action="${pageContext.request.contextPath}/index-servlet"
                                               method="post">
-                                            <input name="command" type="hidden" value="cancelExhibition_command">
-                                            <input name="exhibition_id" type="hidden" value="${exh.id}">
+                                            <input name="command" type="hidden" value="cancelExhibitionCommand">
+                                            <input name="exhibitionId" type="hidden" value="${exh.id}">
 
                                             <button class="btn-success" type="button">
                                                     ${exh.amountOfTickets()} <fmt:message
@@ -100,8 +103,8 @@
                                         </form>
                                         <form action="${pageContext.request.contextPath}/index-servlet"
                                               method="post">
-                                            <input name="command" type="hidden" value="deleteExhibition_command">
-                                            <input name="exhibition_id" type="hidden" value="${exh.id}">
+                                            <input name="command" type="hidden" value="deleteExhibitionCommand">
+                                            <input name="exhibitionId" type="hidden" value="${exh.id}">
                                             <button class="btn btn-danger" type="submit">
                                                 <fmt:message key='exhibition.delete'/>
                                             </button>
@@ -122,9 +125,8 @@
             <nav class="align-content-center align-items-center">
                 <ul class="pagination">
                     <c:forEach var="i" begin="1" end="${sessionScope.noOfPages}">
-
                         <li class="page-item"><a class="page-link"
-                                                 href="${pageContext.request.contextPath}/index-servlet?command=getExhibitions_command&currentPage=${i}">${i}</a>
+                          href="${pageContext.request.contextPath}/index-servlet?command=getExhibitionsCommand&currentPage=${i}">${i}</a>
                         </li>
                     </c:forEach>
                 </ul>

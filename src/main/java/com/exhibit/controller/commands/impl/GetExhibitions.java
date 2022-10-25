@@ -39,11 +39,28 @@ public class GetExhibitions implements Command {
             sortType = (String) session.getAttribute(SORT_TYPE);
         }
 
+        String hallId;
+        if (req.getParameter(HALL_ID) != null) {
+            hallId = req.getParameter(HALL_ID);
+            session.setAttribute(HALL_ID, hallId);
+        } else {
+            hallId = (String) session.getAttribute(HALL_ID);
+        }
+
+        String exhDate;
+        if (req.getParameter(EXH_DATE) != null) {
+            exhDate = req.getParameter(EXH_DATE);
+            session.setAttribute(EXH_DATE, exhDate);
+        } else {
+            exhDate = (String) session.getAttribute(EXH_DATE);
+        }
+
+
         try {
             exhList = new ExhibitionDao().findAll();
             switch (sortType) {
                 case "sortByDate":
-                    if (!sortByDate(req.getParameter(EXH_DATE))) {
+                    if (!sortByDate(exhDate)){
                         req.getSession().setAttribute(ERROR_MESSAGE, "no exhibition on this date");
                     }
                     break;
@@ -58,7 +75,7 @@ public class GetExhibitions implements Command {
                     exhList.sort(comparatorP);
                     break;
                 case "sortByHall":
-                    if (!sortByHall(Long.parseLong(req.getParameter("hall_id")))) {
+                    if (!sortByHall(hallId)){
                         req.getSession().setAttribute(ERROR_MESSAGE, "no exhibition in this hall");
                     }
                     break;
@@ -88,7 +105,7 @@ public class GetExhibitions implements Command {
 
         String redirect;
         if (session.getAttribute(ERROR_MESSAGE) != null) {
-            redirect = HOME_PAGE;
+            redirect = req.getHeader("Referer");
         } else {
             redirect = EXHIBITION_PAGE;
         }
@@ -113,8 +130,11 @@ public class GetExhibitions implements Command {
         return exhList != null && !exhList.isEmpty();
     }
 
-    private boolean sortByHall(long hallId) {
-
+    private boolean sortByHall(String hallString) {
+        if (hallString == null || hallString.isEmpty()) {
+            return false;
+        }
+        long hallId = Long.parseLong(hallString);
         ExhibitionService service = new ExhibitionDao();
         List<Exhibition> hallExhibition = new CopyOnWriteArrayList<>();
         for (Exhibition exh : exhList) {

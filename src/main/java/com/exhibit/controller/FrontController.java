@@ -5,33 +5,31 @@ import com.exhibit.controller.commands.CommandContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import static com.exhibit.util.UtilConstants.INFO_LOGGER;
 
 
 @WebServlet(name = "indexServlet", value = {"/index-servlet"})
-public class IndexServlet extends HttpServlet {
+public class FrontController extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void init() throws ServletException {
-        super.init();
+    public void init(){
         logger.info("Initializing servlet");
-
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         commandManager(req, resp);
     }
 
     @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    public void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         commandManager(req, resp);
     }
 
@@ -41,7 +39,13 @@ public class IndexServlet extends HttpServlet {
         logger.info("Destroying servlet");
     }
 
-    private void commandManager(HttpServletRequest req, HttpServletResponse resp) {
+    private void commandManager(final HttpServletRequest req, final HttpServletResponse resp) {
+        HttpSession session = req.getSession();
+
+        if (session.isNew()) {
+            session.setAttribute("user", null);
+        }
+
         String commandName = req.getParameter("command");
         logger.info(commandName);
         Command command = CommandContainer.getCommand(commandName);

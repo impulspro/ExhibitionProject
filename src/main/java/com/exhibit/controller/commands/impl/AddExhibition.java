@@ -29,7 +29,7 @@ public class AddExhibition implements Command {
         Time startTime = Time.valueOf(req.getParameter("startTime") + ":00");
         Time endTime = Time.valueOf(req.getParameter("endTime") + ":00");
         double price = Double.parseDouble(req.getParameter("price"));
-        String[] hallsId = req.getParameterValues("halls_id");
+        String[] hallsId = req.getParameterValues("hallsId");
 
         ExhibitionService service = new ExhibitionDao();
         Exhibition exhibition = Exhibition.newBuilder()

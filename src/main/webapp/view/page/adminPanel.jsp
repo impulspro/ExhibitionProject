@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<%@ page import="com.exhibit.model.Hall" %>
-<%@ page import="java.util.List" %>
 <%@ page import="com.exhibit.services.HallService" %>
 <%@ page import="com.exhibit.dao.HallDao" %>
+<%@ page import="com.exhibit.model.Hall" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -18,16 +18,16 @@
     <title>Exhibition</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%@include file="/view/template/styles.jsp" %>
-
+    <%@include file="/view/template/header.jsp" %>
+    <%
+        HallService service = new HallDao();
+        List<Hall> hallList = service.findAll();
+        if (session.getAttribute("hallList") == null) {
+            session.setAttribute("hallList", hallList);
+        }
+    %>
 </head>
 <body>
-
-<%@include file="/view/template/header.jsp" %>
-<%
-    HallService service = new HallDao();
-    List<Hall> hallList = service.findAll();
-    session.setAttribute("hallList", hallList);
-%>
 <main>
 
     <div class="container-fluid d-flex justify-content-center align-items-center p-0">
@@ -39,7 +39,7 @@
                     <div class="input-group">
                         <div class="form-inline">
                             <input type="search" name="login" id="form1" class="form-control" required/>
-                            <input name="command" type="hidden" value="searchUser_command">
+                            <input name="command" type="hidden" value="searchUserCommand">
                             <label class="form-label" for="form1"></label>
                         </div>
                         <button type="submit" class="btn btn-primary">
@@ -47,12 +47,12 @@
                         </button>
                     </div>
                 </form>
-                <c:if test="${sessionScope.search_user != null}">
-                    <p><strong>${sessionScope.search_user.login} ${sessionScope.search_user.money}$ </strong>
+                <c:if test="${sessionScope.searchUser != null}">
+                    <p><strong>${sessionScope.searchUser.login} ${sessionScope.searchUser.money}$ </strong>
                     </p>
                     <strong><fmt:message key='adminPanel.userExhibitions'/>:</strong>
                     <br>
-                    <c:forEach var="ticket" items="${sessionScope.search_user.getUserTickets()}">
+                    <c:forEach var="ticket" items="${sessionScope.searchUser.getUserTickets()}">
                         ${ticket.getExhibition().theme}
                         <br>
                     </c:forEach>
@@ -63,7 +63,7 @@
                 <form name="listOfAllUsers" action="${pageContext.request.contextPath}/index-servlet" method="get">
                     <div class="input-group">
                         <div class="form-inline">
-                            <input name="command" type="hidden" value="listOfAllUsers_command">
+                            <input name="command" type="hidden" value="listOfAllUsersCommand">
                         </div>
                         <button type="submit" class="btn btn-primary">
                             <fmt:message key='adminPanel.allUsers'/>
@@ -81,7 +81,7 @@
                                     <div class="input-group">
                                         <div class="form-inline">
                                             <input name="login" type="hidden" value="${userI.login}">
-                                            <input name="command" type="hidden" value="searchUser_command">
+                                            <input name="command" type="hidden" value="searchUserCommand">
                                         </div>
                                         <button type="submit" class="btn btn-light">
                                                 ${i} ${userI.login} ${userI.role} ${userI.money}$
@@ -97,7 +97,7 @@
                                             <div class="input-group">
                                                 <div class="form-inline">
                                                     <input name="login" type="hidden" value="${userI.login}">
-                                                    <input name="command" type="hidden" value="deleteUser_command">
+                                                    <input name="command" type="hidden" value="deleteUserCommand">
                                                 </div>
                                                 <button type="submit" class="btn btn-danger">
                                                     <fmt:message key='adminPanel.deleteUser'/>
@@ -122,7 +122,7 @@
                     <legend><fmt:message key='addExhibition.topic'/> <tf:tagdate/></legend>
 
 
-                    <input name="command" type="hidden" value="addExhibition_command">
+                    <input name="command" type="hidden" value="addExhibitionCommand">
 
                     <label for="themeId"><fmt:message key='addExhibition.form.theme'/></label>
                     <br>
@@ -151,7 +151,7 @@
 
                     <div class="form-group">
                         <label for="hallsId"><fmt:message key='addExhibition.form.chooseHalls'/></label>
-                        <select name="halls_id" multiple class="form-control" id="hallsId" required>
+                        <select name="hallsId" multiple class="form-control" id="hallsId" required>
                             <c:forEach items="${hallList}" var="hall">
                                 <option value="${hall.id}">${hall.name}</option>
                                 <br>

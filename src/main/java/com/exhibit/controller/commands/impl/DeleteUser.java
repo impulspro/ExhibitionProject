@@ -33,7 +33,7 @@ public class DeleteUser implements Command {
             session.setAttribute(ERROR_MESSAGE, "cannot delete user");
         }
 
-        Command command = CommandContainer.getCommand("listOfAllUsers_command");
+        Command command = CommandContainer.getCommand("listOfAllUsersCommand");
         command.execute(req, resp);
     }
 }

@@ -1,14 +1,14 @@
-<c:if test="${not empty sessionScope.error_message}">
+<c:if test="${not empty sessionScope.errorMessage}">
     <script>
-        const error_message = "${sessionScope.error_message}";
-        alert(error_message);
+        const errorMessage = "${sessionScope.errorMessage}";
+        alert(errorMessage);
     </script>
-    ${sessionScope.error_message = null}
+    ${sessionScope.errorMessage = null}
 </c:if>
-<c:if test="${not empty sessionScope.user_message}">
+<c:if test="${not empty sessionScope.userMessage}">
     <script>
-        const user_message = "${sessionScope.user_message}";
-        alert(user_message);
+        const userMessage = "${sessionScope.userMessage}";
+        alert(userMessage);
     </script>
-    ${sessionScope.user_message = null}
+    ${sessionScope.userMessage = null}
 </c:if>

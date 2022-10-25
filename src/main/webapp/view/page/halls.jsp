@@ -20,7 +20,9 @@
     <%
         HallService service = new HallDao();
         List<Hall> hallList = service.findAll();
-        session.setAttribute("hallList", hallList);
+        if (session.getAttribute("hallList") == null) {
+            session.setAttribute("hallList", hallList);
+        }
     %>
 </head>
 <body>
@@ -45,9 +47,9 @@
                             </p>
                             <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet"
                                   method="get">
-                                <input name="command" type="hidden" value="getExhibitions_command">
+                                <input name="command" type="hidden" value="getExhibitionsCommand">
                                 <input name="sortType" type="hidden" value="sortByHall">
-                                <input name="hall_id" type="hidden" value=${hall.id}>
+                                <input name="hallId" type="hidden" value=${hall.id}>
                                 <button class="btn-success" type="submit"><fmt:message
                                         key='index.exhibition.byHall'/></button>
                             </form>

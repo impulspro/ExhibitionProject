@@ -21,7 +21,7 @@ public class BuyTicket implements Command {
     public void execute(final HttpServletRequest req, final HttpServletResponse resp){
         logger.info("BuyTicket Command start ");
 
-        long exhibitionId = Long.parseLong(req.getParameter("exhibition_id"));
+        long exhibitionId = Long.parseLong(req.getParameter("exhibitionId"));
 
 
         User user = (User) req.getSession().getAttribute("user");
@@ -30,7 +30,7 @@ public class BuyTicket implements Command {
 
         String answer = service.buyTicket(user, exhibitionId);
         session.removeAttribute("user");
-        session.removeAttribute("exhibition_id");
+        session.removeAttribute("exhibitionId");
         session.setAttribute("user", user);
 
         if (answer != null && answer.equals("ok")) {

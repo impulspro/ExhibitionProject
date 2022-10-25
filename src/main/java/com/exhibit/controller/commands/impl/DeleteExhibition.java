@@ -19,7 +19,7 @@ public class DeleteExhibition implements Command {
     @Override
     public void execute(final HttpServletRequest req, final HttpServletResponse resp){
         HttpSession session = req.getSession();
-        String exhibitionId = req.getParameter("exhibition_id");
+        String exhibitionId = req.getParameter("exhibitionId");
         ExhibitionService service = new ExhibitionDao();
         try {
             service.delete(Long.parseLong(exhibitionId));

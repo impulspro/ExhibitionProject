@@ -2,21 +2,21 @@
 
     <div class="container-fluid">
         <form action="${pageContext.request.contextPath}/index-servlet" method="get">
-            <input name="command" type="hidden" value="home_command">
+            <input name="command" type="hidden" value="homeCommand">
             <button class="btn btn-info"><i class="fa fa-home"></i> <fmt:message key='header.home'/></button>
         </form>
 
         <div class="row">
             <form action="${pageContext.request.contextPath}/index-servlet" method="get">
                 <input name="sortType" type="hidden" value="sort">
-                <input name="command" type="hidden" value="getExhibitions_command">
+                <input name="command" type="hidden" value="getExhibitionsCommand">
                 <button class="btn btn-success" type="submit"><i class="fa fa-folder"></i> <fmt:message key='header.showExhibitions'/></button>
             </form>
         </div>
 
 
         <form class="nav-link" action="${pageContext.request.contextPath}/index-servlet" method="get">
-            <input name="command" type="hidden" value="getHalls_command">
+            <input name="command" type="hidden" value="getHallsCommand">
             <button type="submit" class="btn btn-warning"><fmt:message key='header.showHalls'/></button>
         </form>
 
@@ -29,7 +29,7 @@
                 <c:choose>
                     <c:when test="${sessionScope.user == null}">
                         <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet" method="post">
-                            <input name="command" type="hidden" value="login_command">
+                            <input name="command" type="hidden" value="loginCommand">
                             <label>
                                 <input type="text" placeholder="<fmt:message key='header.user.loginLabel'/>" name="login">
                             </label>
@@ -42,7 +42,7 @@
                     <c:otherwise>
                         <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet" method="get">
                             <button class="btn-info" disabled>${sessionScope.user.login}</button>
-                            <input name="command" type="hidden" value="logout_command">
+                            <input name="command" type="hidden" value="logoutCommand">
                             <button class="btn-success" type="submit"><i class="fa fa-close"></i> <fmt:message key='header.user.logOut'/></button>
                             <c:if test="${sessionScope.user.role == 'user'}">
                                 <button class="btn-info" disabled>${sessionScope.user.money}$</button>
@@ -50,7 +50,7 @@
                         </form>
 
                         <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet" method="get">
-                            <input name="command" type="hidden" value="printPdf_command">
+                            <input name="command" type="hidden" value="printPdfCommand">
                             <button class="btn-light" type="submit"><fmt:message key='header.printPdf'/></button>
                         </form>
 

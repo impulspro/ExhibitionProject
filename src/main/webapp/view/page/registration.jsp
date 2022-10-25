@@ -53,7 +53,7 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                            <input name="command" type="hidden" value="registration_command">
+                                            <input name="command" type="hidden" value="registrationCommand">
                                             <button type="submit" class="btn btn-primary btn-lg"><fmt:message
                                                     key='registration.form.register'/></button>
                                         </div>

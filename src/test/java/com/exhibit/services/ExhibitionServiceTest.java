@@ -5,6 +5,7 @@ import com.exhibit.dao.UserDao;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Hall;
 import com.exhibit.model.User;
+import com.exhibit.util.PasswordHashing;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;
 
@@ -68,12 +70,28 @@ class ExhibitionServiceTest {
 
     @Test
     void numberOfExhibitions() {
-        List<Exhibition> exhibitionList = service.findAll();
-        Exhibition exhibition = exhibitionList.get(1);
+        String theme = "Test Theme" + randomString();
+        String detail = "Some test details";
+        Date date = Date.valueOf(LocalDate.now());
+        Time time = new Time(7200000);
+        double price = 100D;
+
+        Exhibition expectedExh = Exhibition.newBuilder()
+                .setTheme(theme)
+                .setDetails(detail)
+                .setStartDate(date)
+                .setEndDate(date)
+                .setStartTime(time)
+                .setEndTime(time)
+                .setPrice(price)
+                .build();
+
 
         long expected = service.findAll().size() + 2;
-        service.add(exhibition);
-        service.add(exhibition);
+        service.add(expectedExh);
+        expectedExh.setTheme(randomString());
+        service.add(expectedExh);
+
         long actual = service.findAll().size();
         assertEquals(expected, actual);
 
@@ -81,7 +99,7 @@ class ExhibitionServiceTest {
 
     @Test
     void amountOfTickets() {
-        User user = new User(randomString(), randomString());
+        User user = new User(randomString(), PasswordHashing.toMD5(randomString()));
         UserService userService = new UserDao();
         userService.add(user);
         List<Exhibition> exhibitionList = service.findAll().subList(0,2);
