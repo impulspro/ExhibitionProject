@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
-import static com.exhibit.util.UtilConstants.*;
+import static com.exhibit.util.constants.UtilConstants.*;
 
 
 public class GetExhibitions implements Command {

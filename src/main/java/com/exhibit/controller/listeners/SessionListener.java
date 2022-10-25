@@ -1,37 +1,20 @@
 package com.exhibit.controller.listeners;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.exhibit.dao.HallDao;
+import com.exhibit.model.Hall;
+import com.exhibit.services.HallService;
 
 import javax.servlet.annotation.WebListener;
-import javax.servlet.http.HttpSessionAttributeListener;
-import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
+import java.util.List;
 
-import static com.exhibit.util.UtilConstants.INFO_LOGGER;
-
-/**
- * Session attribute listener.
- */
 @WebListener
-public class SessionListener implements HttpSessionAttributeListener {
-
-    private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
-
+public class SessionListener implements HttpSessionListener {
     @Override
-    public void attributeAdded(final HttpSessionBindingEvent event) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Session attribute added: ").append(event.getClass().getSimpleName()).append(" : ").append(event.getName())
-                .append(" : ").append(event.getValue());
-        logger.info(sb);
+    public void sessionCreated(HttpSessionEvent httpSessionEvent) {
+        HallService service = new HallDao();
+        List<Hall> hallList = service.findAll();
+        httpSessionEvent.getSession().setAttribute("hallList", hallList);
     }
-
-
-    @Override
-    public void attributeRemoved(final HttpSessionBindingEvent event) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Session attribute removed: ").append(event.getClass().getSimpleName()).append(" : ").append(event.getName()).
-                append(" : ").append(event.getValue());
-        logger.info(sb);
-    }
-
 }

@@ -10,7 +10,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import static com.exhibit.util.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 
 
 public class ConnectionPool {
@@ -29,8 +29,9 @@ public class ConnectionPool {
             ds.setUsername(prop.getProperty("db.username"));
             ds.setPassword(prop.getProperty("db.password"));
 
+
         } catch (Exception e) {
-            logger.info("Problems with connection pool");
+            logger.error("Problems with connection pool");
             throw new DaoException("Problems with connection pool", e);
         }
     }
@@ -40,9 +41,35 @@ public class ConnectionPool {
 
     public static Connection getConnection() {
         try {
-            return ds.getConnection();
+            Connection conn = ds.getConnection();
+            conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+            return conn;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("Problems with getConnection");
+            throw new DaoException("Problems with getConnection", e);
+        }
+    }
+
+    public static void closeResources(AutoCloseable... resources) {
+        for (AutoCloseable res : resources) {
+            if (res != null) {
+                try {
+                    res.close();
+                } catch (Exception e) {
+                    logger.error(e);
+                }
+            }
+        }
+    }
+
+    public static void rollbackConnection(Connection conn, SQLException e) {
+        logger.error(e);
+        try {
+            conn.rollback();
+        } catch (SQLException ex) {
+            logger.error(ex);
         }
     }
 }
+
+   

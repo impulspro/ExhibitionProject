@@ -1,4 +1,4 @@
-package com.exhibit.util;
+package com.exhibit.util.constants;
 
 public class ExhibitionConstants {
     public static final String ADD_EXHIBITION_SQL =
@@ -27,6 +27,5 @@ public class ExhibitionConstants {
 
     private ExhibitionConstants() {
     }
-
-
 }
+    

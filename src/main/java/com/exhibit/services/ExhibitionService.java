@@ -8,22 +8,22 @@ import java.util.Optional;
 
 
 public interface ExhibitionService {
-    void add(Exhibition exhibition);
+    void add(final Exhibition exhibition);
 
 
-    Optional<Exhibition> findByTheme(String theme);
+    Optional<Exhibition> findByTheme(final String theme);
 
     List<Exhibition> findAll();
 
-    void setHalls(long exhibitionId, String[] hallsId);
+    void setHalls(final long exhibitionId, final String[] hallsId);
 
-    int amountOfTickets(long exhibitionId);
+    int amountOfTickets(final long exhibitionId);
 
-    List<Hall> getHalls(long id);
+    List<Hall> getHalls(final long id);
 
-    Optional<Exhibition> findById(long exhibitionId);
+    Optional<Exhibition> findById(final long exhibitionId);
 
-    void cancel(long exhibitionId);
+    void cancel(final long exhibitionId);
 
-    void delete(long exhibitionId);
+    void delete(final long exhibitionId);
 }

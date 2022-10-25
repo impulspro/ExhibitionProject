@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<%@ page import="com.exhibit.services.HallService" %>
-<%@ page import="com.exhibit.dao.HallDao" %>
-<%@ page import="com.exhibit.model.Hall" %>
-<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -11,7 +6,9 @@
 
 <fmt:setLocale value="${param.lang}"/>
 <fmt:setBundle basename="text"/>
-<%@include file="/view/template/styles.jsp" %>
+
+
+<!DOCTYPE html>
 <html lang="${param.lang}">
 
 <head>
@@ -19,13 +16,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%@include file="/view/template/styles.jsp" %>
     <%@include file="/view/template/header.jsp" %>
-    <%
-        HallService service = new HallDao();
-        List<Hall> hallList = service.findAll();
-        if (session.getAttribute("hallList") == null) {
-            session.setAttribute("hallList", hallList);
-        }
-    %>
 </head>
 <body>
 <main>

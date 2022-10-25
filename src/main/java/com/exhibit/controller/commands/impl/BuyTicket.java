@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.exhibit.util.UtilConstants.*;
+import static com.exhibit.util.constants.UtilConstants.*;
 
 public class BuyTicket implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);

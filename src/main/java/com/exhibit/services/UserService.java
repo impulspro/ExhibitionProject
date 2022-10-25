@@ -1,22 +1,26 @@
 package com.exhibit.services;
 
+import com.exhibit.model.Exhibition;
+import com.exhibit.model.Hall;
 import com.exhibit.model.Ticket;
 import com.exhibit.model.User;
 
 import java.util.List;
 import java.util.Optional;
 
+
 public interface UserService {
-    Optional<User> findByLogin(String login);
+    void add(final User user);
+
+
+    Optional<User> findByLogin(final String login);
 
     List<User> findAll();
 
-    void add(User user);
 
-    void delete(User user);
-
-    String buyTicket(User user, long exhibitionId);
-
-    List<Ticket> getUserTickets(User user);
+    void update(final User user);
+    void delete(final User user);
+    boolean isTicketPreset(final String login, final long exhibitionId);
+    List<Ticket> getUserTickets(final User user);
+    String buyTicket(final User user, final long exhibitionId);
 }
-   

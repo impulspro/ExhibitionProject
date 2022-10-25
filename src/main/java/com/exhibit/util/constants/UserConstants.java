@@ -1,4 +1,4 @@
-package com.exhibit.util;
+package com.exhibit.util.constants;
 
 public class UserConstants {
     public static final String AUTHORIZED_USER = "user";
@@ -11,11 +11,19 @@ public class UserConstants {
     public static final String FIND_USER_TICKETS_SQL = "SELECT * FROM user_tickets WHERE user_id = ?";
     public static final String UPDATE_USER_SQL =
             "UPDATE user SET login = ?, password = ?, role = ?, money = ? WHERE id = ?";
+    public static final String UPDATE_USER_MONEY_SQL =
+            "UPDATE user SET money = ? WHERE id = ?";
     public static final String FIND_USER_BY_LOGIN =
             "SELECT * FROM user WHERE login = ?";
     public static final String DELETE_USER_BY_ID_SQL =
             "DELETE FROM user WHERE id = ?";
+    public static final String NO_EXHIBITION_FOUND =
+            "No exhibition found";
+    public static final String ALREADY_BOUGHT_TICKET =
+            "already bought a ticket";
+    public static final String NO_ENOUGH_MONEY =
+            "not enough money";
+    public static final String BUY_TICKET_OK = "ok";
     private UserConstants() {
     }
 }
-

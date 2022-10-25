@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.exhibit.util.UtilConstants.*;
+import static com.exhibit.util.constants.UtilConstants.*;
 
 public class PrintPdf implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);

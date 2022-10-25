@@ -1,35 +1,25 @@
-<%@ page import="com.exhibit.services.HallService" %>
-<%@ page import="com.exhibit.dao.HallDao" %>
-<%@ page import="com.exhibit.model.Hall" %>
-<%@ page import="java.util.List" %>
-<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="customTag" uri="/WEB-INF/custom.tld" %>
 <%@ page isELIgnored="false" %>
 
-<fmt:setLocale value="${param.lang}"/>
+<fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="text"/>
 
-<html lang="${param.lang}">
+<!DOCTYPE html>
+<html lang="uk">
 <head>
     <title>Exhibition</title>
 
     <%@include file="view/template/styles.jsp" %>
     <%@include file="view/template/header.jsp" %>
-    <%
-        HallService service = new HallDao();
-        List<Hall> hallList = service.findAll();
-        if (session.getAttribute("hallList") == null) {
-            session.setAttribute("hallList", hallList);
-        }
-    %>
+
 </head>
 <body style="background-image: url('view/img/back2.jpg');">
 
-
 <main>
+    <h1><%= request.getRequestURL() %></h1>
     <div class="container mt-3">
         <div class="d-flex justify-content-md-center bg-warning mb-3">
             <h2><fmt:message key="index.welcome"/><customTag:Hello message="!"/></h2>
@@ -68,6 +58,7 @@
                             <div class="form-group">
                                 <label for="hallId"></label><select name="hallId" class="form-control" id="hallId"
                                                                     required>
+
                                 <c:forEach items="${hallList}" var="hall">
                                     <option value="${hall.id}">${hall.name}</option>
                                     <br>

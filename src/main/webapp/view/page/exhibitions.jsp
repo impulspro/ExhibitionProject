@@ -5,10 +5,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
 <%@ page import="java.time.temporal.ChronoUnit" %>
-<fmt:setLocale value="${param.lang}"/>
+<fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="text"/>
 
-<html lang="${param.lang}">
+<html lang="uk">
 <head>
     <title>Exhibition</title>
 

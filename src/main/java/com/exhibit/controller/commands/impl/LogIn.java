@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.exhibit.util.UtilConstants.ERROR_MESSAGE;
-import static com.exhibit.util.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.constants.UtilConstants.ERROR_MESSAGE;
+import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 
 public class LogIn implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
@@ -50,5 +50,3 @@ public class LogIn implements Command {
         } catch (IOException e) {
             logger.info("problems with Redirect");
         }
-    }
-}

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 
-import static com.exhibit.util.UtilConstants.*;
+import static com.exhibit.util.constants.UtilConstants.*;
 
 public class AddExhibition implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);

@@ -7,8 +7,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-import static com.exhibit.util.UserConstants.AUTHORIZED_USER;
-import static com.exhibit.util.UserConstants.USER_DEFAULT_MONEY;
+import static com.exhibit.util.constants.UserConstants.AUTHORIZED_USER;
+import static com.exhibit.util.constants.UserConstants.USER_DEFAULT_MONEY;
 
 public class User implements Serializable {
     private long id;

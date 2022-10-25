@@ -33,5 +33,3 @@ public class PasswordHashing {
             throw new DaoException("Cannot convert password", e);
         }
         return hashOfString;
-    }
-}

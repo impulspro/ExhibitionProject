@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;
 
