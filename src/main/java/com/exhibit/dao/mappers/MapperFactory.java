@@ -1,5 +1,10 @@
 package com.exhibit.dao.mappers;
 
+import com.exhibit.dao.mappers.impl.ExhibitionMapper;
+import com.exhibit.dao.mappers.impl.HallMapper;
+import com.exhibit.dao.mappers.impl.TicketMapper;
+import com.exhibit.dao.mappers.impl.UserMapper;
+
 public final class MapperFactory {
     private static final MapperFactory instance = new MapperFactory();
 

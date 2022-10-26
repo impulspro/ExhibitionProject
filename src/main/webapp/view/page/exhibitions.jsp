@@ -18,7 +18,7 @@
 
 <main>
     <%@include file="../template/header.jsp" %>
-    <%@include file="../template/showExhibitions.jsp" %>
+    <%@include file="../template/showExhibition2.jsp" %>
     <%@include file="../template/message.jsp" %>
 </main>
 

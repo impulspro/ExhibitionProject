@@ -1,6 +1,6 @@
-package com.exhibit.dao;
+package com.exhibit.util;
 
-import com.exhibit.exeptions.DaoException;
+import com.exhibit.dao.exeptions.DaoException;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,12 +1,14 @@
-package com.exhibit.dao;
+package com.exhibit.dao.impl;
 
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Ticket;
 import com.exhibit.model.User;
-import com.exhibit.services.ExhibitionService;
-import com.exhibit.services.UserService;
+import com.exhibit.model.services.ExhibitionService;
+import com.exhibit.model.services.ServiceFactory;
+import com.exhibit.model.services.UserService;
+import com.exhibit.util.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,8 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.exhibit.util.constants.UtilConstants.*;
 import static com.exhibit.util.constants.UserConstants.*;
+import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 
 
 public class UserDao implements UserService {
@@ -63,15 +65,17 @@ public class UserDao implements UserService {
             ps.setString(i++, AUTHORIZED_USER);
             ps.setDouble(i, USER_DEFAULT_MONEY);
             ps.executeUpdate();
+            conn.commit();
 
             //set real id from db
+
             ps = conn.prepareStatement(FIND_REAL_USER_ID_BY_LOGIN_SQL);
             ps.setString(1, user.getLogin());
             rs = ps.executeQuery();
             if (rs.next()) {
                 user.setId(rs.getLong("id"));
             }
-            conn.commit();
+
         } catch (SQLException e) {
             ConnectionPool.rollbackConnection(conn, e);
         } finally {
@@ -103,7 +107,7 @@ public class UserDao implements UserService {
     }
 
     public String buyTicket(final User user, final long exhibitionId) {
-        ExhibitionService exhibitionService = new ExhibitionDao();
+        ExhibitionService exhibitionService = ServiceFactory.getInstance().getExhibitionService();
         Optional<Exhibition> exhibition = exhibitionService.findById(exhibitionId);
 
         if (!exhibition.isPresent()) {

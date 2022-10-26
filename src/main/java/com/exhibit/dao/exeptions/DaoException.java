@@ -1,4 +1,4 @@
-package com.exhibit.exeptions;
+package com.exhibit.dao.exeptions;
 
 public class DaoException extends RuntimeException {
     public DaoException(String message) {

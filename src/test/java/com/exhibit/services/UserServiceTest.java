@@ -1,9 +1,12 @@
 package com.exhibit.services;
 
-import com.exhibit.dao.ExhibitionDao;
+import com.exhibit.dao.impl.ExhibitionDao;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Ticket;
 import com.exhibit.model.User;
+import com.exhibit.model.services.ExhibitionService;
+import com.exhibit.model.services.ServiceFactory;
+import com.exhibit.model.services.UserService;
 import com.exhibit.util.PasswordHashing;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

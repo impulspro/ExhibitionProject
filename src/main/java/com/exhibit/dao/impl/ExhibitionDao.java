@@ -1,15 +1,11 @@
-package com.exhibit.dao;
+package com.exhibit.dao.impl;
 
-import com.exhibit.dao.mappers.HallMapper;
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
-import com.exhibit.exeptions.DaoException;
 import com.exhibit.model.Exhibition;
-import com.exhibit.model.Hall;
-import com.exhibit.model.User;
-import com.exhibit.services.ExhibitionService;
-import com.exhibit.services.HallService;
-import com.exhibit.services.ServiceFactory;
+import com.exhibit.model.services.ExhibitionService;
+import com.exhibit.model.services.ServiceFactory;
+import com.exhibit.util.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,8 +18,6 @@ import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.exhibit.util.constants.ExhibitionConstants.*;
-import static com.exhibit.util.constants.UserConstants.FIND_ALL_USERS_SQL;
-import static com.exhibit.util.constants.UserConstants.UPDATE_USER_SQL;
 import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 
 
@@ -48,6 +42,7 @@ public class ExhibitionDao implements ExhibitionService {
             ps.setTime(i++, exhibition.getEndTime());
             ps.setDouble(i, exhibition.getPrice());
             ps.executeUpdate();
+            conn.commit();
 
             //set real id from db
             ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
@@ -57,7 +52,7 @@ public class ExhibitionDao implements ExhibitionService {
             } else {
                 logger.error(EXHIBITION_INPUT_FAILED);
             }
-            conn.commit();
+
         } catch (SQLException e) {
             ConnectionPool.rollbackConnection(conn, e);
         } finally {
@@ -87,7 +82,7 @@ public class ExhibitionDao implements ExhibitionService {
     }
 
 
-    public Optional<Exhibition> findByTheme(String theme) {
+    public Optional<Exhibition> findByTheme(final String theme) {
         Optional<Exhibition> exhibition = Optional.empty();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -97,7 +92,7 @@ public class ExhibitionDao implements ExhibitionService {
             ps = conn.prepareStatement(FIND_EXHIBITION_BY_THEME_SQL);
             ps.setString(1, theme);
             rs = ps.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 exhibition = Optional.of(mapper.extractFromResultSet(rs));
             }
         } catch (SQLException e) {
@@ -130,39 +125,59 @@ public class ExhibitionDao implements ExhibitionService {
         return exhibitionList;
     }
 
-    public int amountOfTickets(long exhibitionId) {
-        try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement ps = conn.prepareStatement(FIND_AMOUNT_OF_TICKETS_BY_EXHIBITION_ID_SQL)) {
+    public int amountOfTickets(final long exhibitionId) {
+        int amount = 0;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            ps = conn.prepareStatement(FIND_AMOUNT_OF_TICKETS_BY_EXHIBITION_ID_SQL);
             ps.setLong(1, exhibitionId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1);
-            } else {
-                return 0;
+                amount = rs.getInt(1);
             }
         } catch (SQLException e) {
-            throw new DaoException("Cannot find amount of tickets " + exhibitionId, e);
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
         }
+        return amount;
     }
 
-    public void cancel(long exhibitionId) {
-        try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement ps = conn.prepareStatement(UPDATE_EXHIBITION_PRICE_BY_ID_SQL)) {
+    public void cancel(final long exhibitionId) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            conn.setAutoCommit(false);
+            ps = conn.prepareStatement(UPDATE_EXHIBITION_PRICE_BY_ID_SQL);
             ps.setDouble(1, -1.0);
             ps.setLong(2, exhibitionId);
             ps.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
-            throw new DaoException("Cannot update ticket price " + exhibitionId, e);
+            ConnectionPool.rollbackConnection(conn, e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps);
         }
     }
 
-    public void delete(long exhibitionId) {
-        try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement prepSt = conn.prepareStatement(DELETE_EXHIBITION_BY_ID_SQL)) {
-            prepSt.setLong(1, exhibitionId);
-            prepSt.executeUpdate();
+    public void delete(final long exhibitionId) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            conn.setAutoCommit(false);
+            ps = conn.prepareStatement(DELETE_EXHIBITION_BY_ID_SQL);
+            ps.setLong(1, exhibitionId);
+            ps.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
-            throw new DaoException("Cannot delete exhibition " + exhibitionId, e);
+            ConnectionPool.rollbackConnection(conn, e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps);
         }
     }
 }

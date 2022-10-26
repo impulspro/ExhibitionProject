@@ -1,7 +1,7 @@
 package com.exhibit.model;
 
-import com.exhibit.dao.ExhibitionDao;
-import com.exhibit.services.ExhibitionService;
+import com.exhibit.model.services.ExhibitionService;
+import com.exhibit.model.services.ServiceFactory;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -43,7 +43,7 @@ public class Ticket implements Serializable {
     }
 
     public Exhibition getExhibition() {
-        ExhibitionService service = new ExhibitionDao();
+        ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
         Optional<Exhibition> exhibition = service.findById(exhibitionId);
         return exhibition.orElse(null);
     }

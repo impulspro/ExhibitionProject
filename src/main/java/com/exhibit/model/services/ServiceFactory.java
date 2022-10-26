@@ -1,8 +1,8 @@
-package com.exhibit.services;
+package com.exhibit.model.services;
 
-import com.exhibit.dao.ExhibitionDao;
-import com.exhibit.dao.HallDao;
-import com.exhibit.dao.UserDao;
+import com.exhibit.dao.impl.ExhibitionDao;
+import com.exhibit.dao.impl.HallDao;
+import com.exhibit.dao.impl.UserDao;
 
 public class ServiceFactory {
     private static final ServiceFactory instance = new ServiceFactory();

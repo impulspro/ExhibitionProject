@@ -1,10 +1,10 @@
-package com.exhibit.dao;
+package com.exhibit.dao.impl;
 
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
-import com.exhibit.exeptions.DaoException;
 import com.exhibit.model.Hall;
-import com.exhibit.services.HallService;
+import com.exhibit.model.services.HallService;
+import com.exhibit.util.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,18 +23,24 @@ public class HallDao implements HallService {
     Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     public List<Hall> findAll() {
-        List<Hall> halls = new CopyOnWriteArrayList<>();
-        try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement prepSt = conn.prepareStatement(FIND_ALL_HALLS_SQL)) {
-            ResultSet rs = prepSt.executeQuery();
-            Mapper<Hall> mapperHall = MapperFactory.getInstance().getHallMapper();
+        List<Hall> hallList = new CopyOnWriteArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = ConnectionPool.getConnection();
+            ps = conn.prepareStatement(FIND_ALL_HALLS_SQL);
+            rs = ps.executeQuery();
             while (rs.next()) {
-                halls.add(mapperHall.extractFromResultSet(rs));
+                hallList.add(mapper.extractFromResultSet(rs));
             }
         } catch (SQLException e) {
-            throw new DaoException("Cannot find all halls", e);
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
         }
-        return halls;
+        return hallList;
     }
 
     @Override
@@ -66,7 +72,6 @@ public class HallDao implements HallService {
     public void setHallByExhibitionId(final long exhibitionId, final String[] hallsId) {
         Connection conn = null;
         PreparedStatement ps = null;
-        ResultSet rs = null;
         try {
             conn = ConnectionPool.getConnection();
             conn.setAutoCommit(false);
@@ -80,7 +85,7 @@ public class HallDao implements HallService {
         } catch (SQLException e) {
             ConnectionPool.rollbackConnection(conn, e);
         } finally {
-            ConnectionPool.closeResources(conn, ps, rs);
+            ConnectionPool.closeResources(conn, ps);
         }
     }
 

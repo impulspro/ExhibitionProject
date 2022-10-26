@@ -1,7 +1,8 @@
 package com.exhibit.model;
 
-import com.exhibit.dao.ExhibitionDao;
-import com.exhibit.services.ExhibitionService;
+import com.exhibit.model.services.ExhibitionService;
+import com.exhibit.model.services.HallService;
+import com.exhibit.model.services.ServiceFactory;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -71,12 +72,12 @@ public class Exhibition implements Serializable {
     }
 
     public List<Hall> getHalls() {
-        ExhibitionService service = new ExhibitionDao();
-        return service.getHalls(id);
+        HallService hallService = ServiceFactory.getInstance().getHallService();
+        return hallService.getHallByExhibitionId(id);
     }
 
     public int amountOfTickets() {
-        ExhibitionService service = new ExhibitionDao();
+        ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
         return service.amountOfTickets(id);
     }
 

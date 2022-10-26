@@ -1,5 +1,6 @@
-package com.exhibit.dao.mappers;
+package com.exhibit.dao.mappers.impl;
 
+import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.model.Hall;
 
 import java.sql.ResultSet;

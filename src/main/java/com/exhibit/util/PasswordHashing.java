@@ -1,6 +1,6 @@
 package com.exhibit.util;
 
-import com.exhibit.exeptions.DaoException;
+import com.exhibit.dao.exeptions.DaoException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

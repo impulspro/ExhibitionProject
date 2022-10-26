@@ -1,7 +1,7 @@
 package com.exhibit.model;
 
-import com.exhibit.dao.UserDao;
-import com.exhibit.services.UserService;
+import com.exhibit.model.services.ServiceFactory;
+import com.exhibit.model.services.UserService;
 
 import java.io.Serializable;
 import java.util.List;
@@ -67,12 +67,12 @@ public class User implements Serializable {
     }
 
     public boolean isTicketPresent(long exhibitionId){
-        UserDao dao = new UserDao();
-        return dao.isTicketPreset(getLogin(), exhibitionId);
+        UserService service = ServiceFactory.getInstance().getUserService();
+        return service.isTicketPreset(getLogin(), exhibitionId);
     }
 
     public List<Ticket> getUserTickets(){
-        UserService service = new UserDao();
+        UserService service = ServiceFactory.getInstance().getUserService();
         return service.getUserTickets(this);
     }
     @Override

@@ -1,4 +1,4 @@
-package com.exhibit.services;
+package com.exhibit.model.services;
 
 import com.exhibit.model.Exhibition;
 

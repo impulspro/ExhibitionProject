@@ -21,7 +21,9 @@ public class ExhibitionConstants {
     public static final String FIND_ALL_HALLS_SQL =
             "SELECT * FROM hall";
     public static final String FIND_HALLS_BY_EXHIBITION_ID =
-            "SELECT * FROM exhibition_halls WHERE exhibition_id = ?";
+            "SELECT * FROM hall INNER JOIN exhibition_halls" +
+                    " ON hall.id = exhibition_halls.hall_id " +
+                    "WHERE exhibition_halls.exhibition_id = ?";
     public static final String FIND_AMOUNT_OF_TICKETS_BY_EXHIBITION_ID_SQL =
             "SELECT COUNT(*) FROM user_tickets WHERE exhibition_id = ?";
 

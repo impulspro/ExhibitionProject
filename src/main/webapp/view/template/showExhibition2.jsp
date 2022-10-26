@@ -1,35 +1,35 @@
-<div class="container mt-3">
-    <c:if test="${sessionScope.exhList != null}">
+<div class="container">
+    <div class="row">
         <c:set var="i" value="1"/>
         <c:forEach var="exh" items="${sessionScope.exhList}">
 
-              <div class="d-flex justify-content-md-center">
-                <div class="col-6 card align-content-center text-center bg-info">
-
-                    <h5 class="card-header btn-dark">${exh.theme}</h5>
-
-                    <div class="card-header bg-light">
-                        <fmt:message key='exhibition.from'/>: <strong> ${exh.startDate} </strong>
-                        <fmt:message key='exhibition.to'/>: <strong> ${exh.endDate} </strong>
-                        <fmt:message key='exhibition.price'/> <strong> = ${exh.price}$</strong>
-                    </div>
-
+            <div class="col-lg-4">
+                <div class="card bg-light">
                     <div class="card-body">
-                        <p class="card-text">${exh.details}</p>
-                        <p><strong> ${exh.startTime.toLocalTime().truncatedTo(ChronoUnit.SECONDS)} </strong>
-                            <fmt:message key='exhibition.to'/>
-                            <strong> ${exh.endTime.toLocalTime().truncatedTo(ChronoUnit.SECONDS)} </strong>
-                            <strong><fmt:message key='exhibition.halls'/>:</strong>
+
+                        <h5 class="card-title">${exh.theme}<strong class="float-right">${exh.price}$</strong></h5>
+                        <strong>
+                            <p class="text-center">
+                                    ${exh.startDate}
+                                    (${exh.startTime.toLocalTime().truncatedTo(ChronoUnit.SECONDS)}
+                                        -
+                                    ${exh.endTime.toLocalTime().truncatedTo(ChronoUnit.SECONDS)})
+                                    ${exh.endDate}
+                            </p>
+                        </strong>
+                        <p class="text-center">
+                            <fmt:message key='exhibition.halls'/>:
                             <c:forEach var="hall" items="${exh.getHalls()}">
-                                ${hall.name}
+                                <strong> ${hall.name}</strong>
                             </c:forEach>
                         </p>
+                        <p class="text-center">
+                                ${exh.details}
+                        </p>
                     </div>
-
                     <div class="card-footer align-items-center">
                         <div class="d-flex justify-content-md-center">
                             <div class="row">
-
                                 <c:if test="${sessionScope.user.role == null}">
                                     <a class="btn btn-primary"
                                        href="${pageContext.request.contextPath}/view/page/registration.jsp">
@@ -67,18 +67,18 @@
                                         <input name="command" type="hidden" value="cancelExhibitionCommand">
                                         <input name="exhibitionId" type="hidden" value="${exh.id}">
 
-                                        <button class="btn-success" type="button">
+                                        <button class="btn-success" type="button" disabled>
                                                 ${exh.amountOfTickets()} <fmt:message
                                                 key='exhibition.amountOfTickets'/>
                                         </button>
 
                                         <c:if test="${exh.price != '-1'}">
-                                            <button class="btn btn-warning" type="submit">
+                                            <button class="btn-warning" type="submit">
                                                 <fmt:message key='exhibition.cancel'/>
                                             </button>
                                         </c:if>
                                         <c:if test="${exh.price == '-1'}">
-                                            <button class="btn btn-dark disabled" disabled type="button">
+                                            <button class="btn-dark disabled" disabled type="button">
                                                 <fmt:message key='exhibition.alreadyCanceled'/></button>
                                         </c:if>
 
@@ -87,21 +87,20 @@
                                           method="post">
                                         <input name="command" type="hidden" value="deleteExhibitionCommand">
                                         <input name="exhibitionId" type="hidden" value="${exh.id}">
-                                        <button class="btn btn-danger" type="submit">
+                                        <button class="btn-danger" type="submit">
                                             <fmt:message key='exhibition.delete'/>
                                         </button>
                                     </form>
                                 </c:if>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <br>
+
             <c:set var="i" value="${i+1}"/>
         </c:forEach>
-    </c:if>
+    </div>
 
     <div class="d-flex justify-content-md-center">
         <nav class="align-content-center align-items-center">
@@ -114,4 +113,5 @@
             </ul>
         </nav>
     </div>
+
 </div>

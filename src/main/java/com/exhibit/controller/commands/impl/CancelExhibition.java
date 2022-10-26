@@ -1,8 +1,8 @@
 package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.services.ExhibitionService;
-import com.exhibit.services.ServiceFactory;
+import com.exhibit.model.services.ExhibitionService;
+import com.exhibit.model.services.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

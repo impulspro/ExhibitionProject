@@ -13,7 +13,7 @@ public class UtilConstants {
     public static final String USER_MESSAGE = "userMessage";
     public static final String HOME_PAGE = "index.jsp";
     public static final String EXHIBITION_PAGE = "view/page/exhibitions.jsp";
-    public static final int RECORDS_PER_PAGE = 3;
+    public static final int RECORDS_PER_PAGE = 6;
     private UtilConstants() {
     }
 }
