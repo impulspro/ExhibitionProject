@@ -1,12 +1,12 @@
 package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.ExhibitionDao;
-import com.exhibit.dao.UserDao;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Ticket;
 import com.exhibit.model.User;
 import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.ServiceFactory;
+import com.exhibit.services.UserService;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -36,7 +36,8 @@ public class PrintPdf implements Command {
     public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
 
         User user = (User) req.getSession().getAttribute("user");
-        List<Ticket> ticketList = new UserDao().getUserTickets(user);
+        UserService userService = ServiceFactory.getInstance().getUserService();
+        List<Ticket> ticketList = userService.getUserTickets(user);
 
         if (ticketList == null || ticketList.isEmpty()) {
             String page = req.getHeader("Referer");
@@ -53,7 +54,7 @@ public class PrintPdf implements Command {
                 Document doc = new Document(pdfDoc);
 
                 doc.add(new Paragraph("Your tickets dear " + user.getLogin() + ":"));
-                ExhibitionService service = new ExhibitionDao();
+                ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
 
                 for (Ticket ticket : ticketList) {
                     Optional<Exhibition> exhibitionOpt = service.findById(ticket.getExhibitionId());

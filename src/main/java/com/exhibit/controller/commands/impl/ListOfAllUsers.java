@@ -1,8 +1,8 @@
 package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.UserDao;
 import com.exhibit.model.User;
+import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +23,7 @@ public class ListOfAllUsers implements Command {
 
         String redirectPage = "view/page/adminPanel.jsp";
         try {
-            UserService userService = new UserDao();
+            UserService userService = ServiceFactory.getInstance().getUserService();
             List<User> userList = userService.findAll();
             logger.info("ListOfAllUsers command execute successful");
             req.getSession().setAttribute("userList", userList);

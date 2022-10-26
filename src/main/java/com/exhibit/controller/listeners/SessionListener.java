@@ -1,8 +1,8 @@
 package com.exhibit.controller.listeners;
 
-import com.exhibit.dao.HallDao;
 import com.exhibit.model.Hall;
 import com.exhibit.services.HallService;
+import com.exhibit.services.ServiceFactory;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
@@ -13,8 +13,8 @@ import java.util.List;
 public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-        HallService service = new HallDao();
-        List<Hall> hallList = service.findAll();
+        HallService hallService = ServiceFactory.getInstance().getHallService();
+        List<Hall> hallList = hallService.findAll();
         httpSessionEvent.getSession().setAttribute("hallList", hallList);
     }
 }

@@ -1,11 +1,12 @@
 package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.ExhibitionDao;
 import com.exhibit.exeptions.DaoException;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Hall;
 import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.HallService;
+import com.exhibit.services.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,10 +58,11 @@ public class GetExhibitions implements Command {
 
 
         try {
-            exhList = new ExhibitionDao().findAll();
+            ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
+            exhList = service.findAll();
             switch (sortType) {
                 case "sortByDate":
-                    if (!sortByDate(exhDate)){
+                    if (!sortByDate(exhDate)) {
                         req.getSession().setAttribute(ERROR_MESSAGE, "no exhibition on this date");
                     }
                     break;
@@ -75,7 +77,7 @@ public class GetExhibitions implements Command {
                     exhList.sort(comparatorP);
                     break;
                 case "sortByHall":
-                    if (!sortByHall(hallId)){
+                    if (!sortByHall(hallId)) {
                         req.getSession().setAttribute(ERROR_MESSAGE, "no exhibition in this hall");
                     }
                     break;
@@ -85,7 +87,7 @@ public class GetExhibitions implements Command {
             logger.info("GetExhibitions Command successfully");
 
         } catch (DaoException e) {
-            logger.info("GetExhibitions Command failed");
+            logger.error(e);
             req.getSession().setAttribute(ERROR_MESSAGE, "problem with showing exhibitions");
         }
 
@@ -113,7 +115,7 @@ public class GetExhibitions implements Command {
         try {
             resp.sendRedirect(redirect);
         } catch (IOException e) {
-            logger.info("GetExhibitions redirect failed");
+            logger.error(e);
         }
     }
 
@@ -135,10 +137,10 @@ public class GetExhibitions implements Command {
             return false;
         }
         long hallId = Long.parseLong(hallString);
-        ExhibitionService service = new ExhibitionDao();
+        HallService service = ServiceFactory.getInstance().getHallService();
         List<Exhibition> hallExhibition = new CopyOnWriteArrayList<>();
         for (Exhibition exh : exhList) {
-            List<Hall> halls = service.getHalls(exh.getId());
+            List<Hall> halls = service.getHallByExhibitionId(exh.getId());
             for (Hall hall : halls) {
                 if (hall.getId() == hallId) {
                     hallExhibition.add(exh);

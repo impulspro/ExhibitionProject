@@ -19,10 +19,9 @@
 <body style="background-image: url('view/img/back2.jpg');">
 
 <main>
-    <h1><%= request.getRequestURL() %></h1>
     <div class="container mt-3">
-        <div class="d-flex justify-content-md-center bg-warning mb-3">
-            <h2><fmt:message key="index.welcome"/><customTag:Hello message="!"/></h2>
+        <div class="d-flex justify-content-md-center mb-3">
+            <h3 class="font-italic"><fmt:message key="index.welcome"/><customTag:Hello message="!"/></h3>
         </div>
         <div class="d-flex justify-content-md-center">
             <div class="col">
@@ -59,7 +58,7 @@
                                 <label for="hallId"></label><select name="hallId" class="form-control" id="hallId"
                                                                     required>
 
-                                <c:forEach items="${hallList}" var="hall">
+                                <c:forEach items="${sessionScope.hallList}" var="hall">
                                     <option value="${hall.id}">${hall.name}</option>
                                     <br>
                                 </c:forEach>
@@ -74,11 +73,8 @@
             </div>
         </div>
     </div>
-
+    <%@include file="view/template/message.jsp" %>
 </main>
-
-<%@include file="view/template/message.jsp" %>
-
 </body>
 </html>
 

@@ -6,7 +6,12 @@
     <custom-resource-bundle>
       <file value="file://$PROJECT_DIR$/src/main/resources/text.properties" />
       <file value="file://$PROJECT_DIR$/src/main/resources/text_en.properties" />
-      <file value="file://$PROJECT_DIR$/src/main/resources/text_ua.properties" />
+      <base-name>text</base-name>
+    </custom-resource-bundle>
+    <custom-resource-bundle>
+      <file value="file://$PROJECT_DIR$/src/main/resources/text.properties" />
+      <file value="file://$PROJECT_DIR$/src/main/resources/text_en.properties" />
+      <file value="file://$PROJECT_DIR$/src/main/resources/text_uk.properties" />
       <base-name>text</base-name>
     </custom-resource-bundle>
   </component>

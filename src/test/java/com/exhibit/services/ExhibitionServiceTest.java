@@ -24,7 +24,7 @@ class ExhibitionServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new ExhibitionDao();
+        service = ServiceFactory.getInstance().getExhibitionService();
     }
 
     @AfterEach
@@ -59,8 +59,9 @@ class ExhibitionServiceTest {
         }
 
         String[] halls = {"1", "3", "5"};
-        service.setHalls(expectedExh.getId(), halls);
-        List<Hall> actualHalls = service.getHalls(expectedExh.getId());
+        HallService hallService = ServiceFactory.getInstance().getHallService();
+        hallService.setHallByExhibitionId(expectedExh.getId(), halls);
+        List<Hall> actualHalls = hallService.getHallByExhibitionId(expectedExh.getId());
         for (int i = 0; i < halls.length; i++) {
             assertEquals(actualHalls.get(i).getId(), Long.valueOf(halls[i]));
         }
@@ -167,12 +168,13 @@ class ExhibitionServiceTest {
         service.add(expectedExh);
         assertTrue(service.findById(expectedExh.getId()).isPresent());
         String[] halls = {"1", "3", "5"};
-        service.setHalls(expectedExh.getId(), halls);
+        HallService hallService = ServiceFactory.getInstance().getHallService();
+        hallService.setHallByExhibitionId(expectedExh.getId(), halls);
 
         service.delete(expectedExh.getId());
         assertFalse(service.findById(expectedExh.getId()).isPresent());
 
-        List<Hall> hallListNull = service.getHalls(expectedExh.getId());
+        List<Hall> hallListNull = hallService.getHallByExhibitionId(expectedExh.getId());
         assertTrue(hallListNull.isEmpty());
 
     }

@@ -1,11 +1,17 @@
 package com.exhibit.dao;
 
+import com.exhibit.dao.mappers.HallMapper;
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
 import com.exhibit.exeptions.DaoException;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Hall;
+import com.exhibit.model.User;
 import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.HallService;
+import com.exhibit.services.ServiceFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,111 +22,112 @@ import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.exhibit.util.constants.ExhibitionConstants.*;
+import static com.exhibit.util.constants.UserConstants.FIND_ALL_USERS_SQL;
+import static com.exhibit.util.constants.UserConstants.UPDATE_USER_SQL;
+import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 
 
 public class ExhibitionDao implements ExhibitionService {
     static Mapper<Exhibition> mapper = MapperFactory.getInstance().getExhibitionMapper();
+    Logger logger = LogManager.getLogger(INFO_LOGGER);
 
-    public void add(Exhibition exhibition) {
-        try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement prepSt = conn.prepareStatement(ADD_EXHIBITION_SQL)) {
+    public void add(final Exhibition exhibition) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            conn.setAutoCommit(false);
+            ps = conn.prepareStatement(ADD_EXHIBITION_SQL);
             int i = 1;
-            prepSt.setString(i++, exhibition.getTheme());
-            prepSt.setString(i++, exhibition.getDetails());
-            prepSt.setDate(i++, exhibition.getStartDate());
-            prepSt.setDate(i++, exhibition.getEndDate());
-            prepSt.setTime(i++, exhibition.getStartTime());
-            prepSt.setTime(i++, exhibition.getEndTime());
-            prepSt.setDouble(i, exhibition.getPrice());
-            prepSt.executeUpdate();
-            ExhibitionService service = new ExhibitionDao();
+            ps.setString(i++, exhibition.getTheme());
+            ps.setString(i++, exhibition.getDetails());
+            ps.setDate(i++, exhibition.getStartDate());
+            ps.setDate(i++, exhibition.getEndDate());
+            ps.setTime(i++, exhibition.getStartTime());
+            ps.setTime(i++, exhibition.getEndTime());
+            ps.setDouble(i, exhibition.getPrice());
+            ps.executeUpdate();
+
+            //set real id from db
+            ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
             Optional<Exhibition> exhibitionInBase = service.findByTheme(exhibition.getTheme());
             if (exhibitionInBase.isPresent()) {
                 exhibition.setId(exhibitionInBase.get().getId());
             } else {
-                throw new DaoException("Invalid exhibition input");
+                logger.error(EXHIBITION_INPUT_FAILED);
             }
+            conn.commit();
         } catch (SQLException e) {
-            throw new DaoException("Invalid exhibition input", e);
+            ConnectionPool.rollbackConnection(conn, e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
         }
     }
 
-    public Optional<Exhibition> findById(long id) throws DaoException {
-        try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement prepSt = conn.prepareStatement(FIND_EXHIBITION_BY_THEME_ID)) {
-            prepSt.setLong(1, id);
-            ResultSet rs = prepSt.executeQuery();
+    public Optional<Exhibition> findById(final long id) {
+        Optional<Exhibition> exhibition = Optional.empty();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            ps = conn.prepareStatement(FIND_EXHIBITION_BY_ID);
+            ps.setLong(1, id);
+            rs = ps.executeQuery();
             if (rs.next()) {
-                return Optional.of(mapper.extractFromResultSet(rs));
+                exhibition = Optional.of(mapper.extractFromResultSet(rs));
             }
-        } catch (SQLException | DaoException e) {
-            throw new DaoException("Cannot find exhibition by id " + id, e);
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
         }
-        return Optional.empty();
+        return exhibition;
     }
 
 
     public Optional<Exhibition> findByTheme(String theme) {
         Optional<Exhibition> exhibition = Optional.empty();
-        try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement prepSt = conn.prepareStatement(FIND_EXHIBITION_BY_THEME_SQL)) {
-            prepSt.setString(1, theme);
-            ResultSet rs = prepSt.executeQuery();
-            while (rs.next()) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            ps = conn.prepareStatement(FIND_EXHIBITION_BY_THEME_SQL);
+            ps.setString(1, theme);
+            rs = ps.executeQuery();
+            if (rs.next()) {
                 exhibition = Optional.of(mapper.extractFromResultSet(rs));
             }
-            return exhibition;
         } catch (SQLException e) {
-            throw new DaoException("Cannot find exhibition by theme " + theme, e);
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
         }
+        return exhibition;
     }
 
     public List<Exhibition> findAll() {
-        List<Exhibition> exhibitions = new CopyOnWriteArrayList<>();
-        try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement ps = conn.prepareStatement(FIND_ALL_EXHIBITIONS_SQL)) {
-            ResultSet rs = ps.executeQuery();
+        List<Exhibition> exhibitionList = new CopyOnWriteArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = ConnectionPool.getConnection();
+            ps = conn.prepareStatement(FIND_ALL_EXHIBITIONS_SQL);
+            rs = ps.executeQuery();
             while (rs.next()) {
-                exhibitions.add(mapper.extractFromResultSet(rs));
-            }
-
-        } catch (SQLException e) {
-            throw new DaoException("Cannot find all exhibition", e);
-        }
-        return exhibitions;
-    }
-
-    public void setHalls(long exhibitionId, String[] hallsId) {
-        try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement ps = conn.prepareStatement(SET_HALLS_SQL)) {
-            ps.setLong(1, exhibitionId);
-            for (String hall_id : hallsId) {
-                ps.setLong(2, Long.parseLong(hall_id));
-                ps.executeUpdate();
+                Exhibition exhibition = mapper.extractFromResultSet(rs);
+                exhibitionList.add(exhibition);
             }
         } catch (SQLException e) {
-            throw new DaoException("Cannot set halls for exhibition " + exhibitionId, e);
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
         }
-    }
-
-    public List<Hall> getHalls(long id) {
-        List<Hall> hallListById = new CopyOnWriteArrayList<>();
-        List<Hall> allHalls = new HallDao().findAll();
-        try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement ps = conn.prepareStatement(FIND_HALLS_BY_EXHIBITION_ID)) {
-            ps.setLong(1, id);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                long hallId = rs.getLong(2);
-                Optional<Hall> hall = allHalls.stream()
-                        .filter(i -> i.getId() == hallId)
-                        .findFirst();
-                hall.ifPresent(hallListById::add);
-            }
-        } catch (Exception e) {
-            throw new DaoException("Cannot find halls by exhibition id " + id, e);
-        }
-        return hallListById;
+        return exhibitionList;
     }
 
     public int amountOfTickets(long exhibitionId) {

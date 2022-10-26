@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -7,10 +6,10 @@
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="text"/>
 
-<html lang="ua">
+<!DOCTYPE html>
+<html lang="uk">
 <head>
     <title>Exhibition</title>
-
     <%@include file="../template/styles.jsp" %>
 
 </head>

@@ -4,12 +4,12 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tf" %>
 <%@ page isELIgnored="false" %>
 
-<fmt:setLocale value="${param.lang}"/>
+<fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="text"/>
 
 
 <!DOCTYPE html>
-<html lang="${param.lang}">
+<html lang="uk">
 
 <head>
     <title>Exhibition</title>
@@ -142,7 +142,7 @@
                     <div class="form-group">
                         <label for="hallsId"><fmt:message key='addExhibition.form.chooseHalls'/></label>
                         <select name="hallsId" multiple class="form-control" id="hallsId" required>
-                            <c:forEach items="${hallList}" var="hall">
+                            <c:forEach items="${sessionScope.hallList}" var="hall">
                                 <option value="${hall.id}">${hall.name}</option>
                                 <br>
                             </c:forEach>

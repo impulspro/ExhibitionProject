@@ -1,7 +1,6 @@
 package com.exhibit.services;
 
 import com.exhibit.dao.ExhibitionDao;
-import com.exhibit.dao.UserDao;
 import com.exhibit.model.Exhibition;
 import com.exhibit.model.Ticket;
 import com.exhibit.model.User;
@@ -14,14 +13,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.exhibit.util.constants.UserConstants.BUY_TICKET_OK;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class UserServiceTest {
     UserService service;
 
     @BeforeEach
     void setUp() {
-        service = new UserDao();
+        service = ServiceFactory.getInstance().getUserService();
     }
 
     @AfterEach
@@ -77,7 +78,7 @@ class UserServiceTest {
         List<Exhibition> exhibitionList = exhibitionService.findAll();
         for (int i = 0; i < 3; i++) {
             String answer = service.buyTicket(user.get(), exhibitionList.get(i).getId());
-            assertEquals("ok", answer);
+            assertEquals(BUY_TICKET_OK, answer);
         }
 
 

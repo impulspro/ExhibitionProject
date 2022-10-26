@@ -6,7 +6,7 @@ public class ExhibitionConstants {
                     " VALUES (?, ?, ?, ?, ?, ?, ?)";
     public static final String FIND_EXHIBITION_BY_THEME_SQL =
             "SELECT * FROM exhibition WHERE theme = ?";
-    public static final String FIND_EXHIBITION_BY_THEME_ID =
+    public static final String FIND_EXHIBITION_BY_ID =
             "SELECT * FROM exhibition WHERE id = ?";
     public static final String FIND_ALL_EXHIBITIONS_SQL =
             "SELECT * FROM exhibition";
@@ -25,6 +25,8 @@ public class ExhibitionConstants {
     public static final String FIND_AMOUNT_OF_TICKETS_BY_EXHIBITION_ID_SQL =
             "SELECT COUNT(*) FROM user_tickets WHERE exhibition_id = ?";
 
+    public static final String EXHIBITION_INPUT_FAILED =
+            "Problems with exhibition input";
     private ExhibitionConstants() {
     }
 }

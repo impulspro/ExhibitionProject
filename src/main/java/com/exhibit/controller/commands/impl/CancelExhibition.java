@@ -1,8 +1,8 @@
 package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.ExhibitionDao;
 import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,10 +17,10 @@ public class CancelExhibition implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(final HttpServletRequest req, final HttpServletResponse resp){
+    public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
         HttpSession session = req.getSession();
         String exhibitionId = req.getParameter("exhibitionId");
-        ExhibitionService service = new ExhibitionDao();
+        ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
         try {
             service.cancel(Long.parseLong(exhibitionId));
             logger.info("CancelExhibition Command successfully");

@@ -1,8 +1,8 @@
 package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.UserDao;
 import com.exhibit.model.User;
+import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,14 +18,14 @@ public class BuyTicket implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(final HttpServletRequest req, final HttpServletResponse resp){
+    public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
         logger.info("BuyTicket Command start ");
 
         long exhibitionId = Long.parseLong(req.getParameter("exhibitionId"));
 
 
         User user = (User) req.getSession().getAttribute("user");
-        UserService service = new UserDao();
+        UserService service = ServiceFactory.getInstance().getUserService();
         HttpSession session = req.getSession();
 
         String answer = service.buyTicket(user, exhibitionId);

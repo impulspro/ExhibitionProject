@@ -1,8 +1,8 @@
 package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.UserDao;
 import com.exhibit.model.User;
+import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,12 +20,12 @@ public class SearchUser implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(final HttpServletRequest req, final HttpServletResponse resp){
+    public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
         String login = req.getParameter("login");
         HttpSession session = req.getSession();
         String redirectPage = "view/page/adminPanel.jsp";
         try {
-            UserService userService = new UserDao();
+            UserService userService = ServiceFactory.getInstance().getUserService();
             Optional<User> user = userService.findByLogin(login);
             if (user.isPresent()) {
                 String info = "SearchUser command execute successful = " + login;

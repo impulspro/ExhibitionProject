@@ -1,8 +1,8 @@
 package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.UserDao;
 import com.exhibit.model.User;
+import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
 import com.exhibit.util.PasswordHashing;
 import org.apache.logging.log4j.LogManager;
@@ -27,7 +27,7 @@ public class LogIn implements Command {
         String page = "index.jsp";
 
         try {
-            UserService userService = new UserDao();
+            UserService userService = ServiceFactory.getInstance().getUserService();
             Optional<User> user;
             user = userService.findByLogin(login);
             if (user.isPresent()) {

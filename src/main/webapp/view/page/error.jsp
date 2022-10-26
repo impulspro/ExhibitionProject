@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-
 <%
     String message = pageContext.getException().getMessage();
     String exception = pageContext.getException().getClass().toString();
@@ -13,6 +11,7 @@
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="text"/>
 
+<!DOCTYPE html>
 <html lang="uk">
 <head>
     <title>Exhibition</title>

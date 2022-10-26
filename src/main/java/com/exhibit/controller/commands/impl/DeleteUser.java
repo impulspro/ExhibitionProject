@@ -2,8 +2,8 @@ package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
 import com.exhibit.controller.commands.CommandContainer;
-import com.exhibit.dao.UserDao;
 import com.exhibit.model.User;
+import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +22,7 @@ public class DeleteUser implements Command {
     public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
         HttpSession session = req.getSession();
         String login = req.getParameter("login");
-        UserService service = new UserDao();
+        UserService service = ServiceFactory.getInstance().getUserService();
         try {
             Optional<User> user = service.findByLogin(login);
             user.ifPresent(service::delete);

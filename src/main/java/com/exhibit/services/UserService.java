@@ -1,7 +1,5 @@
 package com.exhibit.services;
 
-import com.exhibit.model.Exhibition;
-import com.exhibit.model.Hall;
 import com.exhibit.model.Ticket;
 import com.exhibit.model.User;
 
@@ -17,10 +15,13 @@ public interface UserService {
 
     List<User> findAll();
 
-
     void update(final User user);
+
     void delete(final User user);
+
     boolean isTicketPreset(final String login, final long exhibitionId);
+
     List<Ticket> getUserTickets(final User user);
+
     String buyTicket(final User user, final long exhibitionId);
 }

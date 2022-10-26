@@ -1,10 +1,10 @@
 package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.UserDao;
-import com.exhibit.util.PasswordHashing;
 import com.exhibit.model.User;
+import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
+import com.exhibit.util.PasswordHashing;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +26,7 @@ public class Registration implements Command {
         HttpSession session = req.getSession();
         String redirectPage = "index.jsp";
         try {
-            UserService userService = new UserDao();
+            UserService userService = ServiceFactory.getInstance().getUserService();
             User user = new User(login, password);
             if (userService.findByLogin(login).isPresent()) {
                 String info = "Registration command execute failed for login because of existing user in base = " + login;

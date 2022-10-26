@@ -1,10 +1,11 @@
 package com.exhibit.controller.commands.impl;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.dao.ExhibitionDao;
 import com.exhibit.exeptions.DaoException;
 import com.exhibit.model.Exhibition;
 import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.HallService;
+import com.exhibit.services.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +21,7 @@ public class AddExhibition implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(final HttpServletRequest req, final HttpServletResponse resp){
+    public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
         String page = "view/page/adminPanel.jsp";
         String theme = req.getParameter("theme");
         String details = req.getParameter("details");
@@ -31,7 +32,7 @@ public class AddExhibition implements Command {
         double price = Double.parseDouble(req.getParameter("price"));
         String[] hallsId = req.getParameterValues("hallsId");
 
-        ExhibitionService service = new ExhibitionDao();
+        ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
         Exhibition exhibition = Exhibition.newBuilder()
                 .setTheme(theme)
                 .setDetails(details)
@@ -43,7 +44,8 @@ public class AddExhibition implements Command {
                 .build();
         try {
             service.add(exhibition);
-            service.setHalls(exhibition.getId(), hallsId);
+            HallService hallService = ServiceFactory.getInstance().getHallService();
+            hallService.setHallByExhibitionId(exhibition.getId(), hallsId);
             logger.info("AddExhibition command execute successful");
             req.getSession().setAttribute(USER_MESSAGE, "you successfully add exhibition");
         } catch (DaoException e) {
