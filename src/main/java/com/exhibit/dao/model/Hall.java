@@ -1,4 +1,4 @@
-package com.exhibit.model;
+package com.exhibit.dao.model;
 
 import java.io.Serializable;
 import java.util.Objects;

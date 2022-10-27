@@ -1,8 +1,8 @@
-package com.exhibit.model;
+package com.exhibit.dao.model;
 
-import com.exhibit.model.services.ExhibitionService;
-import com.exhibit.model.services.HallService;
-import com.exhibit.model.services.ServiceFactory;
+import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.HallService;
+import com.exhibit.services.ServiceFactory;
 
 import java.io.Serializable;
 import java.sql.Date;

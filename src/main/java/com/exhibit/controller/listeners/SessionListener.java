@@ -1,8 +1,8 @@
 package com.exhibit.controller.listeners;
 
-import com.exhibit.model.Hall;
-import com.exhibit.model.services.HallService;
-import com.exhibit.model.services.ServiceFactory;
+import com.exhibit.dao.model.Hall;
+import com.exhibit.services.HallService;
+import com.exhibit.services.ServiceFactory;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;

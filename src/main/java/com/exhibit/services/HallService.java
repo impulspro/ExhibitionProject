@@ -1,6 +1,6 @@
-package com.exhibit.model.services;
+package com.exhibit.services;
 
-import com.exhibit.model.Hall;
+import com.exhibit.dao.model.Hall;
 
 import java.util.List;
 

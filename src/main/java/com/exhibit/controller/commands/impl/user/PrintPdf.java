@@ -1,12 +1,12 @@
-package com.exhibit.controller.commands.impl;
+package com.exhibit.controller.commands.impl.user;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.model.Exhibition;
-import com.exhibit.model.Ticket;
-import com.exhibit.model.User;
-import com.exhibit.model.services.ExhibitionService;
-import com.exhibit.model.services.ServiceFactory;
-import com.exhibit.model.services.UserService;
+import com.exhibit.dao.model.Exhibition;
+import com.exhibit.dao.model.Ticket;
+import com.exhibit.dao.model.User;
+import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.ServiceFactory;
+import com.exhibit.services.UserService;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;

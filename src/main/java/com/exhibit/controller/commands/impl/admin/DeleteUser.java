@@ -1,10 +1,10 @@
-package com.exhibit.controller.commands.impl;
+package com.exhibit.controller.commands.impl.admin;
 
 import com.exhibit.controller.commands.Command;
 import com.exhibit.controller.commands.CommandContainer;
-import com.exhibit.model.User;
-import com.exhibit.model.services.ServiceFactory;
-import com.exhibit.model.services.UserService;
+import com.exhibit.dao.model.User;
+import com.exhibit.services.ServiceFactory;
+import com.exhibit.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

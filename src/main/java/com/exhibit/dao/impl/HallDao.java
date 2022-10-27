@@ -2,8 +2,8 @@ package com.exhibit.dao.impl;
 
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
-import com.exhibit.model.Hall;
-import com.exhibit.model.services.HallService;
+import com.exhibit.dao.model.Hall;
+import com.exhibit.services.HallService;
 import com.exhibit.util.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

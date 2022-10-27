@@ -1,13 +1,9 @@
 package com.exhibit.services;
 
 import com.exhibit.dao.impl.UserDao;
-import com.exhibit.model.Exhibition;
-import com.exhibit.model.Hall;
-import com.exhibit.model.User;
-import com.exhibit.model.services.ExhibitionService;
-import com.exhibit.model.services.HallService;
-import com.exhibit.model.services.ServiceFactory;
-import com.exhibit.model.services.UserService;
+import com.exhibit.dao.model.Exhibition;
+import com.exhibit.dao.model.Hall;
+import com.exhibit.dao.model.User;
 import com.exhibit.util.PasswordHashing;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +14,10 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
+import static com.exhibit.util.constants.UtilConstants.RECORDS_PER_PAGE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExhibitionServiceTest {
@@ -100,6 +99,22 @@ class ExhibitionServiceTest {
 
     }
 
+    @Test
+    void findByDatePerPage(){
+        List<Exhibition> exhibitions = service.findAll();
+        Date date = exhibitions.get(1).getStartDate();
+
+        List<Exhibition> exhibitionListExpected = exhibitions.stream().filter(e -> (e.getStartDate().before(date) || e.getStartDate().equals(date))
+                && (e.getEndDate().after(date) || e.getEndDate().equals(date))).collect(Collectors.toList());
+
+        List<Exhibition> exhibitionListActual = new CopyOnWriteArrayList<>();
+        int noOfPages = (int) Math.ceil(exhibitionListExpected.size() * 1.0 / RECORDS_PER_PAGE);
+        for (int i = 1; i <= noOfPages; i++) {
+            exhibitionListExpected.addAll(service.findByDatePerPage(date,1));
+        }
+
+        assertEquals(exhibitionListExpected, exhibitionListActual);
+    }
     @Test
     void amountOfTickets() {
         User user = new User(randomString(), PasswordHashing.toMD5(randomString()));

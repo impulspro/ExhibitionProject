@@ -1,6 +1,10 @@
 package com.exhibit.controller.commands;
 
-import com.exhibit.controller.commands.impl.*;
+import com.exhibit.controller.commands.impl.admin.*;
+import com.exhibit.controller.commands.impl.common.*;
+import com.exhibit.controller.commands.impl.user.BuyTicket;
+import com.exhibit.controller.commands.impl.user.PrintPdf;
+import com.exhibit.controller.commands.impl.user.Registration;
 
 import java.util.HashMap;
 import java.util.Map;

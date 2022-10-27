@@ -4,11 +4,9 @@
             <ul class="navbar-nav">
 
                 <li class="nav-item">
-                    <form action="${pageContext.request.contextPath}/index-servlet" method="get">
-                        <input name="command" type="hidden" value="homeCommand">
-                        <button class="btn-success"><em class="fa fa-home"></em> <fmt:message key='header.home'/>
-                        </button>
-                    </form>
+                    <button class="btn-success"
+                            onclick="window.location.href='${pageContext.request.contextPath}/index.jsp'">
+                        <em class="fa fa-home"></em> <fmt:message key='header.home'/></button>
                 </li>
                 &nbsp; &nbsp; &nbsp;
                 <li class="nav-item">

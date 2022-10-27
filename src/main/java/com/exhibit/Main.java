@@ -1,10 +1,10 @@
 package com.exhibit;
 
-import com.exhibit.model.Exhibition;
-import com.exhibit.model.Hall;
-import com.exhibit.model.services.ExhibitionService;
-import com.exhibit.model.services.HallService;
-import com.exhibit.model.services.ServiceFactory;
+import com.exhibit.dao.model.Exhibition;
+import com.exhibit.dao.model.Hall;
+import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.HallService;
+import com.exhibit.services.ServiceFactory;
 
 import java.util.List;
 

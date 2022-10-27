@@ -1,7 +1,7 @@
 package com.exhibit.dao.mappers.impl;
 
 import com.exhibit.dao.mappers.Mapper;
-import com.exhibit.model.Ticket;
+import com.exhibit.dao.model.Ticket;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

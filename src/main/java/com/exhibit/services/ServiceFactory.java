@@ -1,4 +1,4 @@
-package com.exhibit.model.services;
+package com.exhibit.services;
 
 import com.exhibit.dao.impl.ExhibitionDao;
 import com.exhibit.dao.impl.HallDao;

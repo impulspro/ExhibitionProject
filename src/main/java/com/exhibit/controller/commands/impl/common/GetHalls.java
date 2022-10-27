@@ -1,9 +1,9 @@
-package com.exhibit.controller.commands.impl;
+package com.exhibit.controller.commands.impl.common;
 
 import com.exhibit.controller.commands.Command;
-import com.exhibit.model.Hall;
-import com.exhibit.model.services.HallService;
-import com.exhibit.model.services.ServiceFactory;
+import com.exhibit.dao.model.Hall;
+import com.exhibit.services.HallService;
+import com.exhibit.services.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

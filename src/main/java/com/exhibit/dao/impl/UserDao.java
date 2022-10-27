@@ -2,12 +2,12 @@ package com.exhibit.dao.impl;
 
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
-import com.exhibit.model.Exhibition;
-import com.exhibit.model.Ticket;
-import com.exhibit.model.User;
-import com.exhibit.model.services.ExhibitionService;
-import com.exhibit.model.services.ServiceFactory;
-import com.exhibit.model.services.UserService;
+import com.exhibit.dao.model.Exhibition;
+import com.exhibit.dao.model.Ticket;
+import com.exhibit.dao.model.User;
+import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.ServiceFactory;
+import com.exhibit.services.UserService;
 import com.exhibit.util.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

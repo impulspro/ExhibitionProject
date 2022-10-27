@@ -1,7 +1,7 @@
-package com.exhibit.model.services;
+package com.exhibit.services;
 
-import com.exhibit.model.Ticket;
-import com.exhibit.model.User;
+import com.exhibit.dao.model.Ticket;
+import com.exhibit.dao.model.User;
 
 import java.util.List;
 import java.util.Optional;

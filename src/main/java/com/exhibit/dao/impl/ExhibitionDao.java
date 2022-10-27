@@ -2,9 +2,9 @@ package com.exhibit.dao.impl;
 
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
-import com.exhibit.model.Exhibition;
-import com.exhibit.model.services.ExhibitionService;
-import com.exhibit.model.services.ServiceFactory;
+import com.exhibit.dao.model.Exhibition;
+import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.ServiceFactory;
 import com.exhibit.util.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,12 +13,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.exhibit.util.constants.ExhibitionConstants.*;
 import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.constants.UtilConstants.RECORDS_PER_PAGE;
 
 
 public class ExhibitionDao implements ExhibitionService {
@@ -112,6 +114,58 @@ public class ExhibitionDao implements ExhibitionService {
         try {
             conn = ConnectionPool.getConnection();
             ps = conn.prepareStatement(FIND_ALL_EXHIBITIONS_SQL);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Exhibition exhibition = mapper.extractFromResultSet(rs);
+                exhibitionList.add(exhibition);
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
+        }
+        return exhibitionList;
+    }
+
+    @Override
+    public List<Exhibition> findByDatePerPage(final Date date, final int pageNum) {
+        List<Exhibition> exhibitionList = new CopyOnWriteArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = ConnectionPool.getConnection();
+            ps = conn.prepareStatement(FIND_EXHIBITIONS_BY_DATE_PER_PAGE_WITH_OFFSET_SQL);
+
+            ps.setDate(1, (java.sql.Date) date);
+            ps.setInt(2, RECORDS_PER_PAGE);
+            ps.setInt(3, (pageNum - 1) * RECORDS_PER_PAGE);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Exhibition exhibition = mapper.extractFromResultSet(rs);
+                exhibitionList.add(exhibition);
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
+        }
+        return exhibitionList;
+    }
+
+    @Override
+    public List<Exhibition> findAllSortByDatePerPage(final int pageNum) {
+        List<Exhibition> exhibitionList = new CopyOnWriteArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = ConnectionPool.getConnection();
+            ps = conn.prepareStatement(FIND_ALL_EXHIBITIONS_SORT_BY_DATE_PER_PAGE_WITH_OFFSET_SQL);
+            ps.setInt(1, RECORDS_PER_PAGE);
+            ps.setInt(2, (pageNum - 1) * RECORDS_PER_PAGE);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Exhibition exhibition = mapper.extractFromResultSet(rs);

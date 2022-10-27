@@ -1,13 +1,15 @@
-package com.exhibit.controller.commands.impl;
+package com.exhibit.controller.commands.impl.common;
 
 import com.exhibit.controller.commands.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.exhibit.util.constants.UtilConstants.HOME_PAGE;
 import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 
 public class Home implements Command {
@@ -16,9 +18,9 @@ public class Home implements Command {
     @Override
     public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
-            resp.sendRedirect("index.jsp");
+            resp.sendRedirect(HOME_PAGE);
         } catch (IOException e) {
-            logger.info("Home redirect failed");
+            logger.info(e);
         }
     }
 }

@@ -10,8 +10,11 @@ public class ExhibitionConstants {
             "SELECT * FROM exhibition WHERE id = ?";
     public static final String FIND_ALL_EXHIBITIONS_SQL =
             "SELECT * FROM exhibition";
-    public static final String FIND_EXHIBITIONS_RELATED_HALLS_SQL =
-            "SELECT * FROM exhibition_halls";
+
+    public static final String FIND_EXHIBITIONS_BY_DATE_PER_PAGE_WITH_OFFSET_SQL =
+            "SELECT * FROM exhibition WHERE ? BETWEEN start_date AND end_date ORDER BY start_date LIMIT ? OFFSET ?";
+    public static final String FIND_ALL_EXHIBITIONS_SORT_BY_DATE_PER_PAGE_WITH_OFFSET_SQL =
+            "SELECT * FROM exhibition ORDER BY start_date LIMIT ? OFFSET ?";
     public static final String DELETE_EXHIBITION_BY_ID_SQL =
             "DELETE FROM exhibition WHERE id = ?";
     public static final String UPDATE_EXHIBITION_PRICE_BY_ID_SQL =

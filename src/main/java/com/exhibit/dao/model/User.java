@@ -1,7 +1,7 @@
-package com.exhibit.model;
+package com.exhibit.dao.model;
 
-import com.exhibit.model.services.ServiceFactory;
-import com.exhibit.model.services.UserService;
+import com.exhibit.services.ServiceFactory;
+import com.exhibit.services.UserService;
 
 import java.io.Serializable;
 import java.util.List;

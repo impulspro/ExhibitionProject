@@ -1,7 +1,8 @@
-package com.exhibit.model.services;
+package com.exhibit.services;
 
-import com.exhibit.model.Exhibition;
+import com.exhibit.dao.model.Exhibition;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,8 @@ public interface ExhibitionService {
     Optional<Exhibition> findByTheme(final String theme);
 
     List<Exhibition> findAll();
+    List<Exhibition> findByDatePerPage(final Date date, final int pageNum);
+    List<Exhibition> findAllSortByDatePerPage(final int pageNum);
 
     int amountOfTickets(final long exhibitionId);
 

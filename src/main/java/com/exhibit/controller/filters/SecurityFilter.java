@@ -1,6 +1,6 @@
 package com.exhibit.controller.filters;
 
-import com.exhibit.model.User;
+import com.exhibit.dao.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
