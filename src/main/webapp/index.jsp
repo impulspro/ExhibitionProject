@@ -20,7 +20,7 @@
 
 <main>
     <div class="container mt-3">
-        <div class="d-flex justify-content-md-center mb-3">
+        <div class="d-flex justify-content-md-center mb-3 bg-light">
             <h3 class="font-italic"><fmt:message key="index.welcome"/><customTag:Hello message="!"/></h3>
         </div>
         <div class="d-flex justify-content-md-center">
@@ -45,7 +45,7 @@
                               method="get">
                             <input name="command" type="hidden" value="getExhibitionsCommand">
                             <input name="sortType" type="hidden" value="sortByDate">
-                            <label for="exhDate"></label><input type="date" name="exhDate" id="exhDate">
+                            <label for="exhDate"></label><input type="date" name="sortParam" id="exhDate">
                             <button class="btn btn-dark" type="submit"><fmt:message
                                     key='index.exhibition.byDate'/></button>
                         </form>
@@ -55,7 +55,7 @@
                             <input name="sortType" type="hidden" value="sortByHall">
                             <input name="command" type="hidden" value="getExhibitionsCommand">
                             <div class="form-group">
-                                <label for="hallId"></label><select name="hallId" class="form-control" id="hallId"
+                                <label for="hallId"></label><select name="sortParam" class="form-control" id="hallId"
                                                                     required>
 
                                 <c:forEach items="${sessionScope.hallList}" var="hall">

@@ -100,34 +100,18 @@ class ExhibitionServiceTest {
     }
 
     @Test
-    void findByDatePerPage(){
-        List<Exhibition> exhibitions = service.findAll();
-        Date date = exhibitions.get(1).getStartDate();
-
-        List<Exhibition> exhibitionListExpected = exhibitions.stream().filter(e -> (e.getStartDate().before(date) || e.getStartDate().equals(date))
-                && (e.getEndDate().after(date) || e.getEndDate().equals(date))).collect(Collectors.toList());
-
-        List<Exhibition> exhibitionListActual = new CopyOnWriteArrayList<>();
-        int noOfPages = (int) Math.ceil(exhibitionListExpected.size() * 1.0 / RECORDS_PER_PAGE);
-        for (int i = 1; i <= noOfPages; i++) {
-            exhibitionListExpected.addAll(service.findByDatePerPage(date,1));
-        }
-
-        assertEquals(exhibitionListExpected, exhibitionListActual);
-    }
-    @Test
     void amountOfTickets() {
         User user = new User(randomString(), PasswordHashing.toMD5(randomString()));
         UserService userService = new UserDao();
         userService.add(user);
         List<Exhibition> exhibitionList = service.findAll().subList(0,2);
 
-        long expectedAmount = service.amountOfTickets(exhibitionList.get(0).getId()) + service.amountOfTickets(exhibitionList.get(1).getId()) + 2;
+        long expectedAmount = service.amountOfTicketsByExhibition(exhibitionList.get(0).getId()) + service.amountOfTicketsByExhibition(exhibitionList.get(1).getId()) + 2;
 
         userService.buyTicket(user, exhibitionList.get(0).getId());
         userService.buyTicket(user, exhibitionList.get(1).getId());
 
-        long actualAmount = service.amountOfTickets(exhibitionList.get(0).getId()) + service.amountOfTickets(exhibitionList.get(1).getId());
+        long actualAmount = service.amountOfTicketsByExhibition(exhibitionList.get(0).getId()) + service.amountOfTicketsByExhibition(exhibitionList.get(1).getId());
 
         assertEquals(expectedAmount, actualAmount);
 

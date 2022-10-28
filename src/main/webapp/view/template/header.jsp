@@ -11,7 +11,7 @@
                 &nbsp; &nbsp; &nbsp;
                 <li class="nav-item">
                     <form action="${pageContext.request.contextPath}/index-servlet" method="get">
-                        <input name="sortType" type="hidden" value="sort">
+                        <input name="sortType" type="hidden" value="sortByDate">
                         <input name="command" type="hidden" value="getExhibitionsCommand">
                         <button class="btn-success" type="submit"><em class="fa fa-folder"></em>
                             <fmt:message key='header.showExhibitions'/></button>

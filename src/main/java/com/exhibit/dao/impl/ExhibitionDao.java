@@ -9,11 +9,7 @@ import com.exhibit.util.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -30,7 +26,6 @@ public class ExhibitionDao implements ExhibitionService {
     public void add(final Exhibition exhibition) {
         Connection conn = null;
         PreparedStatement ps = null;
-        ResultSet rs = null;
         try {
             conn = ConnectionPool.getConnection();
             conn.setAutoCommit(false);
@@ -54,11 +49,10 @@ public class ExhibitionDao implements ExhibitionService {
             } else {
                 logger.error(EXHIBITION_INPUT_FAILED);
             }
-
         } catch (SQLException e) {
             ConnectionPool.rollbackConnection(conn, e);
         } finally {
-            ConnectionPool.closeResources(conn, ps, rs);
+            ConnectionPool.closeResources(conn, ps);
         }
     }
 
@@ -128,66 +122,46 @@ public class ExhibitionDao implements ExhibitionService {
     }
 
     @Override
-    public List<Exhibition> findByDatePerPage(final Date date, final int pageNum) {
-        List<Exhibition> exhibitionList = new CopyOnWriteArrayList<>();
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            conn = ConnectionPool.getConnection();
-            ps = conn.prepareStatement(FIND_EXHIBITIONS_BY_DATE_PER_PAGE_WITH_OFFSET_SQL);
-
-            ps.setDate(1, (java.sql.Date) date);
-            ps.setInt(2, RECORDS_PER_PAGE);
-            ps.setInt(3, (pageNum - 1) * RECORDS_PER_PAGE);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Exhibition exhibition = mapper.extractFromResultSet(rs);
-                exhibitionList.add(exhibition);
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-        } finally {
-            ConnectionPool.closeResources(conn, ps, rs);
-        }
-        return exhibitionList;
-    }
-
-    @Override
-    public List<Exhibition> findAllSortByDatePerPage(final int pageNum) {
-        List<Exhibition> exhibitionList = new CopyOnWriteArrayList<>();
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            conn = ConnectionPool.getConnection();
-            ps = conn.prepareStatement(FIND_ALL_EXHIBITIONS_SORT_BY_DATE_PER_PAGE_WITH_OFFSET_SQL);
-            ps.setInt(1, RECORDS_PER_PAGE);
-            ps.setInt(2, (pageNum - 1) * RECORDS_PER_PAGE);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Exhibition exhibition = mapper.extractFromResultSet(rs);
-                exhibitionList.add(exhibition);
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-        } finally {
-            ConnectionPool.closeResources(conn, ps, rs);
-        }
-        return exhibitionList;
-    }
-
-    public int amountOfTickets(final long exhibitionId) {
+    public int amountOfExhibitions(final String sortType, final String sortParam) {
         int amount = 0;
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             conn = ConnectionPool.getConnection();
-            ps = conn.prepareStatement(FIND_AMOUNT_OF_TICKETS_BY_EXHIBITION_ID_SQL);
-            ps.setLong(1, exhibitionId);
+            if (sortParam != null && !sortParam.isEmpty()) {
+                if (sortType.equals(SORT_BY_HALL)) {
+                    ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_WHERE_HALL_SQL);
+                    ps.setLong(1, Long.parseLong(sortParam));
+                } else {
+                    ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_WHERE_DATE_SQL);
+                    ps.setDate(1, Date.valueOf(sortParam));
+                }
+            } else {
+                ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_SQL);
+            }
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                amount = rs.getInt(1);
+            }
+        } catch (SQLException | IllegalArgumentException e) {
+            amount = amountOfExhibitions();
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
+        }
+        return amount;
+    }
+
+    @Override
+    public int amountOfExhibitions() {
+        int amount = 0;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_SQL);
             rs = ps.executeQuery();
             if (rs.next()) {
                 amount = rs.getInt(1);
@@ -199,6 +173,65 @@ public class ExhibitionDao implements ExhibitionService {
         }
         return amount;
     }
+
+    @Override
+    public List<Exhibition> findSortByWhereIs(final String sortType, final String sortParam, final int pageNum) {
+        List<Exhibition> exhibitionList = new CopyOnWriteArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = ConnectionPool.getConnection();
+            int i = 1;
+            if (sortParam == null || sortParam.isEmpty()) {
+                switch (sortType) {
+                    case SORT_BY_THEME:
+                        ps = conn.prepareStatement(SORT_BY_THEME_SQL);
+                        break;
+                    case SORT_BY_PRICE:
+                        ps = conn.prepareStatement(SORT_BY_PRICE_SQL);
+                        break;
+                    case SORT_BY_DATE:
+                        ps = conn.prepareStatement(SORT_BY_DATE_SQL);
+                        break;
+                    default:
+                        logger.error("Cannot get a sortType");
+                }
+            } else {
+                switch (sortType) {
+                    case SORT_BY_HALL:
+                        ps = conn.prepareStatement(SORT_BY_HALL_WHERE_SQL);
+                        ps.setLong(i++, Long.parseLong(sortParam));
+                        break;
+                    case SORT_BY_DATE:
+                        ps = conn.prepareStatement(SORT_BY_DATE_WHERE_SQL);
+                        ps.setDate(i++, Date.valueOf(sortParam));
+                        break;
+                    default:
+                        logger.error("Cannot get a sortParam");
+                }
+            }
+
+            if (ps != null) {
+                ps.setInt(i++, RECORDS_PER_PAGE);
+                ps.setInt(i, (pageNum - 1) * RECORDS_PER_PAGE);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    Exhibition exhibition = mapper.extractFromResultSet(rs);
+                    exhibitionList.add(exhibition);
+                }
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
+        }
+        return exhibitionList;
+    }
+
+
+    @Override
 
     public void cancel(final long exhibitionId) {
         Connection conn = null;
@@ -234,4 +267,28 @@ public class ExhibitionDao implements ExhibitionService {
             ConnectionPool.closeResources(conn, ps);
         }
     }
+
+    public int amountOfTicketsByExhibition(final long exhibitionId) {
+        int amount = 0;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            ps = conn.prepareStatement(FIND_AMOUNT_OF_TICKETS_BY_EXHIBITION_ID_SQL);
+            ps.setLong(1, exhibitionId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                amount = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
+        }
+        return amount;
+    }
 }
+
+
+

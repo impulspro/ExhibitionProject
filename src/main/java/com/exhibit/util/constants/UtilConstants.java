@@ -6,7 +6,10 @@ public class UtilConstants {
     public static final String ERROR_LOGGER = "error";
 
     public static final String CURRENT_PAGE = "currentPage";
+    public static final String AMOUNT_OF_PAGES = "amountOfPages";
     public static final String SORT_TYPE = "sortType";
+    public static final String EXHIBITIONS_LIST = "exhibitionsList";
+    public static final String SORT_PARAM = "sortParam";
     public static final String HALL_ID = "hallId";
     public static final String EXH_DATE = "exhDate";
     public static final String ERROR_MESSAGE = "errorMessage";
@@ -14,6 +17,7 @@ public class UtilConstants {
     public static final String HOME_PAGE = "index.jsp";
     public static final String EXHIBITION_PAGE = "view/page/exhibitions.jsp";
     public static final int RECORDS_PER_PAGE = 6;
+
     private UtilConstants() {
     }
 }

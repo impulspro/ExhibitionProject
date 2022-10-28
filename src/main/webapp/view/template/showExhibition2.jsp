@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <c:set var="i" value="1"/>
-        <c:forEach var="exh" items="${sessionScope.exhList}">
+        <c:forEach var="exh" items="${sessionScope.exhibitionsList}">
 
             <div class="col-lg-4">
                 <div class="card bg-light">
@@ -105,7 +105,7 @@
     <div class="d-flex justify-content-md-center">
         <nav class="align-content-center align-items-center">
             <ul class="pagination">
-                <c:forEach var="i" begin="1" end="${sessionScope.noOfPages}">
+                <c:forEach var="i" begin="1" end="${sessionScope.amountOfPages}">
                     <li class="page-item"><a class="page-link"
                                              href="${pageContext.request.contextPath}/index-servlet?command=getExhibitionsCommand&currentPage=${i}">${i}</a>
                     </li>

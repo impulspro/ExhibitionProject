@@ -78,7 +78,7 @@ public class Exhibition implements Serializable {
 
     public int amountOfTickets() {
         ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
-        return service.amountOfTickets(id);
+        return service.amountOfTicketsByExhibition(id);
     }
 
     @Override

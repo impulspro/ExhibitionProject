@@ -2,25 +2,35 @@ package com.exhibit.services;
 
 import com.exhibit.dao.model.Exhibition;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 
 public interface ExhibitionService {
-    void add(final Exhibition exhibition);
+
+    Optional<Exhibition> findById(final long exhibitionId);
 
     Optional<Exhibition> findByTheme(final String theme);
 
     List<Exhibition> findAll();
-    List<Exhibition> findByDatePerPage(final Date date, final int pageNum);
-    List<Exhibition> findAllSortByDatePerPage(final int pageNum);
+    int amountOfExhibitions(final String sortType, final String sortParam);
+    int amountOfExhibitions();
+    // find sorted by sortType per page
 
-    int amountOfTickets(final long exhibitionId);
+    /**
+     * method for get exhibitions by sortType per page
+     *
+     * @param sortType sortByDate, sortByTheme, sortByPrice, sortByHall
+     * @param sortParam put null for sortBy without WHERE
+     * @param pageNum  current page view to extract from db
+     * @return list of exhibitions by given parameters
+     */
+    List<Exhibition> findSortByWhereIs(final String sortType, final String sortParam, final int pageNum);
 
-    Optional<Exhibition> findById(final long exhibitionId);
+    void add(final Exhibition exhibition);
 
     void cancel(final long exhibitionId);
 
     void delete(final long exhibitionId);
+    int amountOfTicketsByExhibition(final long exhibitionId);
 }

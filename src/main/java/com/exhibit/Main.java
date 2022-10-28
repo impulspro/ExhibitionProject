@@ -15,6 +15,6 @@ public class Main {
         List<Exhibition> list = exhibitionService.findAll();
         System.out.println(list.get(1));
         List<Hall> halls = hallService.getHallByExhibitionId(1);
-        halls.stream().forEach(s-> System.out.println(s));
+        halls.forEach(System.out::println);
     }
 }

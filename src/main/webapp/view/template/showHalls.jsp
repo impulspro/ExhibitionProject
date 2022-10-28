@@ -18,7 +18,7 @@
                               method="get">
                             <input name="command" type="hidden" value="getExhibitionsCommand">
                             <input name="sortType" type="hidden" value="sortByHall">
-                            <input name="hallId" type="hidden" value=${hall.id}>
+                            <input name="sortParam" type="hidden" value=${hall.id}>
                             <button class="btn-success" type="submit"><fmt:message
                                     key='index.exhibition.byHall'/></button>
                         </form>
