@@ -1,6 +1,8 @@
-package com.exhibit.controller.commands.impl.common;
+package com.exhibit.controller.commands.implR.common;
 
-import com.exhibit.controller.commands.Command;
+import com.exhibit.controller.commands.CRType;
+import com.exhibit.controller.commands.CommandR;
+import com.exhibit.controller.commands.CommandResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,18 +13,13 @@ import java.io.IOException;
 
 import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 
-public class LogOut implements Command {
+public class LogOutR implements CommandR {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
+    public CommandResponse execute(final HttpServletRequest req, final HttpServletResponse resp) {
         HttpSession session = req.getSession();
         session.invalidate();
-
-        try {
-            resp.sendRedirect(req.getHeader("Referer"));
-        } catch (IOException e) {
-            logger.info(e);
-        }
+        return new CommandResponse(CRType.FORWARD, req.getHeader("Referer"));
     }
 }

@@ -5,7 +5,7 @@
 
                 <li class="nav-item">
                     <button class="btn-success"
-                            onclick="window.location.href='../index.jsp'">
+                            onclick="window.location.href='../../../view/index.jsp'">
                         <em class="fa fa-home"></em> <fmt:message key='header.home'/></button>
                 </li>
                 &nbsp; &nbsp; &nbsp;
