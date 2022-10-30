@@ -2,6 +2,7 @@ package com.exhibit.controller.commands.impl.admin;
 
 import com.exhibit.controller.commands.Command;
 import com.exhibit.controller.commands.CommandContainer;
+import com.exhibit.controller.commands.CommandResponse;
 import com.exhibit.dao.model.User;
 import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
@@ -19,7 +20,7 @@ public class DeleteUser implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
+    public CommandResponse execute(final HttpServletRequest req, final HttpServletResponse resp) {
         HttpSession session = req.getSession();
         String login = req.getParameter("login");
         UserService service = ServiceFactory.getInstance().getUserService();
@@ -33,7 +34,6 @@ public class DeleteUser implements Command {
             session.setAttribute(ERROR_MESSAGE, "cannot delete user");
         }
 
-        Command command = CommandContainer.getCommand("listOfAllUsersCommand");
-        command.execute(req, resp);
+        return CommandContainer.getCommand("listOfAllUsersCommand").execute(req, resp);
     }
 }

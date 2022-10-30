@@ -1,12 +1,14 @@
 package com.exhibit.controller.commands.impl.user;
 
 import com.exhibit.controller.commands.Command;
+import com.exhibit.controller.commands.CommandResponse;
 import com.exhibit.dao.model.Exhibition;
 import com.exhibit.dao.model.Ticket;
 import com.exhibit.dao.model.User;
 import com.exhibit.services.ExhibitionService;
 import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
+import com.exhibit.util.constants.DispatchType;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -33,20 +35,14 @@ public class PrintPdf implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
-
+    public CommandResponse execute(final HttpServletRequest req, final HttpServletResponse resp) {
         User user = (User) req.getSession().getAttribute("user");
         UserService userService = ServiceFactory.getInstance().getUserService();
         List<Ticket> ticketList = userService.getUserTickets(user);
 
         if (ticketList == null || ticketList.isEmpty()) {
-            String page = req.getHeader("Referer");
             req.getSession().setAttribute(USER_MESSAGE, "you have not tickets yet");
-            try {
-                resp.sendRedirect(page);
-            } catch (IOException e) {
-                logger.info("PrintPdf redirect failed");
-            }
+            return new CommandResponse(DispatchType.FORWARD, HOME_PAGE);
         } else {
             try {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -77,7 +73,6 @@ public class PrintPdf implements Command {
                 }
 
                 doc.close();
-                logger.info("PrintPdf command execute successful");
                 // setting some response headers
                 resp.setHeader("Expires", "0");
                 resp.setHeader("Cache-Control",
@@ -91,10 +86,11 @@ public class PrintPdf implements Command {
                 os.flush();
                 os.close();
             } catch (IOException e) {
-                logger.info("problems with creating pdf");
+                logger.error(e);
                 req.getSession().setAttribute(ERROR_MESSAGE, "problems with creating pdf");
             }
         }
 
+        return new CommandResponse(DispatchType.FORWARD, req.getHeader("Referer"));
     }
 }

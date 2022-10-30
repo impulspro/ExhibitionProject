@@ -1,19 +1,23 @@
 package com.exhibit.controller.commands.impl.admin;
 
 import com.exhibit.controller.commands.Command;
+import com.exhibit.controller.commands.CommandResponse;
 import com.exhibit.dao.exeptions.DaoException;
 import com.exhibit.dao.model.Exhibition;
+import com.exhibit.dao.model.Hall;
 import com.exhibit.services.ExhibitionService;
 import com.exhibit.services.HallService;
 import com.exhibit.services.ServiceFactory;
+import com.exhibit.util.constants.DispatchCommand;
+import com.exhibit.util.constants.DispatchType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Optional;
 
 import static com.exhibit.util.constants.UtilConstants.*;
 
@@ -21,8 +25,7 @@ public class AddExhibition implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
-        String page = "view/page/adminPanel.jsp";
+    public CommandResponse execute(final HttpServletRequest req, final HttpServletResponse resp) {
         String theme = req.getParameter("theme");
         String details = req.getParameter("details");
         Date startDate = Date.valueOf(req.getParameter("startDate"));
@@ -43,20 +46,22 @@ public class AddExhibition implements Command {
                 .setPrice(price)
                 .build();
         try {
-            service.add(exhibition);
             HallService hallService = ServiceFactory.getInstance().getHallService();
+            for (String hallId: hallsId) {
+                if (hallService.isOccupiedOnDate(Long.parseLong(hallId), startDate, endDate)) {
+                    Optional<Hall> hall = hallService.findById(Long.parseLong(hallId));
+                    hall.ifPresent(value -> req.getSession().setAttribute(ERROR_MESSAGE, value.getName() + "hall is occupied on this dates"));
+                    return new CommandResponse(DispatchType.REDIRECT, DispatchCommand.GO, ADMIN_JSP);
+                }
+            }
+
+            service.add(exhibition);
             hallService.setHallByExhibitionId(exhibition.getId(), hallsId);
-            logger.info("AddExhibition command execute successful");
             req.getSession().setAttribute(USER_MESSAGE, "you successfully add exhibition");
-        } catch (DaoException e) {
-            logger.info("AddExhibition command failed");
+        } catch (Exception e) {
+            logger.error(e);
             req.getSession().setAttribute(ERROR_MESSAGE, "something gone wrong");
         }
-
-        try {
-            resp.sendRedirect(page);
-        } catch (IOException e) {
-            logger.info("AddExhibition redirect failed");
-        }
+        return new CommandResponse(DispatchType.REDIRECT, DispatchCommand.GO, ADMIN_JSP);
     }
 }

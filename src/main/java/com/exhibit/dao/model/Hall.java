@@ -1,6 +1,14 @@
 package com.exhibit.dao.model;
 
+import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.HallService;
+import com.exhibit.services.ServiceFactory;
+
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class Hall implements Serializable {
@@ -40,7 +48,16 @@ public class Hall implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
+    public List<Date> getOccupiedDates(){
+        HallService hallService = ServiceFactory.getInstance().getHallService();
+        List<Date> dateList = hallService.getOccupiedDates(id);
+        Collections.sort(dateList);
+        return dateList;
+    }
+    public List<Exhibition> getExhibitions(){
+        HallService hallService = ServiceFactory.getInstance().getHallService();
+        return hallService.findAllExhibitionsByHall(id);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -12,13 +12,13 @@
 <html lang="uk">
 <head>
     <title>Exhibition</title>
-
     <%@include file="template/styles.jsp" %>
-    <%@include file="template/header.jsp" %>
-
 </head>
 <body>
-<p> REAL iNDEX</p>
+<header>
+    <%@include file="template/header.jsp" %>
+</header>
+
 <div class="container mt-3">
     <div class="d-flex justify-content-md-center mb-3 bg-light">
         <h3 class="font-italic"><fmt:message key="index.welcome"/><customTag:Hello message="!"/></h3>
@@ -74,22 +74,9 @@
     </div>
 </div>
 
-<%--<c:import url="${showPage}"/> --%>
-<%--  <%@include file="page/showHalls2.jsp" %> --%>
-<%--
-<c:if test="${not empty sessionScope.showPage}">
-    <jsp:include page="${sessionScope.showPage}" />
-</c:if>
-<jsp:include page="page/showHalls2.jsp" />
-<%@ include file="hallsView.jspf" %>
-
-<jsp:include page="relativeURL | <%=%>">
-    <jsp:param name="parametername" value="parametervalue | <%=expression%>" />
-</jsp:include>
-
---%>
-
+<main>
 <jsp:include page="${sessionScope.showPage}" flush="true" />
+</main>
 
 <%@ include file="template/message.jsp" %>
 </body>

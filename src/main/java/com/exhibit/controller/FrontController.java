@@ -1,9 +1,8 @@
 package com.exhibit.controller;
 
-import com.exhibit.controller.commands.CRType;
-import com.exhibit.controller.commands.CommandR;
+import com.exhibit.controller.commands.CommandContainer;
 import com.exhibit.controller.commands.CommandResponse;
-import com.exhibit.controller.commands.CommandContainerR;
+import com.exhibit.util.constants.DispatchType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,12 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.util.constants.UtilConstants.*;
 
 
 @WebServlet(name = "indexServlet", value = {"/index-servlet"})
 public class FrontController extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
+
 
     @Override
     public void init() {
@@ -36,46 +36,43 @@ public class FrontController extends HttpServlet {
     private void commandManager(final HttpServletRequest req, final HttpServletResponse resp) {
         HttpSession session = req.getSession();
 
-        if (session.isNew()) {
-            session.setAttribute("user", null);
-        }
-
         String commandName = req.getParameter("command");
         if (commandName == null || commandName.isEmpty()){
             commandName = "getExhibitionsCommand";
         }
+
         logger.info(commandName);
 
+        CommandResponse cr = CommandContainer.getCommand(commandName).execute(req, resp);
 
-//        Command command = CommandContainer.getCommand(commandName);
-        CommandR commandR = CommandContainerR.getCommand(commandName);
-        System.out.println(commandR);
-        CommandResponse cr = commandR.execute(req,resp);
-        System.out.println(cr);
-        //
+        String dispatchPage = HOME_PAGE;
 
-        System.out.println(cr.getShowPage());
+        switch (cr.getDispatchCommand()){
+            case SHOW:
+                session.setAttribute(SHOW_PAGE, cr.getPage());
+                break;
+            case GO:
+                dispatchPage = cr.getPage();
+                break;
+            case STAY:
+                dispatchPage = req.getHeader("Referer");
+                break;
+            default:
+        }
+
         try {
-            session.setAttribute("showPage", "page/" + cr.getShowPage());
-            System.out.println(req.getSession().getAttribute("showPage"));
-            if (cr.getType().equals(CRType.FORWARD)) {
-                req.getRequestDispatcher("view/index.jsp").forward(req, resp);
-            } else {
-                resp.sendRedirect("view/index.jsp");
+            switch (cr.getType()){
+                case FORWARD:
+                    req.getRequestDispatcher(dispatchPage).forward(req, resp);
+                    break;
+                case REDIRECT:
+                    resp.sendRedirect(dispatchPage);
+                    break;
+                default:
             }
         } catch (ServletException | IOException e) {
             logger.error(e);
         }
 
-/*
-        if (commandName == null || commandName.isEmpty()) {
-            try {
-                req.getRequestDispatcher(HOME_PAGE).forward(req, resp);
-            } catch (Exception e) {
-                logger.info("No define command");
-            }
-        }
-
- */
     }
 }

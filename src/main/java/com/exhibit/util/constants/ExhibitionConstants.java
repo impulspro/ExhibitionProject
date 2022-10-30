@@ -8,6 +8,10 @@ public class ExhibitionConstants {
             "SELECT * FROM exhibition WHERE theme = ?";
     public static final String FIND_EXHIBITION_BY_ID =
             "SELECT * FROM exhibition WHERE id = ?";
+    public static final String FIND_EXHIBITIONS_BY_HALL_ID_SQL =
+            "SELECT * FROM exhibition INNER JOIN exhibition_halls" +
+                    " ON exhibition.id = exhibition_halls.exhibition_id " +
+                    "WHERE exhibition_halls.hall_id = ?";
     public static final String FIND_ALL_EXHIBITIONS_SQL =
             "SELECT * FROM exhibition ORDER BY start_date";
     public static final String SORT_BY_DATE_WHERE_SQL =
@@ -30,17 +34,25 @@ public class ExhibitionConstants {
     public static final String DELETE_EXHIBITION_BY_ID_SQL =
             "DELETE FROM exhibition WHERE id = ?";
     public static final String UPDATE_EXHIBITION_PRICE_BY_ID_SQL =
-            "UPDATE exhibition SET price = ? WHERE ID = ?";
+            "UPDATE exhibition SET price = ? WHERE id = ?";
     public static final String SET_HALLS_SQL =
             "INSERT INTO exhibition_halls (exhibition_id, hall_id) VALUES(?, ?)";
     public static final String FIND_ALL_HALLS_SQL =
             "SELECT * FROM hall";
+    public static final String FIND_HALL_BY_ID_SQL =
+            "SELECT * FROM hall WHERE id = ?";
+
     public static final String FIND_EXHIBITIONS_AMOUNT_SQL =
             "SELECT COUNT(*) FROM exhibition";
     public static final String FIND_EXHIBITIONS_AMOUNT_WHERE_DATE_SQL =
             "SELECT COUNT(*) FROM exhibition WHERE ? BETWEEN start_date AND end_date";
     public static final String FIND_EXHIBITIONS_AMOUNT_WHERE_HALL_SQL =
             "SELECT COUNT(*) FROM exhibition INNER JOIN exhibition_halls" +
+                    " ON exhibition.id = exhibition_halls.exhibition_id " +
+                    "WHERE exhibition_halls.hall_id = ?";
+
+    public static final String FIND_EXHIBITIONS_BY_HALL_SQL =
+            "SELECT * FROM exhibition INNER JOIN exhibition_halls" +
                     " ON exhibition.id = exhibition_halls.exhibition_id " +
                     "WHERE exhibition_halls.hall_id = ?";
     public static final String FIND_HALLS_BY_EXHIBITION_ID =

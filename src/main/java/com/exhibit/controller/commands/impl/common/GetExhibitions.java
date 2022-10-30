@@ -1,16 +1,18 @@
 package com.exhibit.controller.commands.impl.common;
 
 import com.exhibit.controller.commands.Command;
+import com.exhibit.controller.commands.CommandResponse;
 import com.exhibit.dao.model.Exhibition;
 import com.exhibit.services.ExhibitionService;
 import com.exhibit.services.ServiceFactory;
+import com.exhibit.util.constants.DispatchCommand;
+import com.exhibit.util.constants.DispatchType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.List;
 
 import static com.exhibit.util.constants.UtilConstants.*;
@@ -20,7 +22,7 @@ public class GetExhibitions implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public void execute(final HttpServletRequest req, final HttpServletResponse resp) {
+    public CommandResponse execute(final HttpServletRequest req, final HttpServletResponse resp) {
         ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
         HttpSession session = req.getSession();
 
@@ -50,25 +52,14 @@ public class GetExhibitions implements Command {
         int amountOfPages = (int) Math.ceil(amountOfExhibitions * 1.0 / RECORDS_PER_PAGE);
         List<Exhibition> exhibitionsList = service.findSortByWhereIs(sortType, sortParam, currentPage);
 
-        String redirect;
         if (exhibitionsList == null || exhibitionsList.isEmpty()) {
             session.setAttribute(ERROR_MESSAGE, "no exhibition by your request was found");
-            redirect = req.getHeader("Referer");
         } else {
-            redirect = EXHIBITION_PAGE;
             session.setAttribute(EXHIBITIONS_LIST, exhibitionsList);
             session.setAttribute(AMOUNT_OF_PAGES, amountOfPages);
             session.setAttribute(CURRENT_PAGE, currentPage);
         }
 
-        if (req.getHeader("Referer").equals(HOME_PAGE))
-        {
-            redirect = HOME_PAGE;
-        }
-        try {
-            resp.sendRedirect(redirect);
-        } catch (IOException e) {
-            logger.error(e);
-        }
+        return new CommandResponse(DispatchType.FORWARD, DispatchCommand.SHOW, EXHIBITIONS_JSP);
     }
 }

@@ -2,17 +2,19 @@ package com.exhibit.dao.impl;
 
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
+import com.exhibit.dao.model.Exhibition;
 import com.exhibit.dao.model.Hall;
 import com.exhibit.services.HallService;
 import com.exhibit.util.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.exhibit.util.constants.ExhibitionConstants.*;
@@ -21,6 +23,22 @@ import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
 public class HallDao implements HallService {
     static Mapper<Hall> mapper = MapperFactory.getInstance().getHallMapper();
     Logger logger = LogManager.getLogger(INFO_LOGGER);
+
+    public static List<Date> getDaysBetweenDates(Date startDate, Date endDate) {
+        List<Date> dates = new ArrayList<>();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(endDate);
+        calendar.add(Calendar.DATE, 1);
+        Date endDatePlus = calendar.getTime();
+
+        calendar.setTime(startDate);
+        while (calendar.getTime().before(endDatePlus)) {
+            Date result = calendar.getTime();
+            dates.add(result);
+            calendar.add(Calendar.DATE, 1);
+        }
+        return dates;
+    }
 
     public List<Hall> findAll() {
         List<Hall> hallList = new CopyOnWriteArrayList<>();
@@ -41,6 +59,52 @@ public class HallDao implements HallService {
             ConnectionPool.closeResources(conn, ps, rs);
         }
         return hallList;
+    }
+
+    @Override
+    public Optional<Hall> findById(final long hallId) {
+        Optional<Hall> hall = Optional.empty();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = ConnectionPool.getConnection();
+            ps = conn.prepareStatement(FIND_HALL_BY_ID_SQL);
+            ps.setLong(1, hallId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                hall = Optional.ofNullable(mapper.extractFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
+        }
+        return hall;
+    }
+
+    @Override
+    public List<Exhibition> findAllExhibitionsByHall(long hallId) {
+        List<Exhibition> exhibitions = new CopyOnWriteArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Mapper<Exhibition> exhibitionMapper = MapperFactory.getInstance().getExhibitionMapper();
+        try {
+            conn = ConnectionPool.getConnection();
+            ps = conn.prepareStatement(FIND_EXHIBITIONS_BY_HALL_ID_SQL);
+            ps.setLong(1, hallId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                exhibitions.add(exhibitionMapper.extractFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
+        }
+        return exhibitions;
     }
 
     @Override
@@ -87,6 +151,63 @@ public class HallDao implements HallService {
         } finally {
             ConnectionPool.closeResources(conn, ps);
         }
+    }
+
+    @Override
+    public List<Date> getOccupiedDates(final long hallId) {
+        List<Exhibition> exhibitionList = new CopyOnWriteArrayList<>();
+        List<Date> dateList = new CopyOnWriteArrayList<>();
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Mapper<Exhibition> exhibitionMapper = MapperFactory.getInstance().getExhibitionMapper();
+        try {
+            conn = ConnectionPool.getConnection();
+            ps = conn.prepareStatement(FIND_EXHIBITIONS_BY_HALL_SQL);
+            ps.setLong(1, hallId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                exhibitionList.add(exhibitionMapper.extractFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
+        }
+
+        for (Exhibition exhibition : exhibitionList) {
+            dateList.addAll(getDaysBetweenDates(exhibition.getStartDate(), exhibition.getEndDate()));
+        }
+
+        return dateList;
+    }
+
+    @Override
+    public boolean isOccupiedOnDate(long hallId, Date date) {
+        List<Date> dateList = getOccupiedDates(hallId);
+        for (Date dateItem : dateList) {
+            int result = dateItem.compareTo(date);
+            if (result == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isOccupiedOnDate(long hallId, Date startDate, Date endDate) {
+        List<Date> dateList = getOccupiedDates(hallId);
+        List<Date> interval = getDaysBetweenDates(startDate, endDate);
+        for (Date dateFromInterval: interval) {
+            for (Date dateOccupied : dateList) {
+                int result = dateOccupied.compareTo(dateFromInterval);
+                if (result == 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
