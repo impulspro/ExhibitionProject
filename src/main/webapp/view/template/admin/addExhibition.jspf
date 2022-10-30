@@ -41,12 +41,16 @@
         </select>
     </div>
 
+    <div class="col text-center">
     <label for="priceId"><fmt:message key='addExhibition.form.price'/></label> <br>
     <input type="number" name="price" id="priceId" required step="50" placeholder="0.00" min="0">
-
-
-    <button class="btn-primary align-content-center" type="submit">
+    </div>
+    <br>
+    <div class="col text-center">
+    <button class="btn-primary" type="submit">
         <fmt:message key='addExhibition.topic'/></button>
+    </div>
+
 </form>
 <br> <br>
 <script>

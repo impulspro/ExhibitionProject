@@ -4,6 +4,10 @@ import com.exhibit.services.ExhibitionService;
 import com.exhibit.services.ServiceFactory;
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class Ticket implements Serializable {
@@ -46,6 +50,19 @@ public class Ticket implements Serializable {
         ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
         Optional<Exhibition> exhibition = service.findById(exhibitionId);
         return exhibition.orElse(null);
+    }
+
+    public boolean isCanBeReturn(){
+        Exhibition exhibition = getExhibition();
+
+        java.sql.Date date = java.sql.Date.valueOf(LocalDate.now());
+        Date endDate = exhibition.getEndDate();
+
+        if (endDate.compareTo(date) >= 0){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

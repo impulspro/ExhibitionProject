@@ -29,7 +29,7 @@
             <div class="col-3 border rounded bg-light">
                 <%@ include file="../template/admin/listOfAllUsers.jspf" %>
             </div>
-            <div class="col-3 border rounded bg-light align-items-center">
+            <div class="col-3 border rounded bg-light">
                 <%@ include file="../template/admin/searchUserForm.jspf" %>
             </div>
         </div>

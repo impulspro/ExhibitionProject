@@ -83,6 +83,46 @@ public class UserDao implements UserService {
         }
     }
 
+    @Override
+    public void returnTicket(final User user, long exhibitionId) {
+        ExhibitionService exhibitionService = ServiceFactory.getInstance().getExhibitionService();
+        Optional<Exhibition> exhibition = exhibitionService.findById(exhibitionId);
+
+        List<Ticket> tickets = getUserTickets(user);
+        if (!tickets.isEmpty()) {
+            Optional<Ticket> ticket = tickets.stream().filter(t -> t.getExhibitionId() == exhibitionId).findFirst();
+            if (ticket.isPresent()) {
+                logger.error("No exhibition find");
+            }
+        }
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = ConnectionPool.getConnection();
+            conn.setAutoCommit(false);
+            ps = conn.prepareStatement(RETURN_USER_TICKET_SQL);
+
+            ps.setLong(1, user.getId());
+            ps.setLong(2, exhibitionId);
+            ps.executeUpdate();
+
+            ps = conn.prepareStatement(UPDATE_USER_MONEY_SQL);
+            user.setMoney(user.getMoney() + exhibition.get().getPrice());
+
+            ps.setDouble(1, user.getMoney());
+            ps.setLong(2, user.getId());
+            ps.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            ConnectionPool.rollbackConnection(conn, e);
+        } finally {
+            ConnectionPool.closeResources(conn, ps, rs);
+        }
+    }
+
 
     public List<User> findAll() {
         List<User> userList = new CopyOnWriteArrayList<>();

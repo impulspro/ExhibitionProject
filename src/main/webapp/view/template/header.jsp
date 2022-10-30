@@ -49,13 +49,7 @@
                             <c:otherwise>
                                 <button class="btn-dark" disabled>${sessionScope.user.login}</button>
                                 <c:if test="${sessionScope.user.role == 'user'}">
-                                    <button class="btn-dark" disabled>${sessionScope.user.money}$</button>
-                                    <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet"
-                                          method="get">
-                                        <input name="command" type="hidden" value="printPdfCommand">
-                                        <button class="btn-dark" type="submit"><fmt:message
-                                                key='header.printPdf'/></button>
-                                    </form>
+                                    <button class="btn-warning" disabled>${sessionScope.user.money}$</button>
                                 </c:if>
 
                                 <form class="form-inline" action="${pageContext.request.contextPath}/index-servlet"
@@ -76,6 +70,12 @@
                             <button class="btn-danger"
                                     onclick="window.location.href='${pageContext.request.contextPath}/view/page/adminPanel.jsp'">
                                 <fmt:message key='header.adminPanel'/><span class="sr-only">(current)</span>
+                            </button>
+                        </c:if>
+                        <c:if test="${sessionScope.user.role == 'user'}">
+                            <button class="btn-danger"
+                                    onclick="window.location.href='${pageContext.request.contextPath}/view/page/userPanel.jsp'">
+                                <fmt:message key='header.userPanel'/><span class="sr-only">(current)</span>
                             </button>
                         </c:if>
                         <div>

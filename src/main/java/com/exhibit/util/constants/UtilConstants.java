@@ -18,6 +18,7 @@ public class UtilConstants {
     public static final String EXHIBITIONS_JSP = "page/exhibitions.jsp";
     public static final String HALLS_JSP = "page/halls.jsp";
     public static final String ADMIN_JSP = "view/page/adminPanel.jsp";
+    public static final String USER_JSP = "view/page/userPanel.jsp";
     public static final String REGISTRATION_JSP = "view/page/registration.jsp";
     public static final String SHOW_PAGE = "showPage";
     private UtilConstants() {

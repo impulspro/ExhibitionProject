@@ -16,26 +16,25 @@ import javax.servlet.http.HttpSession;
 
 import static com.exhibit.util.constants.UtilConstants.*;
 
-public class BuyTicket implements Command {
+public class AddUserFunds implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
-
     @Override
-    public CommandResponse execute(final HttpServletRequest req, final HttpServletResponse resp) {
-        long exhibitionId = Long.parseLong(req.getParameter("exhibitionId"));
+    public CommandResponse execute(HttpServletRequest req, HttpServletResponse resp) {
+        double money = Long.parseLong(req.getParameter("money"));
 
         User user = (User) req.getSession().getAttribute("user");
         UserService service = ServiceFactory.getInstance().getUserService();
         HttpSession session = req.getSession();
 
-        String answer = service.buyTicket(user, exhibitionId);
-
-        if (answer != null && answer.equals("ok")) {
-            session.setAttribute(USER_MESSAGE, "see you at the exhibition");
-        } else {
-            logger.info(answer);
-            session.setAttribute(ERROR_MESSAGE, answer);
+        try {
+            double setMoney = user.getMoney() + money;
+            user.setMoney(setMoney);
+            service.update(user);
+        } catch (Exception e){
+            logger.info(e);
+            session.setAttribute(ERROR_MESSAGE, "Cannot update user account");
         }
 
-        return new CommandResponse(DispatchType.REDIRECT, DispatchCommand.STAY);
+        return new CommandResponse(DispatchType.REDIRECT, DispatchCommand.GO, USER_JSP);
     }
 }

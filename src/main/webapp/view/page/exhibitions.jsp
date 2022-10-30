@@ -19,12 +19,17 @@
                 <div class="card bg-light">
                     <div class="card-body">
 
-                        <h5 class="card-title">${exh.theme}<strong class="float-right">${exh.price}$</strong></h5>
+                        <h5 class="card-title">${exh.theme}
+                            <c:if test="${exh.price != '-1'}">
+                                <strong class="float-right">${exh.price}$</strong>
+                            </c:if>
+                        </h5>
+
                         <strong>
                             <p class="text-center">
                                     ${exh.startDate}
-                                    (${exh.startTime.toLocalTime().truncatedTo(ChronoUnit.SECONDS)}
-                                        -
+                                (${exh.startTime.toLocalTime().truncatedTo(ChronoUnit.SECONDS)}
+                                -
                                     ${exh.endTime.toLocalTime().truncatedTo(ChronoUnit.SECONDS)})
                                     ${exh.endDate}
                             </p>
@@ -49,6 +54,7 @@
                                 </c:if>
 
                                 <c:if test="${sessionScope.user.role == 'user'}">
+                                <c:if test="${exh.isGoing()}">
                                     <form action="${pageContext.request.contextPath}/index-servlet"
                                           method="post">
                                         <input name="command" type="hidden" value="buyTicketCommand">
@@ -71,6 +77,7 @@
                                                 <fmt:message key='exhibition.alreadyCanceled'/></button>
                                         </c:if>
                                     </form>
+                                </c:if>
                                 </c:if>
 
                                 <c:if test="${sessionScope.user.role == 'admin'}">

@@ -1,16 +1,19 @@
-<form name="searchUserForm" action="${pageContext.request.contextPath}/index-servlet" method="get">
-    <div class="input-group">
-        <div class="form-inline">
-            <input type="search" name="login" id="formSearchUser" class="form-control" required/>
-            <input name="command" type="hidden" value="searchUserCommand">
-            <label class="form-label" for="formSearchUser"></label>
+<div class="d-flex justify-content-center">
+    <form name="searchUserForm1" action="${pageContext.request.contextPath}/index-servlet" method="get">
+        <div class="input-group">
+            <div class="form-inline">
+                <input name="command" type="hidden" value="searchUserCommand">
+                <input type="search" name="login" id="formSearchUser1" class="form-control" required/>
+            </div>
+            <div class="col text-center">
+                <button type="submit" id="formSearchUserButton1" class="btn-primary">
+                    <fmt:message key='adminPanel.searchUser'/>
+                </button>
+            </div>
         </div>
-        <button type="submit" id = "formSearchUserButton" class="btn btn-primary">
-            <fmt:message key='adminPanel.searchUser'/>
-        </button>
+    </form>
+</div>
 
-    </div>
-</form>
 <c:if test="${sessionScope.searchUser != null}">
     <br> <br>
     <p><strong>${sessionScope.searchUser.login} ${sessionScope.searchUser.money}$ </strong>
@@ -31,7 +34,7 @@
                         <input name="login" type="hidden" value="${sessionScope.searchUser.login}">
                         <input name="command" type="hidden" value="deleteUserCommand">
                     </div>
-                    <button type="submit" class="btn btn-danger">
+                    <button type="submit" class="btn-danger">
                         <fmt:message key='adminPanel.deleteUser'/>
                     </button>
                 </div>

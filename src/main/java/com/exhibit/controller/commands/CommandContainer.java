@@ -2,9 +2,7 @@ package com.exhibit.controller.commands;
 
 import com.exhibit.controller.commands.impl.admin.*;
 import com.exhibit.controller.commands.impl.common.*;
-import com.exhibit.controller.commands.impl.user.BuyTicket;
-import com.exhibit.controller.commands.impl.user.PrintPdf;
-import com.exhibit.controller.commands.impl.user.Registration;
+import com.exhibit.controller.commands.impl.user.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +23,8 @@ public class CommandContainer {
         commands.put("searchUserCommand", new SearchUser());
         commands.put("listOfAllUsersCommand", new ListOfAllUsers());
         commands.put("deleteUserCommand", new DeleteUser());
+        commands.put("addUserFundsCommand", new AddUserFunds());
+        commands.put("returnTicketCommand", new ReturnTicket());
         commands.put("printPdfCommand", new PrintPdf());
     }
 
