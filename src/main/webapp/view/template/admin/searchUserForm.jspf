@@ -1,0 +1,41 @@
+<form name="searchUserForm" action="${pageContext.request.contextPath}/index-servlet" method="get">
+    <div class="input-group">
+        <div class="form-inline">
+            <input type="search" name="login" id="formSearchUser" class="form-control" required/>
+            <input name="command" type="hidden" value="searchUserCommand">
+            <label class="form-label" for="formSearchUser"></label>
+        </div>
+        <button type="submit" id = "formSearchUserButton" class="btn btn-primary">
+            <fmt:message key='adminPanel.searchUser'/>
+        </button>
+
+    </div>
+</form>
+<c:if test="${sessionScope.searchUser != null}">
+    <br> <br>
+    <p><strong>${sessionScope.searchUser.login} ${sessionScope.searchUser.money}$ </strong>
+    </p>
+    <strong><fmt:message key='adminPanel.userExhibitions'/>:</strong>
+    <br>
+    <c:forEach var="ticket" items="${sessionScope.searchUser.getUserTickets()}">
+        ${ticket.getExhibition().theme}
+        <br>
+    </c:forEach>
+    <div>
+        <c:if test="${sessionScope.searchUser.role != 'admin'}">
+            <form name="deleteUser"
+                  action="${pageContext.request.contextPath}/index-servlet"
+                  method="post">
+                <div class="input-group">
+                    <div class="form-inline">
+                        <input name="login" type="hidden" value="${sessionScope.searchUser.login}">
+                        <input name="command" type="hidden" value="deleteUserCommand">
+                    </div>
+                    <button type="submit" class="btn btn-danger">
+                        <fmt:message key='adminPanel.deleteUser'/>
+                    </button>
+                </div>
+            </form>
+        </c:if>
+    </div>
+</c:if>

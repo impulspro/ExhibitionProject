@@ -75,7 +75,8 @@
 </div>
 
 <main>
-<jsp:include page="${sessionScope.showPage}" flush="true" />
+    <br> <br>
+    <jsp:include page="${sessionScope.showPage}" flush="true" />
 </main>
 
 <%@ include file="template/message.jsp" %>

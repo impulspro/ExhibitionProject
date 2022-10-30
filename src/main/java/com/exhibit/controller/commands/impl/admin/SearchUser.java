@@ -5,6 +5,7 @@ import com.exhibit.controller.commands.CommandResponse;
 import com.exhibit.dao.model.User;
 import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
+import com.exhibit.util.constants.DispatchCommand;
 import com.exhibit.util.constants.DispatchType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,6 +38,6 @@ public class SearchUser implements Command {
             req.getSession().setAttribute(ERROR_MESSAGE, "SearchUser error");
         }
 
-        return new CommandResponse(DispatchType.FORWARD, ADMIN_JSP);
+        return new CommandResponse(DispatchType.FORWARD, DispatchCommand.GO, ADMIN_JSP);
     }
 }

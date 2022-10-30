@@ -8,6 +8,7 @@ import com.exhibit.dao.model.User;
 import com.exhibit.services.ExhibitionService;
 import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
+import com.exhibit.util.constants.DispatchCommand;
 import com.exhibit.util.constants.DispatchType;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -91,6 +92,6 @@ public class PrintPdf implements Command {
             }
         }
 
-        return new CommandResponse(DispatchType.FORWARD, req.getHeader("Referer"));
+        return new CommandResponse(DispatchType.FORWARD, DispatchCommand.STAY);
     }
 }

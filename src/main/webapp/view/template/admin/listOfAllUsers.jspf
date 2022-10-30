@@ -1,0 +1,35 @@
+<form name="listOfAllUsers" action="${pageContext.request.contextPath}/index-servlet" method="get">
+    <div class="input-group">
+        <div class="form-inline">
+            <input name="command" type="hidden" value="listOfAllUsersCommand">
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <fmt:message key='adminPanel.allUsers'/>
+        </button>
+    </div>
+</form>
+<c:if test="${sessionScope.userList != null}">
+    <br>
+    <div class="col">
+        <c:set var="i" value="1"/>
+        <c:forEach var="userI" items="${sessionScope.userList}">
+            <div class="row">
+                <form name="userProperties"
+                      action="${pageContext.request.contextPath}/index-servlet"
+                      method="get">
+                    <div class="input-group">
+                        <div class="form-inline">
+                            <input name="login" type="hidden" value="${userI.login}">
+                            <input name="command" type="hidden" value="searchUserCommand">
+                        </div>
+                        <button type="submit" class="btn btn-light">
+                                ${i} ${userI.login} ${userI.role} ${userI.money}$
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <c:set var="i" value="${i+1}"/>
+        </c:forEach>
+    </div>
+</c:if>

@@ -1,0 +1,13 @@
+<c:set var="k" value="1"/>
+<c:forEach var="hall" items="${sessionScope.hallList}">
+    <strong> ${hall.getName()}  <fmt:message key='exhibition.hallIsOccupied'/>: </strong> <br>
+    <c:set var="j" value="1"/>
+    <c:forEach var="exhibiton" items="${hall.getExhibitions()}">
+        <div>
+            (${exhibiton.startDate} <fmt:message key='exhibition.to'/> ${exhibiton.endDate})
+        </div>
+        <c:set var="j" value="${j+1}"/>
+    </c:forEach>
+    <c:set var="k" value="${i+1}"/>
+    <br>
+</c:forEach>

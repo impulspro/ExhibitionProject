@@ -5,6 +5,7 @@ import com.exhibit.controller.commands.CommandResponse;
 import com.exhibit.dao.model.User;
 import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
+import com.exhibit.util.constants.DispatchCommand;
 import com.exhibit.util.constants.DispatchType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,6 +42,6 @@ public class BuyTicket implements Command {
             session.setAttribute(ERROR_MESSAGE, answer);
         }
 
-        return new CommandResponse(DispatchType.REDIRECT, EXHIBITIONS_JSP);
+        return new CommandResponse(DispatchType.REDIRECT, DispatchCommand.STAY);
     }
 }

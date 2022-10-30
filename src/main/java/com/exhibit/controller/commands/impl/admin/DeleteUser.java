@@ -6,6 +6,7 @@ import com.exhibit.controller.commands.CommandResponse;
 import com.exhibit.dao.model.User;
 import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
+import com.exhibit.util.constants.DispatchType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,13 +28,15 @@ public class DeleteUser implements Command {
         try {
             Optional<User> user = service.findByLogin(login);
             user.ifPresent(service::delete);
-            logger.info("DeleteUser Command successfully");
             session.setAttribute(USER_MESSAGE, "you deleted user with login =  " + login);
+            req.getSession().removeAttribute("searchUser");
         } catch (Exception e) {
-            logger.info("DeleteUser Command failed");
+            logger.info(e);
             session.setAttribute(ERROR_MESSAGE, "cannot delete user");
         }
 
-        return CommandContainer.getCommand("listOfAllUsersCommand").execute(req, resp);
+        CommandResponse cr =  CommandContainer.getCommand("listOfAllUsersCommand").execute(req, resp);
+        cr.setDispatchType(DispatchType.REDIRECT);
+        return cr;
     }
 }

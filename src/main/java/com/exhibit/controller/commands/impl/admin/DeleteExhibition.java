@@ -4,6 +4,7 @@ import com.exhibit.controller.commands.Command;
 import com.exhibit.controller.commands.CommandResponse;
 import com.exhibit.services.ExhibitionService;
 import com.exhibit.services.ServiceFactory;
+import com.exhibit.util.constants.DispatchCommand;
 import com.exhibit.util.constants.DispatchType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,6 +31,6 @@ public class DeleteExhibition implements Command {
             session.setAttribute(ERROR_MESSAGE, "cannot delete exhibition");
         }
 
-        return new CommandResponse(DispatchType.REDIRECT, ADMIN_JSP);
+        return new CommandResponse(DispatchType.REDIRECT, DispatchCommand.STAY);
     }
 }
