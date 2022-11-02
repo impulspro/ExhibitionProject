@@ -12,6 +12,7 @@ Not authorised user:
 Authorised user:
 - see exhibitionі sorted by parametrs
 - see halls
+- 
 on User panel:
 - buy tikets
 - view tikets
@@ -25,6 +26,7 @@ Admin:
 - see statistics of visitors by exhibitions
 - cancel exhibitions (corespondent records remain)
 - delete exhibitions (corespondent records deleted)
+- 
 on Amdin panel:
 - see what hall and when is occupied
 - add exhibitions
