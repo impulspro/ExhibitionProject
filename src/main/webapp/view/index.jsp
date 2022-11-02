@@ -58,7 +58,7 @@
                             <label for="hallId"></label><select name="sortParam" class="form-control" id="hallId"
                                                                 required>
 
-                            <c:forEach items="${sessionScope.hallList}" var="hall">
+                            <c:forEach items="${sessionScope.hallService.findAll()}" var="hall">
                                 <option value="${hall.id}">${hall.name}</option>
                                 <br>
                             </c:forEach>

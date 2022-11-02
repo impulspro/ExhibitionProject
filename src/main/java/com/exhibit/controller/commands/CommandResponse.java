@@ -1,7 +1,7 @@
 package com.exhibit.controller.commands;
 
-import com.exhibit.util.constants.DispatchCommand;
-import com.exhibit.util.constants.DispatchType;
+import com.exhibit.dao.constants.DispatchCommand;
+import com.exhibit.dao.constants.DispatchType;
 
 public class CommandResponse {
 

@@ -1,4 +1,4 @@
-package com.exhibit.util;
+package com.exhibit.dao;
 
 import com.exhibit.dao.exeptions.DaoException;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -10,15 +10,16 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.dao.constants.UtilConstants.INFO_LOGGER;
 
 
-public class ConnectionPool {
+public class BasicConnectionManager implements ConnectionManager {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
     private static final BasicDataSource ds = new BasicDataSource();
+    private static ConnectionManager manager;
 
     static {
-        try (InputStream in = ConnectionPool.class.getClassLoader().
+        try (InputStream in = BasicConnectionManager.class.getClassLoader().
                 getResourceAsStream("db.properties")) {
             Properties prop = new Properties();
             prop.load(in);
@@ -36,13 +37,20 @@ public class ConnectionPool {
         }
     }
 
-    private ConnectionPool() {
+    private BasicConnectionManager() {
     }
 
-    public static Connection getConnection() {
+    public static ConnectionManager getInstance() {
+        if (manager == null)
+            manager = new BasicConnectionManager();
+        return manager;
+
+    }
+    public Connection getConnection() {
         try {
             Connection conn = ds.getConnection();
             conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+            conn.setAutoCommit(false);
             return conn;
         } catch (SQLException e) {
             logger.error("Problems with getConnection");
@@ -50,7 +58,7 @@ public class ConnectionPool {
         }
     }
 
-    public static void closeResources(AutoCloseable... resources) {
+    public void closeResources(AutoCloseable... resources) {
         for (AutoCloseable res : resources) {
             if (res != null) {
                 try {
@@ -62,7 +70,7 @@ public class ConnectionPool {
         }
     }
 
-    public static void rollbackConnection(Connection conn, SQLException e) {
+    public void rollbackConnection(Connection conn, SQLException e) {
         logger.error(e);
         try {
             conn.rollback();

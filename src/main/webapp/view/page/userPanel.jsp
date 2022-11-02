@@ -58,9 +58,9 @@
 
         </div>
         <br>
-        <c:forEach var="ticket" items="${sessionScope.user.getUserTickets()}">
+        <c:forEach var="ticket" items="${sessionScope.userService.getUserTickets(sessionScope.user.id)}">
             <div class="row justify-content-md-center">
-                <c:set var="exhibition" value="${ticket.getExhibition()}"/>
+                <c:set var="exhibition" value="${sessionScope.exhibitionService.findById(ticket.exhibitionId).get()}"/>
                 <div class="col-md-auto">
                 <strong>
                         ${exhibition.theme}
@@ -73,7 +73,7 @@
                 </strong>
                 </div>
                 <div class="col-md-auto">
-                <c:if test="${ticket.isCanBeReturn()}">
+                <c:if test="${sessionScope.exhibitionService.isTicketCanBeReturnByExhibition(exhibition.id)}">
                     <form name="returnTicket"
                           action="${pageContext.request.contextPath}/index-servlet"
                           method="post">

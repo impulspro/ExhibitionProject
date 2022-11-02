@@ -1,15 +1,14 @@
 package com.exhibit.dao.impl;
 
+import com.exhibit.dao.ConnectionManager;
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
 import com.exhibit.dao.model.Exhibition;
 import com.exhibit.dao.model.Hall;
 import com.exhibit.services.HallService;
-import com.exhibit.util.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,12 +16,19 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.exhibit.util.constants.ExhibitionConstants.*;
-import static com.exhibit.util.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.dao.constants.ExhibitionConstants.*;
+import static com.exhibit.dao.constants.UtilConstants.*;
 
-public class HallDao implements HallService {
+public class HallDao implements HallService{
     static Mapper<Hall> mapper = MapperFactory.getInstance().getHallMapper();
     Logger logger = LogManager.getLogger(INFO_LOGGER);
+
+    private ConnectionManager manager;
+
+    public HallDao(ConnectionManager manager) {
+        this.manager = manager;
+    }
+
 
     public static List<Date> getDaysBetweenDates(Date startDate, Date endDate) {
         List<Date> dates = new ArrayList<>();
@@ -47,7 +53,7 @@ public class HallDao implements HallService {
         ResultSet rs = null;
 
         try {
-            conn = ConnectionPool.getConnection();
+            conn = manager.getConnection();
             ps = conn.prepareStatement(FIND_ALL_HALLS_SQL);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -56,7 +62,7 @@ public class HallDao implements HallService {
         } catch (SQLException e) {
             logger.error(e);
         } finally {
-            ConnectionPool.closeResources(conn, ps, rs);
+            manager.closeResources(conn, ps, rs);
         }
         return hallList;
     }
@@ -69,7 +75,7 @@ public class HallDao implements HallService {
         ResultSet rs = null;
 
         try {
-            conn = ConnectionPool.getConnection();
+            conn = manager.getConnection();
             ps = conn.prepareStatement(FIND_HALL_BY_ID_SQL);
             ps.setLong(1, hallId);
             rs = ps.executeQuery();
@@ -79,7 +85,7 @@ public class HallDao implements HallService {
         } catch (SQLException e) {
             logger.error(e);
         } finally {
-            ConnectionPool.closeResources(conn, ps, rs);
+            manager.closeResources(conn, ps, rs);
         }
         return hall;
     }
@@ -92,7 +98,7 @@ public class HallDao implements HallService {
         ResultSet rs = null;
         Mapper<Exhibition> exhibitionMapper = MapperFactory.getInstance().getExhibitionMapper();
         try {
-            conn = ConnectionPool.getConnection();
+            conn = manager.getConnection();
             ps = conn.prepareStatement(FIND_EXHIBITIONS_BY_HALL_ID_SQL);
             ps.setLong(1, hallId);
             rs = ps.executeQuery();
@@ -102,13 +108,13 @@ public class HallDao implements HallService {
         } catch (SQLException e) {
             logger.error(e);
         } finally {
-            ConnectionPool.closeResources(conn, ps, rs);
+            manager.closeResources(conn, ps, rs);
         }
         return exhibitions;
     }
 
     @Override
-    public List<Hall> getHallByExhibitionId(final long exhibitionId) {
+    public List<Hall> getHallsByExhibitionId(final long exhibitionId) {
         List<Hall> hallList = new CopyOnWriteArrayList<>();
 
         Connection conn = null;
@@ -116,7 +122,7 @@ public class HallDao implements HallService {
         ResultSet rs = null;
 
         try {
-            conn = ConnectionPool.getConnection();
+            conn = manager.getConnection();
             ps = conn.prepareStatement(FIND_HALLS_BY_EXHIBITION_ID);
             ps.setLong(1, exhibitionId);
             rs = ps.executeQuery();
@@ -127,7 +133,7 @@ public class HallDao implements HallService {
         } catch (SQLException e) {
             logger.error(e);
         } finally {
-            ConnectionPool.closeResources(conn, ps, rs);
+            manager.closeResources(conn, ps, rs);
         }
         return hallList;
     }
@@ -137,8 +143,7 @@ public class HallDao implements HallService {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
-            conn = ConnectionPool.getConnection();
-            conn.setAutoCommit(false);
+            conn = manager.getConnection();
             ps = conn.prepareStatement(SET_HALLS_SQL);
             ps.setLong(1, exhibitionId);
             for (String hall_id : hallsId) {
@@ -147,9 +152,9 @@ public class HallDao implements HallService {
             }
             conn.commit();
         } catch (SQLException e) {
-            ConnectionPool.rollbackConnection(conn, e);
+            manager.rollbackConnection(conn, e);
         } finally {
-            ConnectionPool.closeResources(conn, ps);
+            manager.closeResources(conn, ps);
         }
     }
 
@@ -163,7 +168,7 @@ public class HallDao implements HallService {
         ResultSet rs = null;
         Mapper<Exhibition> exhibitionMapper = MapperFactory.getInstance().getExhibitionMapper();
         try {
-            conn = ConnectionPool.getConnection();
+            conn = manager.getConnection();
             ps = conn.prepareStatement(FIND_EXHIBITIONS_BY_HALL_SQL);
             ps.setLong(1, hallId);
             rs = ps.executeQuery();
@@ -173,7 +178,7 @@ public class HallDao implements HallService {
         } catch (SQLException e) {
             logger.error(e);
         } finally {
-            ConnectionPool.closeResources(conn, ps, rs);
+            manager.closeResources(conn, ps, rs);
         }
 
         for (Exhibition exhibition : exhibitionList) {
@@ -199,7 +204,7 @@ public class HallDao implements HallService {
     public boolean isOccupiedOnDate(long hallId, Date startDate, Date endDate) {
         List<Date> dateList = getOccupiedDates(hallId);
         List<Date> interval = getDaysBetweenDates(startDate, endDate);
-        for (Date dateFromInterval: interval) {
+        for (Date dateFromInterval : interval) {
             for (Date dateOccupied : dateList) {
                 int result = dateOccupied.compareTo(dateFromInterval);
                 if (result == 0) {
@@ -209,5 +214,4 @@ public class HallDao implements HallService {
         }
         return false;
     }
-
 }

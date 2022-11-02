@@ -1,26 +1,27 @@
 package com.exhibit.services;
 
+import com.exhibit.dao.ConnectionManager;
 import com.exhibit.dao.impl.ExhibitionDao;
 import com.exhibit.dao.impl.HallDao;
 import com.exhibit.dao.impl.UserDao;
 
-public class ServiceFactory {
+public class ServiceFactory{
     private static final ServiceFactory instance = new ServiceFactory();
 
     public static ServiceFactory getInstance() {
         return instance;
     }
 
-    public ExhibitionService getExhibitionService() {
-        return new ExhibitionDao();
+    public ExhibitionService getExhibitionService(ConnectionManager manager) {
+        return new ExhibitionDao(manager);
     }
 
-    public HallService getHallService() {
-        return new HallDao();
+    public HallService getHallService(ConnectionManager manager) {
+        return new HallDao(manager);
     }
 
-    public UserService getUserService() {
-        return new UserDao();
+    public UserService getUserService(ConnectionManager manager) {
+        return new UserDao(manager);
     }
 
 }

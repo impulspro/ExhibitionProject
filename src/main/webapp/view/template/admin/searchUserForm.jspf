@@ -20,8 +20,8 @@
     </p>
     <strong><fmt:message key='adminPanel.userExhibitions'/>:</strong>
     <br>
-    <c:forEach var="ticket" items="${sessionScope.searchUser.getUserTickets()}">
-        ${ticket.getExhibition().theme}
+    <c:forEach var="ticket" items="${sessionScope.userService.getUserTickets(sessionScope.searchUser.id)}">
+        ${sessionScope.exhibitionService.findById(ticket.exhibitionId).theme}
         <br>
     </c:forEach>
     <div>

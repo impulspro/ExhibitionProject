@@ -1,4 +1,4 @@
-package com.exhibit.util.constants;
+package com.exhibit.dao.constants;
 
 public class ExhibitionConstants {
     public static final String ADD_EXHIBITION_SQL =

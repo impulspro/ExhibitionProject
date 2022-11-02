@@ -2,11 +2,12 @@ package com.exhibit.controller.commands.impl.common;
 
 import com.exhibit.controller.commands.Command;
 import com.exhibit.controller.commands.CommandResponse;
+import com.exhibit.dao.ConnectionManager;
 import com.exhibit.dao.model.Exhibition;
 import com.exhibit.services.ExhibitionService;
 import com.exhibit.services.ServiceFactory;
-import com.exhibit.util.constants.DispatchCommand;
-import com.exhibit.util.constants.DispatchType;
+import com.exhibit.dao.constants.DispatchCommand;
+import com.exhibit.dao.constants.DispatchType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,15 +16,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static com.exhibit.util.constants.UtilConstants.*;
+import static com.exhibit.dao.constants.UtilConstants.*;
 
 
 public class GetExhibitions implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public CommandResponse execute(final HttpServletRequest req, final HttpServletResponse resp) {
-        ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
+    public CommandResponse execute(final HttpServletRequest req, final HttpServletResponse resp, final ConnectionManager manager) {
+        ExhibitionService userService = ServiceFactory.getInstance().getExhibitionService(manager);
         HttpSession session = req.getSession();
 
         String sortType = (String) session.getAttribute(SORT_TYPE);
@@ -48,9 +49,9 @@ public class GetExhibitions implements Command {
             currentPage = Integer.parseInt(req.getParameter(CURRENT_PAGE));
         }
 
-        int amountOfExhibitions = service.amountOfExhibitions(sortType, sortParam);
+        int amountOfExhibitions = userService.amountOfExhibitions(sortType, sortParam);
         int amountOfPages = (int) Math.ceil(amountOfExhibitions * 1.0 / RECORDS_PER_PAGE);
-        List<Exhibition> exhibitionsList = service.findSortByWhereIs(sortType, sortParam, currentPage);
+        List<Exhibition> exhibitionsList = userService.findSortByWhereIs(sortType, sortParam, currentPage);
 
         if (exhibitionsList == null || exhibitionsList.isEmpty()) {
             session.setAttribute(ERROR_MESSAGE, "no exhibition by your request was found");

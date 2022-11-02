@@ -1,14 +1,8 @@
 package com.exhibit.dao.model;
 
-import com.exhibit.services.ExhibitionService;
-import com.exhibit.services.HallService;
-import com.exhibit.services.ServiceFactory;
-
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,7 +19,7 @@ public class Exhibition implements Serializable {
     private double price;
 
 
-    private Exhibition() {
+    public Exhibition() {
     }
 
     public static Builder newBuilder() {
@@ -70,25 +64,6 @@ public class Exhibition implements Serializable {
 
     public double getPrice() {
         return price;
-    }
-
-    public List<Hall> getHalls() {
-        HallService hallService = ServiceFactory.getInstance().getHallService();
-        return hallService.getHallByExhibitionId(id);
-    }
-
-    public int amountOfTickets() {
-        ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
-        return service.amountOfTicketsByExhibition(id);
-    }
-
-    public boolean isGoing(){
-        java.sql.Date date = java.sql.Date.valueOf(LocalDate.now());
-        if (endDate.compareTo(date) >= 0){
-            return true;
-        } else {
-            return false;
-        }
     }
 
     @Override

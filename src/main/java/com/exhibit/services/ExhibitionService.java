@@ -2,11 +2,12 @@ package com.exhibit.services;
 
 import com.exhibit.dao.model.Exhibition;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
 
-public interface ExhibitionService {
+public interface ExhibitionService extends Serializable {
 
     Optional<Exhibition> findById(final long exhibitionId);
 
@@ -28,7 +29,8 @@ public interface ExhibitionService {
     List<Exhibition> findSortByWhereIs(final String sortType, final String sortParam, final int pageNum);
 
     void add(final Exhibition exhibition);
-
+    boolean inPast(final long exhibitionId);
+    boolean isTicketCanBeReturnByExhibition(final long exhibitionId);
     void cancel(final long exhibitionId);
 
     void delete(final long exhibitionId);

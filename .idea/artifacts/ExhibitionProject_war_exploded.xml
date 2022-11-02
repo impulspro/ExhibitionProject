@@ -30,7 +30,6 @@
           <element id="library" level="project" name="Maven: org.bouncycastle:bcpkix-jdk15on:1.70" />
           <element id="library" level="project" name="Maven: org.bouncycastle:bcutil-jdk15on:1.70" />
           <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk15on:1.70" />
-          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.36" />
           <element id="library" level="project" name="Maven: com.itextpdf:barcodes:7.2.3" />
           <element id="library" level="project" name="Maven: com.itextpdf:font-asian:7.2.3" />
           <element id="library" level="project" name="Maven: com.itextpdf:forms:7.2.3" />
@@ -41,6 +40,7 @@
           <element id="library" level="project" name="Maven: com.itextpdf:styled-xml-parser:7.2.3" />
           <element id="library" level="project" name="Maven: com.itextpdf:svg:7.2.3" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-simple:2.0.3" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:2.0.3" />
         </element>
       </element>
       <element id="directory" name="META-INF">

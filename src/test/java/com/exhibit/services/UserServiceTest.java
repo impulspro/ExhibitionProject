@@ -1,30 +1,39 @@
 package com.exhibit.services;
 
+import com.exhibit.dao.BasicConnectionManager;
 import com.exhibit.dao.impl.ExhibitionDao;
 import com.exhibit.dao.model.Exhibition;
 import com.exhibit.dao.model.Ticket;
 import com.exhibit.dao.model.User;
 import com.exhibit.util.PasswordHashing;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import static com.exhibit.util.constants.UserConstants.BUY_TICKET_OK;
+import static com.exhibit.dao.constants.UserConstants.BUY_TICKET_OK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class UserServiceTest {
-    UserService service;
+    UserService userService;
+    ExhibitionService exhibitionService;
 
-    @BeforeEach
-    void setUp() {
-        service = ServiceFactory.getInstance().getUserService();
+    @BeforeAll
+    void globalSetUp(){
+        userService = ServiceFactory.getInstance().getUserService(BasicConnectionManager.getInstance());
+        exhibitionService = ServiceFactory.getInstance().getExhibitionService(BasicConnectionManager.getInstance());
     }
 
+    @BeforeEach
+    void setUp() throws SQLException {
+
+    }
     @AfterEach
     void tearDown() {
     }
@@ -35,14 +44,14 @@ class UserServiceTest {
         String password = PasswordHashing.toMD5(randomString());
         Optional<User> expectedUser = Optional.of(new User(login, password));
 
-        List<User> userListExpected = service.findAll();
-        service.add(expectedUser.get());
+        List<User> userListExpected = userService.findAll();
+        userService.add(expectedUser.get());
         userListExpected.add(expectedUser.get());
 
-        Optional<User> actualUser = service.findByLogin(login);
+        Optional<User> actualUser = userService.findByLogin(login);
         assertEquals(expectedUser, actualUser);
 
-        List<User> userListActual = service.findAll();
+        List<User> userListActual = userService.findAll();
         assertEquals(userListExpected, userListActual);
     }
 
@@ -52,18 +61,18 @@ class UserServiceTest {
         String password = PasswordHashing.toMD5(randomString());
         Optional<User> expectedUser = Optional.of(new User(login, password));
 
-        List<User> userListExpected = service.findAll();
-        service.add(expectedUser.get());
+        List<User> userListExpected = userService.findAll();
+        userService.add(expectedUser.get());
         userListExpected.add(expectedUser.get());
 
-        Optional<User> actualUser = service.findByLogin(login);
+        Optional<User> actualUser = userService.findByLogin(login);
         assertEquals(expectedUser, actualUser);
 
-        List<User> userListActual = service.findAll();
+        List<User> userListActual = userService.findAll();
         assertEquals(userListExpected, userListActual);
 
-        service.delete(expectedUser.get());
-        Optional<User> deletedUser = service.findByLogin(expectedUser.get().getLogin());
+        userService.delete(expectedUser.get());
+        Optional<User> deletedUser = userService.findByLogin(expectedUser.get().getLogin());
         assertFalse(deletedUser.isPresent());
     }
 
@@ -73,16 +82,15 @@ class UserServiceTest {
         String password = PasswordHashing.toMD5(randomString());
         Optional<User> user = Optional.of(new User(login, password));
 
-        service.add(user.get());
-        ExhibitionService exhibitionService = new ExhibitionDao();
+        userService.add(user.get());
         List<Exhibition> exhibitionList = exhibitionService.findAll();
         for (int i = 0; i < 3; i++) {
-            String answer = service.buyTicket(user.get(), exhibitionList.get(i).getId());
+            String answer = userService.buyTicket(user.get(), exhibitionList.get(i).getId());
             assertEquals(BUY_TICKET_OK, answer);
         }
 
 
-        List<Ticket> ticketList = service.getUserTickets(user.get());
+        List<Ticket> ticketList = userService.getUserTickets(user.get().getId());
         for (int i = 0; i < ticketList.size(); i++) {
             assertEquals(ticketList.get(i).getExhibitionId(), exhibitionList.get(i).getId());
         }

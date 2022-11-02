@@ -1,14 +1,10 @@
 package com.exhibit.dao.model;
 
-import com.exhibit.services.ServiceFactory;
-import com.exhibit.services.UserService;
-
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
-import static com.exhibit.util.constants.UserConstants.AUTHORIZED_USER;
-import static com.exhibit.util.constants.UserConstants.USER_DEFAULT_MONEY;
+import static com.exhibit.dao.constants.UserConstants.AUTHORIZED_USER;
+import static com.exhibit.dao.constants.UserConstants.USER_DEFAULT_MONEY;
 
 public class User implements Serializable {
     private long id;
@@ -28,6 +24,10 @@ public class User implements Serializable {
     }
 
     public User() {
+    }
+
+    public static Builder newBuilder() {
+        return new User().new Builder();
     }
 
     public long getId() {
@@ -66,15 +66,6 @@ public class User implements Serializable {
         this.money = money;
     }
 
-    public boolean isTicketPresent(long exhibitionId){
-        UserService service = ServiceFactory.getInstance().getUserService();
-        return service.isTicketPreset(getLogin(), exhibitionId);
-    }
-
-    public List<Ticket> getUserTickets(){
-        UserService service = ServiceFactory.getInstance().getUserService();
-        return service.getUserTickets(this);
-    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -97,9 +88,6 @@ public class User implements Serializable {
                 ", money=" + money +
                 ", id=" + id +
                 '}';
-    }
-    public static Builder newBuilder() {
-        return new User().new Builder();
     }
 
     public class Builder {

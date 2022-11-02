@@ -13,7 +13,7 @@
 
 <c:if test="${sessionScope.userList != null}">
     <br>
-    <div class="d-flex justify-content-center">
+
         <c:set var="i" value="1"/>
         <c:forEach var="userI" items="${sessionScope.userList}">
             <div class="row bg-light">
@@ -34,5 +34,5 @@
 
             <c:set var="i" value="${i+1}"/>
         </c:forEach>
-    </div>
+   
 </c:if>

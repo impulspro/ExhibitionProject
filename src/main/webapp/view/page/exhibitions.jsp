@@ -10,6 +10,9 @@
 
 <!DOCTYPE html>
 <html lang="uk">
+<head>
+    <title>Exhibitions jsp</title>
+</head>
 <div class="container">
     <div class="row">
         <c:set var="i" value="1"/>
@@ -36,7 +39,7 @@
                         </strong>
                         <p class="text-center">
                             <fmt:message key='exhibition.halls'/>:
-                            <c:forEach var="hall" items="${exh.getHalls()}">
+                            <c:forEach var="hall" items="${sessionScope.hallService.getHallsByExhibitionId(exh.id)}">
                                 <strong> ${hall.name}</strong>
                             </c:forEach>
                         </p>
@@ -54,31 +57,41 @@
                                 </c:if>
 
                                 <c:if test="${sessionScope.user.role == 'user'}">
-                                <c:if test="${exh.isGoing()}">
                                     <form action="${pageContext.request.contextPath}/index-servlet"
                                           method="post">
                                         <input name="command" type="hidden" value="buyTicketCommand">
                                         <input name="exhibitionId" type="hidden" value="${exh.id}">
 
-                                        <c:if test="${sessionScope.user.isTicketPresent(exh.id)}">
+                                        <c:if test="${sessionScope.userService.isTicketPresent(sessionScope.user.login, exh.id)}">
                                             <button class="btn btn-success" type="button" disabled>
                                                 <fmt:message key='exhibition.alreadyBought'/>
                                             </button>
                                         </c:if>
 
-                                        <c:if test="${exh.price != '-1'}">
-                                            <c:if test="${!sessionScope.user.isTicketPresent(exh.id)}">
-                                                <button class="btn btn-primary" type="submit">
-                                                    <fmt:message key='exhibition.buyTickets'/></button>
+                                        <c:if test="${!sessionScope.exhibitionService.inPast(exh.id)}">
+                                            <c:if test="${exh.price != '-1'}">
+                                                <c:if test="${!sessionScope.userService.isTicketPresent(sessionScope.user.login, exh.id)}">
+                                                    <button class="btn btn-primary" type="submit">
+                                                        <fmt:message key='exhibition.buyTickets'/></button>
+                                                </c:if>
                                             </c:if>
                                         </c:if>
+                                        <c:if test="${sessionScope.exhibitionService.inPast(exh.id)}">
+                                            <c:if test="${exh.price != '-1'}">
+                                                <c:if test="${!sessionScope.userService.isTicketPresent(sessionScope.user.login, exh.id)}">
+                                                    <button class="btn btn-dark" disabled type="button">
+                                                        <fmt:message key='exhibition.alreadyEnded'/></button>
+                                                </c:if>
+                                            </c:if>
+                                        </c:if>
+
                                         <c:if test="${exh.price == '-1'}">
                                             <button class="btn btn-dark" disabled type="button">
                                                 <fmt:message key='exhibition.alreadyCanceled'/></button>
                                         </c:if>
                                     </form>
                                 </c:if>
-                                </c:if>
+
 
                                 <c:if test="${sessionScope.user.role == 'admin'}">
                                     <form action="${pageContext.request.contextPath}/index-servlet"
@@ -87,8 +100,9 @@
                                         <input name="exhibitionId" type="hidden" value="${exh.id}">
 
                                         <button class="btn-success" type="button" disabled>
-                                                ${exh.amountOfTickets()} <fmt:message
-                                                key='exhibition.amountOfTickets'/>
+                                                ${sessionScope.exhibitionService.amountOfTicketsByExhibition(exh.id)}
+                                            <fmt:message
+                                                    key='exhibition.amountOfTickets'/>
                                         </button>
 
                                         <c:if test="${exh.price != '-1'}">

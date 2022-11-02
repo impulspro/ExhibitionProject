@@ -1,8 +1,8 @@
 <c:set var="k" value="1"/>
-<c:forEach var="hall" items="${sessionScope.hallList}">
-    <strong> ${hall.getName()}  <fmt:message key='exhibition.hallIsOccupied'/>: </strong> <br>
+<c:forEach var="hall" items="${sessionScope.hallService.findAll()}">
+    <strong> ${hall.name()}  <fmt:message key='exhibition.hallIsOccupied'/>: </strong> <br>
     <c:set var="j" value="1"/>
-    <c:forEach var="exhibiton" items="${hall.getExhibitions()}">
+    <c:forEach var="exhibiton" items="${sessionScope.hallService.findAllExhibitionsByHall(hall.id)}">
         <div>
             (${exhibiton.startDate} <fmt:message key='exhibition.to'/> ${exhibiton.endDate})
         </div>

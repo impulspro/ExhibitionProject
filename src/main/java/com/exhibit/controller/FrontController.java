@@ -2,7 +2,11 @@ package com.exhibit.controller;
 
 import com.exhibit.controller.commands.CommandContainer;
 import com.exhibit.controller.commands.CommandResponse;
-import com.exhibit.util.constants.DispatchType;
+import com.exhibit.dao.BasicConnectionManager;
+import com.exhibit.dao.ConnectionManager;
+import com.exhibit.dao.model.Hall;
+import com.exhibit.services.HallService;
+import com.exhibit.services.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,14 +17,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
-import static com.exhibit.util.constants.UtilConstants.*;
+import static com.exhibit.dao.constants.UtilConstants.*;
 
 
 @WebServlet(name = "indexServlet", value = {"/index-servlet"})
 public class FrontController extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
-
+    private static final ConnectionManager manager = BasicConnectionManager.getInstance();
 
     @Override
     public void init() {
@@ -43,7 +48,7 @@ public class FrontController extends HttpServlet {
 
         logger.info(commandName);
 
-        CommandResponse cr = CommandContainer.getCommand(commandName).execute(req, resp);
+        CommandResponse cr = CommandContainer.getCommand(commandName).execute(req, resp, BasicConnectionManager.getInstance());
 
         String dispatchPage = HOME_PAGE;
 

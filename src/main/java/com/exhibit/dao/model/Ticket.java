@@ -1,21 +1,15 @@
 package com.exhibit.dao.model;
 
-import com.exhibit.services.ExhibitionService;
-import com.exhibit.services.ServiceFactory;
-
 import java.io.Serializable;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Optional;
+import java.util.Objects;
 
 public class Ticket implements Serializable {
     private long id;
     private long userId;
+
     private long exhibitionId;
 
-    private Ticket() {
+    public Ticket() {
     }
 
     public static Ticket.Builder newBuilder() {
@@ -26,43 +20,25 @@ public class Ticket implements Serializable {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public long getUserId() {
         return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
     }
 
     public long getExhibitionId() {
         return exhibitionId;
     }
 
-    public void setExhibitionId(long exhibitionId) {
-        this.exhibitionId = exhibitionId;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ticket ticket = (Ticket) o;
+        return id == ticket.id && userId == ticket.userId && exhibitionId == ticket.exhibitionId;
     }
 
-    public Exhibition getExhibition() {
-        ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
-        Optional<Exhibition> exhibition = service.findById(exhibitionId);
-        return exhibition.orElse(null);
-    }
-
-    public boolean isCanBeReturn(){
-        Exhibition exhibition = getExhibition();
-
-        java.sql.Date date = java.sql.Date.valueOf(LocalDate.now());
-        Date endDate = exhibition.getEndDate();
-
-        if (endDate.compareTo(date) >= 0){
-            return true;
-        } else {
-            return false;
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId, exhibitionId);
     }
 
     @Override

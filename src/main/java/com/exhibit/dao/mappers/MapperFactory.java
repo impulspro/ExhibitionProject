@@ -8,7 +8,7 @@ import com.exhibit.dao.mappers.impl.UserMapper;
 public final class MapperFactory {
     private static final MapperFactory instance = new MapperFactory();
 
-    public static MapperFactory getInstance() {
+    public static synchronized MapperFactory getInstance() {
         return instance;
     }
 

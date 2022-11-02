@@ -2,14 +2,15 @@ package com.exhibit.controller.commands.impl.user;
 
 import com.exhibit.controller.commands.Command;
 import com.exhibit.controller.commands.CommandResponse;
+import com.exhibit.dao.ConnectionManager;
 import com.exhibit.dao.model.Exhibition;
 import com.exhibit.dao.model.Ticket;
 import com.exhibit.dao.model.User;
 import com.exhibit.services.ExhibitionService;
 import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;
-import com.exhibit.util.constants.DispatchCommand;
-import com.exhibit.util.constants.DispatchType;
+import com.exhibit.dao.constants.DispatchCommand;
+import com.exhibit.dao.constants.DispatchType;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -30,16 +31,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.exhibit.util.constants.UtilConstants.*;
+import static com.exhibit.dao.constants.UtilConstants.*;
 
 public class PrintPdf implements Command {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     @Override
-    public CommandResponse execute(final HttpServletRequest req, final HttpServletResponse resp) {
+    public CommandResponse execute(final HttpServletRequest req, final HttpServletResponse resp, final ConnectionManager manager) {
+        UserService userService = ServiceFactory.getInstance().getUserService(manager);
+        ExhibitionService exhibitionService = ServiceFactory.getInstance().getExhibitionService(manager);
+
         User user = (User) req.getSession().getAttribute("user");
-        UserService userService = ServiceFactory.getInstance().getUserService();
-        List<Ticket> ticketList = userService.getUserTickets(user);
+        List<Ticket> ticketList = userService.getUserTickets(user.getId());
 
         if (ticketList == null || ticketList.isEmpty()) {
             req.getSession().setAttribute(USER_MESSAGE, "you have not tickets yet");
@@ -51,10 +54,10 @@ public class PrintPdf implements Command {
                 Document doc = new Document(pdfDoc);
 
                 doc.add(new Paragraph("Your tickets dear " + user.getLogin() + ":"));
-                ExhibitionService service = ServiceFactory.getInstance().getExhibitionService();
+
 
                 for (Ticket ticket : ticketList) {
-                    Optional<Exhibition> exhibitionOpt = service.findById(ticket.getExhibitionId());
+                    Optional<Exhibition> exhibitionOpt = exhibitionService.findById(ticket.getExhibitionId());
                     if (exhibitionOpt.isPresent()) {
                         Exhibition exhibition = exhibitionOpt.get();
                         String theme = exhibition.getTheme();
@@ -74,14 +77,7 @@ public class PrintPdf implements Command {
                 }
 
                 doc.close();
-                // setting some response headers
-                resp.setHeader("Expires", "0");
-                resp.setHeader("Cache-Control",
-                        "must-revalidate, post-check=0, pre-check=0");
-                resp.setHeader("Pragma", "public");
-                resp.setContentType("application/pdf");
-                resp.setContentLength(baos.size());
-                // write ByteArrayOutputStream to the ServletOutputStream
+             // write ByteArrayOutputStream to the ServletOutputStream
                 OutputStream os = resp.getOutputStream();
                 baos.writeTo(os);
                 os.flush();

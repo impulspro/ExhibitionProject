@@ -13,7 +13,7 @@
 <div class="container">
     <div class="row">
         <c:set var="i" value="1"/>
-        <c:forEach var="hall" items="${sessionScope.hallList}">
+        <c:forEach var="hall" items="${sessionScope.hallService.findAll()}">
 
             <div class="col-lg-4">
                 <div class="card">
