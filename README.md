@@ -24,8 +24,8 @@ Admin:
 - see exhibitionі sorted by parametrs
 - see halls
 - see statistics of visitors by exhibitions
-- cancel exhibitions (corespondent records remain)
-- delete exhibitions (corespondent records deleted)
+- cancel exhibitions if they not in the past (corespondent records remain) with refund
+- delete exhibitions if they not in the past (corespondent records deleted) with refund
 
 on Amdin panel:
 - see what hall and when is occupied
