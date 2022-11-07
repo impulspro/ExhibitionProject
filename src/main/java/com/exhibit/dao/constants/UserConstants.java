@@ -13,6 +13,10 @@ public class UserConstants {
             "SELECT * FROM user WHERE login = ?";
     public static final String FIND_ALL_USERS_SQL =
             "SELECT * FROM user";
+    public static final String FIND_ALL_USERS_BY_EXHIBITION_ID_SQL =
+            "SELECT * FROM user INNER JOIN user_tickets " +
+                    "ON user.id = user_tickets.user_id " +
+                    "WHERE user_tickets.exhibition_id = ?";
     public static final String FIND_USER_TICKETS_SQL =
             "SELECT * FROM user_tickets WHERE user_id = ?";
     public static final String UPDATE_USER_SQL =
@@ -30,6 +34,7 @@ public class UserConstants {
     public static final String NO_ENOUGH_MONEY =
             "not enough money";
     public static final String BUY_TICKET_OK = "ok";
+
     private UserConstants() {
     }
 }

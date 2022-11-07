@@ -1,6 +1,7 @@
 package com.exhibit.services;
 
 import com.exhibit.dao.model.Exhibition;
+import com.exhibit.dao.model.User;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,6 +15,7 @@ public interface ExhibitionService extends Serializable {
     Optional<Exhibition> findByTheme(final String theme);
 
     List<Exhibition> findAll();
+    List<User> findAllUsersByExhibitionId(final long exhibitionId);
     int amountOfExhibitions(final String sortType, final String sortParam);
     int amountOfExhibitions();
     // find sorted by sortType per page

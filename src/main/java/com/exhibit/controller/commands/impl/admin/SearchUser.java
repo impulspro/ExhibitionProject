@@ -2,7 +2,7 @@ package com.exhibit.controller.commands.impl.admin;
 
 import com.exhibit.controller.commands.Command;
 import com.exhibit.controller.commands.CommandResponse;
-import com.exhibit.dao.ConnectionManager;
+import com.exhibit.dao.connection.ConnectionManager;
 import com.exhibit.dao.constants.DispatchCommand;
 import com.exhibit.dao.constants.DispatchType;
 import com.exhibit.dao.model.User;

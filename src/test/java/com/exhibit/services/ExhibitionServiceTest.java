@@ -1,214 +1,123 @@
 package com.exhibit.services;
 
-import com.exhibit.dao.BasicConnectionManager;
-import com.exhibit.dao.impl.UserDao;
+import com.exhibit.dao.connection.TestConnectionManager;
 import com.exhibit.dao.model.Exhibition;
 import com.exhibit.dao.model.Hall;
 import com.exhibit.dao.model.User;
-import com.exhibit.services.ExhibitionService;
-import com.exhibit.services.HallService;
-import com.exhibit.services.ServiceFactory;
-import com.exhibit.services.UserService;
 import com.exhibit.util.PasswordHashing;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExhibitionServiceTest {
-    private static final String CONNECTION_URL = "jdbc:derby:memory:testExhibitionDb;create=true";
-
-    private static final String SHUTDOWN_URL = "jdbc:derby:;shutdown=true";
-
-    private static final String APP_PROPS_FILE = "app.properties";
-
-    private static final String APP_CONTENT = "connection.url=" + CONNECTION_URL;
-
-    private static final String CREATE_USER_TABLE =
-            "CREATE TABLE `user` (\n" +
-                    "  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,\n" +
-                    "  `login` VARCHAR(32) NOT NULL,\n" +
-                    "  `password` VARCHAR(32) NOT NULL,\n" +
-                    "  `role` VARCHAR(32) NOT NULL,\n" +
-                    "  `money` DECIMAL(9,2) UNSIGNED NOT NULL DEFAULT 1000,\n" +
-                    "  PRIMARY KEY (`id`),\n" +
-                    "  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,\n" +
-                    "  UNIQUE INDEX `username_UNIQUE` (`login` ASC) VISIBLE)\n" +
-                    "ENGINE = InnoDB\n" +
-                    "KEY_BLOCK_SIZE = 1;";
-
-
-    private static final String CREATE_EXHIBITION_TABLE =
-            "CREATE TABLE IF NOT EXISTS `exhibition` (\n" +
-                    "  `id` INT NOT NULL AUTO_INCREMENT,\n" +
-                    "  `theme` VARCHAR(255) NOT NULL,\n" +
-                    "  `details` VARCHAR(1024) NOT NULL,\n" +
-                    "  `start_date` DATE NOT NULL,\n" +
-                    "  `end_date` DATE NOT NULL,\n" +
-                    "  `start_time` TIME NOT NULL,\n" +
-                    "  `end_time` TIME NOT NULL,\n" +
-                    "  `price` DECIMAL(9,2) NOT NULL,\n" +
-                    "  PRIMARY KEY (`id`),\n" +
-                    "  UNIQUE INDEX `exhibition_id_UNIQUE` (`id` ASC) VISIBLE,\n" +
-                    "  FULLTEXT INDEX `idx_exhibition_theme` (`theme`) VISIBLE,\n" +
-                    "  INDEX `idx_exhibtition_start_date` (`start_date` ASC) INVISIBLE,\n" +
-                    "  INDEX `idx_exhibtition_price` (`price` ASC) VISIBLE);";
-
-    private static final String CREATE_HALL_TABLE =
-            "CREATE TABLE IF NOT EXISTS `hall` (\n" +
-                    "  `id` INT NOT NULL AUTO_INCREMENT,\n" +
-                    "  `name` VARCHAR(60) NOT NULL,\n" +
-                    "  `details` VARCHAR(1024) NOT NULL,\n" +
-                    "  PRIMARY KEY (`id`),\n" +
-                    "  UNIQUE INDEX `hall_id_UNIQUE` (`id` ASC) VISIBLE);";
-
-    private static final String CREATE_EXHIBITION_HALLS_TABLE =
-            "CREATE TABLE IF NOT EXISTS `exhibition_halls` (\n" +
-                    "  `exhibition_id` INT NOT NULL,\n" +
-                    "  `hall_id` INT NOT NULL,\n" +
-                    "  PRIMARY KEY (`exhibition_id`, `hall_id`),\n" +
-                    "  INDEX `fk_exhibition_has_hall_hall1_idx` (`hall_id` ASC) VISIBLE,\n" +
-                    "  INDEX `fk_exhibition_has_hall_exhibition_idx` (`exhibition_id` ASC) VISIBLE,\n" +
-                    "  CONSTRAINT `fk_exhibition_has_hall_exhibition`\n" +
-                    "    FOREIGN KEY (`exhibition_id`)\n" +
-                    "    REFERENCES `exhibition_db`.`exhibition` (`id`)\n" +
-                    "    ON DELETE CASCADE\n" +
-                    "    ON UPDATE CASCADE,\n" +
-                    "  CONSTRAINT `fk_exhibition_has_hall_hall1`\n" +
-                    "    FOREIGN KEY (`hall_id`)\n" +
-                    "    REFERENCES `exhibition_db`.`hall` (`id`)\n" +
-                    "    ON DELETE CASCADE\n" +
-                    "    ON UPDATE CASCADE);";
-
-    private static final String CREATE_USER_TICKETS_TABLE =
-            "CREATE TABLE IF NOT EXISTS `user_tickets` (\n" +
-                    "  `id` INT NOT NULL AUTO_INCREMENT,\n" +
-                    "  `user_id` INT UNSIGNED NOT NULL,\n" +
-                    "  `exhibition_id` INT NOT NULL,\n" +
-                    "  PRIMARY KEY (`id`, `user_id`, `exhibition_id`),\n" +
-                    "  INDEX `fk_user_has_exhibition_exhibition1_idx` (`exhibition_id` ASC) VISIBLE,\n" +
-                    "  INDEX `fk_user_has_exhibition_user1_idx` (`user_id` ASC) VISIBLE,\n" +
-                    "  CONSTRAINT `fk_user_has_exhibition_user1`\n" +
-                    "    FOREIGN KEY (`user_id`)\n" +
-                    "    REFERENCES `exhibition_db`.`user` (`id`)\n" +
-                    "    ON DELETE CASCADE\n" +
-                    "    ON UPDATE CASCADE,\n" +
-                    "  CONSTRAINT `fk_user_has_exhibition_exhibition1`\n" +
-                    "    FOREIGN KEY (`exhibition_id`)\n" +
-                    "    REFERENCES `exhibition_db`.`exhibition` (`id`)\n" +
-                    "    ON DELETE CASCADE\n" +
-                    "    ON UPDATE CASCADE)\n" +
-                    "ENGINE = InnoDB;";
-
-    private static final String DROP_USER_TABLE = "DROP TABLE user";
-    private static final String DROP_EXHIBITION_TABLE = "DROP TABLE exhibition";
-    private static final String DROP_HALL_TABLE = "DROP TABLE hall";
-    private static final String DROP_EXHIBITION_HALLS = "DROP TABLE exhibition_halls";
-    private static final String DROP_USER_TICKETS_TABLE = "DROP TABLE user_tickets";
-
-    private static final String DERBY_LOG_FILE = "derby.log";
-
-    private static Connection con;
-
-    private static String userDefinedAppContent;
-
-
-
-
-
-
-
-
-
-
-
-
-    ExhibitionService exhibitionService;
-    UserService userService;
-    HallService hallService;
-    @BeforeEach
-    void setUp() {
-
-        exhibitionService = ServiceFactory.getInstance().getExhibitionService(BasicConnectionManager.getInstance());
-        userService = ServiceFactory.getInstance().getUserService(BasicConnectionManager.getInstance());
-        hallService = ServiceFactory.getInstance().getHallService(BasicConnectionManager.getInstance());
+    static ExhibitionService exhibitionService;
+    static UserService userService;
+    static HallService hallService;
+    static int testIterations;
+    static Date date;
+    static String detail = "Some test details";
+    static Time time = new Time(7200000);
+    static double price = 100D;
+    static int hallsAmount = 8;
+    @BeforeAll
+    static void globalSetUp() {
+        exhibitionService = ServiceFactory.getInstance().getExhibitionService(TestConnectionManager.getInstance());
+        userService = ServiceFactory.getInstance().getUserService(TestConnectionManager.getInstance());
+        hallService = ServiceFactory.getInstance().getHallService(TestConnectionManager.getInstance());
+        testIterations = 6;
+        date = Date.valueOf("2023-06-01");
     }
-
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
-    void addExhibition() {
-        String theme = "Test Theme" + randomString();
-        String detail = "Some test details";
-        Date date = Date.valueOf(LocalDate.now());
-        Time time = new Time(7200000);
-        double price = 100D;
+    void addExhibitionWithoutHalls() {
+        List<Exhibition> exhibitionsExpected = exhibitionService.findAll();
+        for (int i = 0; i < testIterations; i++) {
+            String theme = "Test Theme " + randomString();
+            Date date = nextDate();
 
-        Exhibition expectedExh = Exhibition.newBuilder()
-                .setTheme(theme)
-                .setDetails(detail)
-                .setStartDate(date)
-                .setEndDate(date)
-                .setStartTime(time)
-                .setEndTime(time)
-                .setPrice(price)
-                .build();
-
-
-        exhibitionService.add(expectedExh);
-        if (exhibitionService.findById(expectedExh.getId()).isPresent()) {
-            Exhibition actualExh = exhibitionService.findById(expectedExh.getId()).get();
-            assertEquals(expectedExh, actualExh);
-        } else {
-            fail();
+            Exhibition exhibition = Exhibition.newBuilder()
+                    .setTheme(theme)
+                    .setDetails(detail)
+                    .setStartDate(date)
+                    .setEndDate(date)
+                    .setStartTime(time)
+                    .setEndTime(time)
+                    .setPrice(price)
+                    .build();
+            exhibitionService.add(exhibition);
+            exhibitionsExpected.add(exhibition);
         }
 
-        String[] halls = {"1", "3", "5"};
-        hallService.setHallByExhibitionId(expectedExh.getId(), halls);
-        List<Hall> actualHalls = hallService.getHallsByExhibitionId(expectedExh.getId());
-        for (int i = 0; i < halls.length; i++) {
-            assertEquals(actualHalls.get(i).getId(), Long.valueOf(halls[i]));
+        List<Exhibition> exhibitionsActual = exhibitionService.findAll();
+        assertEquals(exhibitionsExpected, exhibitionsActual);
+    }
+    @Test
+    void setHallsForExhibition() {
+        List<Exhibition> exhibitionsExpected = new CopyOnWriteArrayList<>();
+        String[][] hallsExpected = new String[testIterations][];
+        for (int i = 0; i < testIterations; i++) {
+            String theme = "Test Theme " + randomString();
+            Date date = nextDate();
+
+            Exhibition exhibition = Exhibition.newBuilder()
+                    .setTheme(theme)
+                    .setDetails(detail)
+                    .setStartDate(date)
+                    .setEndDate(date)
+                    .setStartTime(time)
+                    .setEndTime(time)
+                    .setPrice(price)
+                    .build();
+            exhibitionService.add(exhibition);
+            exhibitionsExpected.add(exhibition);
+
+            int hall1 = (int) (Math.random() * (hallsAmount - 2)) + 1;
+            int hall2 = hall1 + 1;
+            String[] halls = {String.valueOf(hall1), String.valueOf(hall2)};
+            hallService.setHallByExhibitionId(exhibition.getId(), halls);
+            hallsExpected[i] = halls;
+        }
+
+        for (int i = 0; i < testIterations; i++) {
+            long exhibitionId = exhibitionsExpected.get(i).getId();
+            List<Hall> hallsActual = hallService.getHallsByExhibitionId(exhibitionId);
+            assertEquals(hallsExpected[i][0], String.valueOf(hallsActual.get(0).getId()));
+            assertEquals(hallsExpected[i][1], String.valueOf(hallsActual.get(1).getId()));
         }
     }
-
 
     @Test
     void numberOfExhibitions() {
-        String theme = "Test Theme" + randomString();
-        String detail = "Some test details";
-        Date date = Date.valueOf(LocalDate.now());
-        Time time = new Time(7200000);
-        double price = 100D;
+        int exhibitionsExpectedCount = exhibitionService.findAll().size();
+        for (int i = 0; i < testIterations; i++) {
+            String theme = "Test Theme " + randomString();
+            Date date = nextDate();
 
-        Exhibition expectedExh = Exhibition.newBuilder()
-                .setTheme(theme)
-                .setDetails(detail)
-                .setStartDate(date)
-                .setEndDate(date)
-                .setStartTime(time)
-                .setEndTime(time)
-                .setPrice(price)
-                .build();
+            Exhibition exhibition = Exhibition.newBuilder()
+                    .setTheme(theme)
+                    .setDetails(detail)
+                    .setStartDate(date)
+                    .setEndDate(date)
+                    .setStartTime(time)
+                    .setEndTime(time)
+                    .setPrice(price)
+                    .build();
+            exhibitionService.add(exhibition);
+            exhibitionsExpectedCount++;
+        }
 
-
-        long expected = exhibitionService.findAll().size() + 2;
-        exhibitionService.add(expectedExh);
-        expectedExh.setTheme(randomString());
-        exhibitionService.add(expectedExh);
-
-        long actual = exhibitionService.findAll().size();
-        assertEquals(expected, actual);
-
+        int exhibitionsActualCount = exhibitionService.findAll().size();
+        assertEquals(exhibitionsExpectedCount, exhibitionsActualCount);
     }
 
     @Test
@@ -301,6 +210,21 @@ class ExhibitionServiceTest {
                 .limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+    }
+
+    Date nextDate(){
+        String dt = String.valueOf(date);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(dt));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        c.add(Calendar.DATE, 3);  // number of days to add
+        dt = sdf.format(c.getTime());
+        date = Date.valueOf(dt);
+        return date;
     }
 
 }

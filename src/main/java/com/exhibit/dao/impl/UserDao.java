@@ -1,6 +1,7 @@
 package com.exhibit.dao.impl;
 
-import com.exhibit.dao.ConnectionManager;
+import com.exhibit.dao.connection.ConnectionManager;
+import com.exhibit.dao.exeptions.DaoException;
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
 import com.exhibit.dao.model.Exhibition;
@@ -93,15 +94,16 @@ public class UserDao implements UserService {
     public void returnTicket(final User user, long exhibitionId) {
         Optional<Exhibition> exhibition = exhibitionService.findById(exhibitionId);
         if (!exhibition.isPresent()) {
-            logger.error("No exhibition find");
-            return;
+            logger.error("No exhibition found");
+            throw new DaoException("No exhibition found");
         }
 
         List<Ticket> tickets = getUserTickets(user.getId());
         if (!tickets.isEmpty()) {
             Optional<Ticket> ticket = tickets.stream().filter(t -> t.getExhibitionId() == exhibitionId).findFirst();
             if (ticket.isPresent()) {
-                logger.error("No exhibition find");
+                logger.error("No exhibition found");
+                throw new DaoException("No exhibition found");
             }
         }
 
@@ -126,6 +128,7 @@ public class UserDao implements UserService {
             conn.commit();
         } catch (SQLException e) {
             manager.rollbackConnection(conn, e);
+            throw new DaoException("No exhibition found");
         } finally {
             manager.closeResources(conn, ps, rs);
         }

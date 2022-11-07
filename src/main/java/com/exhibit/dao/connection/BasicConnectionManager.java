@@ -1,4 +1,4 @@
-package com.exhibit.dao;
+package com.exhibit.dao.connection;
 
 import com.exhibit.dao.exeptions.DaoException;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -20,7 +20,7 @@ public class BasicConnectionManager implements ConnectionManager {
 
     static {
         try (InputStream in = BasicConnectionManager.class.getClassLoader().
-                getResourceAsStream("db.properties")) {
+                getResourceAsStream("db/basicDB.properties")) {
             Properties prop = new Properties();
             prop.load(in);
 
@@ -49,6 +49,7 @@ public class BasicConnectionManager implements ConnectionManager {
     public Connection getConnection() {
         try {
             Connection conn = ds.getConnection();
+            //snapshot isolation level
             conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             conn.setAutoCommit(false);
             return conn;

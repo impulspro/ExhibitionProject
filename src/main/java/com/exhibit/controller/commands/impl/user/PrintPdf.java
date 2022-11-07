@@ -2,7 +2,7 @@ package com.exhibit.controller.commands.impl.user;
 
 import com.exhibit.controller.commands.Command;
 import com.exhibit.controller.commands.CommandResponse;
-import com.exhibit.dao.ConnectionManager;
+import com.exhibit.dao.connection.ConnectionManager;
 import com.exhibit.dao.model.Exhibition;
 import com.exhibit.dao.model.Ticket;
 import com.exhibit.dao.model.User;

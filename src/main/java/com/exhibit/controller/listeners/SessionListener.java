@@ -1,7 +1,7 @@
 package com.exhibit.controller.listeners;
 
-import com.exhibit.dao.BasicConnectionManager;
-import com.exhibit.dao.ConnectionManager;
+import com.exhibit.dao.connection.BasicConnectionManager;
+import com.exhibit.dao.connection.ConnectionManager;
 import com.exhibit.services.ServiceFactory;
 
 import javax.servlet.annotation.WebListener;

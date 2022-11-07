@@ -1,6 +1,6 @@
 package com.exhibit.controller.commands;
 
-import com.exhibit.dao.ConnectionManager;
+import com.exhibit.dao.connection.ConnectionManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

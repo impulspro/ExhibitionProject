@@ -1,6 +1,6 @@
 package com.exhibit.services;
 
-import com.exhibit.dao.ConnectionManager;
+import com.exhibit.dao.connection.ConnectionManager;
 import com.exhibit.dao.impl.ExhibitionDao;
 import com.exhibit.dao.impl.HallDao;
 import com.exhibit.dao.impl.UserDao;

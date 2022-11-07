@@ -3,7 +3,7 @@ package com.exhibit.controller.commands.impl.admin;
 import com.exhibit.controller.commands.Command;
 import com.exhibit.controller.commands.CommandContainer;
 import com.exhibit.controller.commands.CommandResponse;
-import com.exhibit.dao.ConnectionManager;
+import com.exhibit.dao.connection.ConnectionManager;
 import com.exhibit.dao.model.User;
 import com.exhibit.services.ServiceFactory;
 import com.exhibit.services.UserService;

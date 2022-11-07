@@ -1,10 +1,13 @@
 package com.exhibit.dao.impl;
 
-import com.exhibit.dao.ConnectionManager;
+import com.exhibit.dao.connection.ConnectionManager;
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
 import com.exhibit.dao.model.Exhibition;
+import com.exhibit.dao.model.User;
 import com.exhibit.services.ExhibitionService;
+import com.exhibit.services.ServiceFactory;
+import com.exhibit.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,11 +18,13 @@ import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.exhibit.dao.constants.ExhibitionConstants.*;
-import static com.exhibit.dao.constants.UtilConstants.*;
+import static com.exhibit.dao.constants.UserConstants.FIND_ALL_USERS_BY_EXHIBITION_ID_SQL;
+import static com.exhibit.dao.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.dao.constants.UtilConstants.RECORDS_PER_PAGE;
 
 
 public class ExhibitionDao implements ExhibitionService {
-    static Mapper<Exhibition> mapper = MapperFactory.getInstance().getExhibitionMapper();
+    private static Mapper<Exhibition> mapper = MapperFactory.getInstance().getExhibitionMapper();
     Logger logger = LogManager.getLogger(INFO_LOGGER);
     private ConnectionManager manager;
 
@@ -59,11 +64,11 @@ public class ExhibitionDao implements ExhibitionService {
     }
 
     @Override
-    public boolean inPast(final long exhibitionId){
+    public boolean inPast(final long exhibitionId) {
         java.sql.Date date = java.sql.Date.valueOf(LocalDate.now());
         Optional<Exhibition> exhibition = findById(exhibitionId);
-        if (exhibition.isPresent()){
-            if (exhibition.get().getEndDate().compareTo(date) < 0){
+        if (exhibition.isPresent()) {
+            if (exhibition.get().getEndDate().compareTo(date) < 0) {
                 return true;
             }
         } else {
@@ -72,10 +77,10 @@ public class ExhibitionDao implements ExhibitionService {
         return false;
     }
 
-    public boolean isTicketCanBeReturnByExhibition(final long exhibitionId){
+    public boolean isTicketCanBeReturnByExhibition(final long exhibitionId) {
         Optional<Exhibition> exhibition = findById(exhibitionId);
 
-        if (exhibition.isPresent()){
+        if (exhibition.isPresent()) {
             java.sql.Date date = java.sql.Date.valueOf(LocalDate.now());
             Date endDate = exhibition.get().getEndDate();
             return endDate.compareTo(date) >= 0;
@@ -84,6 +89,7 @@ public class ExhibitionDao implements ExhibitionService {
         }
         return false;
     }
+
     public Optional<Exhibition> findById(final long id) {
         Optional<Exhibition> exhibition = Optional.empty();
         Connection conn = null;
@@ -147,6 +153,31 @@ public class ExhibitionDao implements ExhibitionService {
             manager.closeResources(conn, ps, rs);
         }
         return exhibitionList;
+    }
+
+    @Override
+    public List<User> findAllUsersByExhibitionId(long exhibitionId) {
+        List<User> userList = new CopyOnWriteArrayList<>();
+        Mapper<User> userMapper = MapperFactory.getInstance().getUserMapper();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = manager.getConnection();
+            ps = conn.prepareStatement(FIND_ALL_USERS_BY_EXHIBITION_ID_SQL);
+            ps.setLong(1, exhibitionId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = userMapper.extractFromResultSet(rs);
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            manager.closeResources(conn, ps, rs);
+        }
+        return userList;
     }
 
     @Override
@@ -262,9 +293,14 @@ public class ExhibitionDao implements ExhibitionService {
     @Override
 
     public void cancel(final long exhibitionId) {
+        List<User> userList = findAllUsersByExhibitionId(exhibitionId);
+        UserService userService = ServiceFactory.getInstance().getUserService(manager);
+
         Connection conn = null;
         PreparedStatement ps = null;
         try {
+            userList.forEach(u -> userService.returnTicket(u, exhibitionId));
+
             conn = manager.getConnection();
             ps = conn.prepareStatement(UPDATE_EXHIBITION_PRICE_BY_ID_SQL);
             ps.setDouble(1, -1.0);
@@ -279,13 +315,19 @@ public class ExhibitionDao implements ExhibitionService {
     }
 
     public void delete(final long exhibitionId) {
+        List<User> userList = findAllUsersByExhibitionId(exhibitionId);
+        UserService userService = ServiceFactory.getInstance().getUserService(manager);
+
         Connection conn = null;
         PreparedStatement ps = null;
         try {
+            userList.forEach(u -> userService.returnTicket(u, exhibitionId));
+
             conn = manager.getConnection();
             ps = conn.prepareStatement(DELETE_EXHIBITION_BY_ID_SQL);
             ps.setLong(1, exhibitionId);
             ps.executeUpdate();
+
             conn.commit();
         } catch (SQLException e) {
             manager.rollbackConnection(conn, e);

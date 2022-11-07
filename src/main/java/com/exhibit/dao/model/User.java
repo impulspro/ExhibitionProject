@@ -10,7 +10,7 @@ public class User implements Serializable {
     private long id;
     private String login;
 
-    private String password;
+     private transient String password;
 
     private String role;
     private double money;

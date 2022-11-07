@@ -129,6 +129,9 @@ INSERT INTO `exhibition_db`.`user` (`id`, `login`, `password`, `role`, `money`) 
 INSERT INTO `exhibition_db`.`user` (`id`, `login`, `password`, `role`, `money`) VALUES (DEFAULT, 'Василий', '819b0643d6b89dc9b579fdfc9094f28e', 'user', 1000);
 INSERT INTO `exhibition_db`.`user` (`id`, `login`, `password`, `role`, `money`) VALUES (DEFAULT, 'Степан', '218dd27aebeccecae69ad8408d9a36bf', 'user', 1000);
 INSERT INTO `exhibition_db`.`user` (`id`, `login`, `password`, `role`, `money`) VALUES (DEFAULT, 'Дмитро', '218dd27aebeccecae69ad8408d9a363f', 'user', 1500);
+INSERT INTO `exhibition_db`.`user` (`id`, `login`, `password`, `role`, `money`) VALUES (DEFAULT, 'user1', '96e79218965eb72c92a549dd5a330112', 'user', 800);
+INSERT INTO `exhibition_db`.`user` (`id`, `login`, `password`, `role`, `money`) VALUES (DEFAULT, 'user2', 'e3ceb5881a0a1fdaad01296d7554868d', 'user', 980);
+INSERT INTO `exhibition_db`.`user` (`id`, `login`, `password`, `role`, `money`) VALUES (DEFAULT, 'user3', '1a100d2c0dab19c4430e7d73762b3423', 'user', 560);
 
 COMMIT;
 
@@ -144,6 +147,8 @@ INSERT INTO `exhibition_db`.`exhibition` (`id`, `theme`, `details`, `start_date`
 INSERT INTO `exhibition_db`.`exhibition` (`id`, `theme`, `details`, `start_date`, `end_date`, `start_time`, `end_time`, `price`) VALUES (DEFAULT, 'BlackWhite', 'Exhibition about black-white colors', '2022.12.01', '2022.12.05', '08:00:00', '18:30:00', 200);
 INSERT INTO `exhibition_db`.`exhibition` (`id`, `theme`, `details`, `start_date`, `end_date`, `start_time`, `end_time`, `price`) VALUES (DEFAULT, 'History Art', 'Exhibition about histrorical aspects of art', '2022.12.23', '2022.12.29', '08:00:00', '19:40:00', 250);
 INSERT INTO `exhibition_db`.`exhibition` (`id`, `theme`, `details`, `start_date`, `end_date`, `start_time`, `end_time`, `price`) VALUES (DEFAULT, 'Місто Харків', 'Виставка присвячена місту Харкову', '2022.12.18', '2022.12.28', '09:00:00', '20:00:00', 100);
+INSERT INTO `exhibition_db`.`exhibition` (`id`, `theme`, `details`, `start_date`, `end_date`, `start_time`, `end_time`, `price`) VALUES (DEFAULT, 'Old Exhibition', 'Old Exhibition details', '2022.09.01', '2022.09.21', '09:00:00', '20:00:00', 250);
+INSERT INTO `exhibition_db`.`exhibition` (`id`, `theme`, `details`, `start_date`, `end_date`, `start_time`, `end_time`, `price`) VALUES (DEFAULT, 'New Exhibition', 'New Exhbition details', '2022.11.27', '2023.04.01', '09:00:00', '19:00:00', 300);
 
 COMMIT;
 
@@ -174,14 +179,15 @@ INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALU
 INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (1, 2);
 INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (2, 3);
 INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (2, 4);
-INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (3, 7);
-INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (3, 8);
-INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (4, 7);
+INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (3, 6);
 INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (4, 5);
 INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (5, 6);
 INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (6, 4);
 INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (6, 3);
 INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (6, 2);
+INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (7, 7);
+INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (8, 8);
+INSERT INTO `exhibition_db`.`exhibition_halls` (`exhibition_id`, `hall_id`) VALUES (1, 5);
 
 COMMIT;
 
@@ -199,6 +205,20 @@ INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VA
 INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 5, 5);
 INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 5, 4);
 INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 5, 3);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 6, 8);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 6, 7);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 6, 5);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 6, 6);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 7, 1);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 7, 7);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 7, 8);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 8, 6);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 8, 4);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 8, 5);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 9, 1);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 9, 8);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 9, 4);
+INSERT INTO `exhibition_db`.`user_tickets` (`id`, `user_id`, `exhibition_id`) VALUES (DEFAULT, 9, 6);
 
 COMMIT;
 

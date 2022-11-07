@@ -1,23 +1,24 @@
 package com.exhibit;
 
-import com.exhibit.dao.BasicConnectionManager;
-import com.exhibit.dao.model.Exhibition;
-import com.exhibit.dao.model.Hall;
-import com.exhibit.services.ExhibitionService;
-import com.exhibit.services.HallService;
-import com.exhibit.services.ServiceFactory;
-import com.exhibit.util.PasswordHashing;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.sql.SQLException;
 
 public class Main {
-    public static void main(String[] args) {
-        HallService hallService = ServiceFactory.getInstance().getHallService(BasicConnectionManager.getInstance());
+    public static void main(String[] args) throws SQLException {
+     /*   ConnectionManager manager = TestConnectionManager.getInstance();
+        TestDB testDB = new TestDB(manager);
+        testDB.createTestDatabase();
+*/
+        for (int i = 0; i < 100; i++) {
+            int hall1 = (int) (Math.random() * (8 - 2));
+            System.out.println(hall1);
+        }
+
+        int hall1 = (int) (Math.random() * (8 - 2));
+
+
+
+      /*  HallService hallService = ServiceFactory.getInstance().getHallService(BasicConnectionManager.getInstance());
         ExhibitionService exhibitionService = ServiceFactory.getInstance().getExhibitionService(BasicConnectionManager.getInstance());
         Optional<Exhibition> exhibition =  exhibitionService.findById(8);
         System.out.println(exhibition);
@@ -38,5 +39,7 @@ public class Main {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+
+       */
     }
 }

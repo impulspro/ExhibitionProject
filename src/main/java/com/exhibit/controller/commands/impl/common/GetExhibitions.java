@@ -2,7 +2,7 @@ package com.exhibit.controller.commands.impl.common;
 
 import com.exhibit.controller.commands.Command;
 import com.exhibit.controller.commands.CommandResponse;
-import com.exhibit.dao.ConnectionManager;
+import com.exhibit.dao.connection.ConnectionManager;
 import com.exhibit.dao.model.Exhibition;
 import com.exhibit.services.ExhibitionService;
 import com.exhibit.services.ServiceFactory;

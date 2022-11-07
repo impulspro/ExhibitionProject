@@ -1,6 +1,6 @@
 package com.exhibit.dao.impl;
 
-import com.exhibit.dao.ConnectionManager;
+import com.exhibit.dao.connection.ConnectionManager;
 import com.exhibit.dao.mappers.Mapper;
 import com.exhibit.dao.mappers.MapperFactory;
 import com.exhibit.dao.model.Exhibition;

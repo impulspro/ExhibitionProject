@@ -2,11 +2,8 @@ package com.exhibit.controller;
 
 import com.exhibit.controller.commands.CommandContainer;
 import com.exhibit.controller.commands.CommandResponse;
-import com.exhibit.dao.BasicConnectionManager;
-import com.exhibit.dao.ConnectionManager;
-import com.exhibit.dao.model.Hall;
-import com.exhibit.services.HallService;
-import com.exhibit.services.ServiceFactory;
+import com.exhibit.dao.connection.BasicConnectionManager;
+import com.exhibit.dao.connection.ConnectionManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 import static com.exhibit.dao.constants.UtilConstants.*;
 
@@ -42,7 +38,7 @@ public class FrontController extends HttpServlet {
         HttpSession session = req.getSession();
 
         String commandName = req.getParameter("command");
-        if (commandName == null || commandName.isEmpty()){
+        if (commandName == null || commandName.isEmpty()) {
             commandName = "getExhibitionsCommand";
         }
 
@@ -52,7 +48,7 @@ public class FrontController extends HttpServlet {
 
         String dispatchPage = HOME_PAGE;
 
-        switch (cr.getDispatchCommand()){
+        switch (cr.getDispatchCommand()) {
             case SHOW:
                 session.setAttribute(SHOW_PAGE, cr.getPage());
                 break;
@@ -66,7 +62,7 @@ public class FrontController extends HttpServlet {
         }
 
         try {
-            switch (cr.getType()){
+            switch (cr.getDispatchType()) {
                 case FORWARD:
                     req.getRequestDispatcher(dispatchPage).forward(req, resp);
                     break;

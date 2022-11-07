@@ -1,7 +1,6 @@
 package com.exhibit.services;
 
-import com.exhibit.dao.BasicConnectionManager;
-import com.exhibit.dao.impl.ExhibitionDao;
+import com.exhibit.dao.connection.BasicConnectionManager;
 import com.exhibit.dao.model.Exhibition;
 import com.exhibit.dao.model.Ticket;
 import com.exhibit.dao.model.User;

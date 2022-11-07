@@ -1,4 +1,4 @@
-package com.exhibit.dao;
+package com.exhibit.dao.connection;
 
 import java.io.Serializable;
 import java.sql.Connection;

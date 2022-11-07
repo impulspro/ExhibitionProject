@@ -18,10 +18,6 @@ public class Exhibition implements Serializable {
     private Time endTime;
     private double price;
 
-
-    public Exhibition() {
-    }
-
     public static Builder newBuilder() {
         return new Exhibition().new Builder();
     }

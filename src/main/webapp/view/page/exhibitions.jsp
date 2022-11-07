@@ -94,36 +94,46 @@
 
 
                                 <c:if test="${sessionScope.user.role == 'admin'}">
-                                    <form action="${pageContext.request.contextPath}/index-servlet"
-                                          method="post">
-                                        <input name="command" type="hidden" value="cancelExhibitionCommand">
-                                        <input name="exhibitionId" type="hidden" value="${exh.id}">
 
-                                        <button class="btn-success" type="button" disabled>
-                                                ${sessionScope.exhibitionService.amountOfTicketsByExhibition(exh.id)}
-                                            <fmt:message
-                                                    key='exhibition.amountOfTickets'/>
-                                        </button>
+                                    <button class="btn-success" type="button" disabled>
+                                            ${sessionScope.exhibitionService.amountOfTicketsByExhibition(exh.id)}
+                                        <fmt:message key='exhibition.amountOfTickets'/>
+                                    </button>
 
-                                        <c:if test="${exh.price != '-1'}">
-                                            <button class="btn-warning" type="submit">
-                                                <fmt:message key='exhibition.cancel'/>
+                                    <c:if test="${sessionScope.exhibitionService.inPast(exh.id)}">
+                                        <c:if test="${!sessionScope.userService.isTicketPresent(sessionScope.user.login, exh.id)}">
+                                            <button class="btn btn-dark" disabled type="button">
+                                                <fmt:message key='exhibition.alreadyEnded'/></button>
+                                        </c:if>
+                                    </c:if>
+
+                                    <c:if test="${!sessionScope.exhibitionService.inPast(exh.id)}">
+                                        <form action="${pageContext.request.contextPath}/index-servlet"
+                                              method="post">
+                                            <input name="command" type="hidden" value="cancelExhibitionCommand">
+                                            <input name="exhibitionId" type="hidden" value="${exh.id}">
+
+                                            <c:if test="${exh.price != '-1'}">
+                                                <button class="btn-warning" type="submit">
+                                                    <fmt:message key='exhibition.cancel'/>
+                                                </button>
+                                            </c:if>
+                                            <c:if test="${exh.price == '-1'}">
+                                                <button class="btn-dark disabled" disabled type="button">
+                                                    <fmt:message key='exhibition.alreadyCanceled'/></button>
+                                            </c:if>
+
+                                        </form>
+                                        <form action="${pageContext.request.contextPath}/index-servlet"
+                                              method="post">
+                                            <input name="command" type="hidden" value="deleteExhibitionCommand">
+                                            <input name="exhibitionId" type="hidden" value="${exh.id}">
+                                            <button class="btn-danger" type="submit">
+                                                <fmt:message key='exhibition.delete'/>
                                             </button>
-                                        </c:if>
-                                        <c:if test="${exh.price == '-1'}">
-                                            <button class="btn-dark disabled" disabled type="button">
-                                                <fmt:message key='exhibition.alreadyCanceled'/></button>
-                                        </c:if>
+                                        </form>
+                                    </c:if>
 
-                                    </form>
-                                    <form action="${pageContext.request.contextPath}/index-servlet"
-                                          method="post">
-                                        <input name="command" type="hidden" value="deleteExhibitionCommand">
-                                        <input name="exhibitionId" type="hidden" value="${exh.id}">
-                                        <button class="btn-danger" type="submit">
-                                            <fmt:message key='exhibition.delete'/>
-                                        </button>
-                                    </form>
                                 </c:if>
                             </div>
                         </div>

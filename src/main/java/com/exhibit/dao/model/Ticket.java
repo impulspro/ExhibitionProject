@@ -9,9 +9,6 @@ public class Ticket implements Serializable {
 
     private long exhibitionId;
 
-    public Ticket() {
-    }
-
     public static Ticket.Builder newBuilder() {
         return new Ticket().new Builder();
     }
