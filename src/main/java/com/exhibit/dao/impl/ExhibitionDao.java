@@ -24,9 +24,9 @@ import static com.exhibit.dao.constants.UtilConstants.RECORDS_PER_PAGE;
 
 
 public class ExhibitionDao implements ExhibitionService {
-    private static Mapper<Exhibition> mapper = MapperFactory.getInstance().getExhibitionMapper();
-    Logger logger = LogManager.getLogger(INFO_LOGGER);
-    private ConnectionManager manager;
+    private static final Mapper<Exhibition> mapper = MapperFactory.getInstance().getExhibitionMapper();
+    transient Logger logger = LogManager.getLogger(INFO_LOGGER);
+    private final ConnectionManager manager;
 
     public ExhibitionDao(ConnectionManager manager) {
         this.manager = manager;

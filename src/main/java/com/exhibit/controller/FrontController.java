@@ -44,7 +44,7 @@ public class FrontController extends HttpServlet {
 
         logger.info(commandName);
 
-        CommandResponse cr = CommandContainer.getCommand(commandName).execute(req, resp, BasicConnectionManager.getInstance());
+        CommandResponse cr = CommandContainer.getCommand(commandName).execute(req, resp, manager);
 
         String dispatchPage = HOME_PAGE;
 

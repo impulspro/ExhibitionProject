@@ -45,8 +45,8 @@ public class PrintPdf implements Command {
         List<Ticket> ticketList = userService.getUserTickets(user.getId());
 
         if (ticketList == null || ticketList.isEmpty()) {
-            req.getSession().setAttribute(USER_MESSAGE, "you have not tickets yet");
-            return new CommandResponse(DispatchType.FORWARD, HOME_PAGE);
+            req.getSession().setAttribute(ERROR_MESSAGE, "you have no tickets yet");
+            return new CommandResponse(DispatchType.FORWARD, DispatchCommand.GO, USER_JSP);
         } else {
             try {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -88,6 +88,6 @@ public class PrintPdf implements Command {
             }
         }
 
-        return new CommandResponse(DispatchType.FORWARD, DispatchCommand.STAY);
+        return new CommandResponse(DispatchType.FORWARD, DispatchCommand.GO, USER_JSP);
     }
 }

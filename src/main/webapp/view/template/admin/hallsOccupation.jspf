@@ -1,6 +1,6 @@
 <c:set var="k" value="1"/>
 <c:forEach var="hall" items="${sessionScope.hallService.findAll()}">
-    <strong> ${hall.name()}  <fmt:message key='exhibition.hallIsOccupied'/>: </strong> <br>
+    <strong> ${hall.name}  <fmt:message key='exhibition.hallIsOccupied'/>: </strong> <br>
     <c:set var="j" value="1"/>
     <c:forEach var="exhibiton" items="${sessionScope.hallService.findAllExhibitionsByHall(hall.id)}">
         <div>

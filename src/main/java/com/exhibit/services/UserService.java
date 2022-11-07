@@ -18,7 +18,7 @@ public interface UserService extends Serializable {
 
     void update(final User user);
 
-    void delete(final User user);
+    void delete(final long userId);
 
     boolean isTicketPresent(final String login, final long exhibitionId);
 

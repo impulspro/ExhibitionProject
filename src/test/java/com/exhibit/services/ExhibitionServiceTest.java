@@ -1,11 +1,13 @@
 package com.exhibit.services;
 
 import com.exhibit.dao.connection.TestConnectionManager;
+import com.exhibit.dao.connection.TestDB;
 import com.exhibit.dao.model.Exhibition;
 import com.exhibit.dao.model.Hall;
 import com.exhibit.dao.model.User;
 import com.exhibit.util.PasswordHashing;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Date;
@@ -26,18 +28,30 @@ class ExhibitionServiceTest {
     static HallService hallService;
     static int testIterations;
     static Date date;
-    static String detail = "Some test details";
-    static Time time = new Time(7200000);
-    static double price = 100D;
-    static int hallsAmount = 8;
+    static String detail;
+    static Time time;
+    static double price;
+    static int hallsAmount;
+
+
     @BeforeAll
     static void globalSetUp() {
         exhibitionService = ServiceFactory.getInstance().getExhibitionService(TestConnectionManager.getInstance());
         userService = ServiceFactory.getInstance().getUserService(TestConnectionManager.getInstance());
         hallService = ServiceFactory.getInstance().getHallService(TestConnectionManager.getInstance());
         testIterations = 6;
+        hallsAmount = 8;
         date = Date.valueOf("2023-06-01");
+        detail = "Some test details";
+        price = 100D;
+        time = new Time(7200000);
     }
+
+    @BeforeEach
+    void cleanDB(){
+        TestDB.restartDBScript();
+    }
+
     @Test
     void addExhibitionWithoutHalls() {
         List<Exhibition> exhibitionsExpected = exhibitionService.findAll();
@@ -61,6 +75,7 @@ class ExhibitionServiceTest {
         List<Exhibition> exhibitionsActual = exhibitionService.findAll();
         assertEquals(exhibitionsExpected, exhibitionsActual);
     }
+
     @Test
     void setHallsForExhibition() {
         List<Exhibition> exhibitionsExpected = new CopyOnWriteArrayList<>();
@@ -122,9 +137,11 @@ class ExhibitionServiceTest {
 
     @Test
     void amountOfTickets() {
+
+
         User user = new User(randomString(), PasswordHashing.toMD5(randomString()));
         userService.add(user);
-        List<Exhibition> exhibitionList = exhibitionService.findAll().subList(0,2);
+        List<Exhibition> exhibitionList = exhibitionService.findAll().subList(0, 2);
 
         long expectedAmount = exhibitionService.amountOfTicketsByExhibition(exhibitionList.get(0).getId()) + exhibitionService.amountOfTicketsByExhibition(exhibitionList.get(1).getId()) + 2;
 
@@ -212,7 +229,7 @@ class ExhibitionServiceTest {
                 .toString();
     }
 
-    Date nextDate(){
+    Date nextDate() {
         String dt = String.valueOf(date);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();

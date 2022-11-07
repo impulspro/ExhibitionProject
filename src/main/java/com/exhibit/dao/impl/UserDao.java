@@ -28,7 +28,7 @@ import static com.exhibit.dao.constants.UtilConstants.*;
 public class UserDao implements UserService {
     static Mapper<User> mapper = MapperFactory.getInstance().getUserMapper();
     private final ConnectionManager manager;
-    Logger logger = LogManager.getLogger(INFO_LOGGER);
+    transient Logger logger = LogManager.getLogger(INFO_LOGGER);
     ExhibitionService exhibitionService;
 
     public UserDao(ConnectionManager manager) {
@@ -94,16 +94,16 @@ public class UserDao implements UserService {
     public void returnTicket(final User user, long exhibitionId) {
         Optional<Exhibition> exhibition = exhibitionService.findById(exhibitionId);
         if (!exhibition.isPresent()) {
-            logger.error("No exhibition found");
-            throw new DaoException("No exhibition found");
+            logger.error(NO_EXHIBITION_FOUND);
+            throw new DaoException(NO_EXHIBITION_FOUND);
         }
 
         List<Ticket> tickets = getUserTickets(user.getId());
         if (!tickets.isEmpty()) {
             Optional<Ticket> ticket = tickets.stream().filter(t -> t.getExhibitionId() == exhibitionId).findFirst();
-            if (ticket.isPresent()) {
-                logger.error("No exhibition found");
-                throw new DaoException("No exhibition found");
+            if (!ticket.isPresent()) {
+                logger.error(NO_EXHIBITION_FOUND);
+                throw new DaoException(NO_EXHIBITION_FOUND);
             }
         }
 
@@ -263,14 +263,14 @@ public class UserDao implements UserService {
         }
     }
 
-    public void delete(final User user) {
+    public void delete(final long userId) {
         Connection conn = null;
         PreparedStatement ps = null;
 
         try {
             conn = manager.getConnection();
             ps = conn.prepareStatement(DELETE_USER_BY_ID_SQL);
-            ps.setLong(1, user.getId());
+            ps.setLong(1, userId);
             ps.executeUpdate();
             conn.commit();
         } catch (SQLException e) {

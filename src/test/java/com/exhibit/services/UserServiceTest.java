@@ -70,7 +70,7 @@ class UserServiceTest {
         List<User> userListActual = userService.findAll();
         assertEquals(userListExpected, userListActual);
 
-        userService.delete(expectedUser.get());
+        userService.delete(expectedUser.get().getId());
         Optional<User> deletedUser = userService.findByLogin(expectedUser.get().getLogin());
         assertFalse(deletedUser.isPresent());
     }

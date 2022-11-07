@@ -29,7 +29,7 @@ public class DeleteUser implements Command {
         String login = req.getParameter("login");
         try {
             Optional<User> user = userService.findByLogin(login);
-            user.ifPresent(userService::delete);
+            user.ifPresent(value -> userService.delete(value.getId()));
             session.setAttribute(USER_MESSAGE, "you deleted user with login =  " + login);
             req.getSession().removeAttribute("searchUser");
         } catch (Exception e) {

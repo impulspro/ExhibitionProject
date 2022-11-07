@@ -10,6 +10,9 @@
 
 <!DOCTYPE html>
 <html lang="uk">
+<head>
+    <title>halls view jsp</title>
+</head>
 <div class="container">
     <div class="row">
         <c:set var="i" value="1"/>

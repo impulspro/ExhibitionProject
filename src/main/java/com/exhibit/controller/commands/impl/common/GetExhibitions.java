@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.exhibit.dao.constants.UtilConstants.*;
 
@@ -51,7 +52,13 @@ public class GetExhibitions implements Command {
 
         int amountOfExhibitions = userService.amountOfExhibitions(sortType, sortParam);
         int amountOfPages = (int) Math.ceil(amountOfExhibitions * 1.0 / RECORDS_PER_PAGE);
-        List<Exhibition> exhibitionsList = userService.findSortByWhereIs(sortType, sortParam, currentPage);
+
+        List<Exhibition> exhibitionsList = new CopyOnWriteArrayList<>();
+        try {
+            exhibitionsList = userService.findSortByWhereIs(sortType, sortParam, currentPage);
+        } catch (Exception e) {
+            logger.error(e);
+        }
 
         if (exhibitionsList == null || exhibitionsList.isEmpty()) {
             session.setAttribute(ERROR_MESSAGE, "no exhibition by your request was found");

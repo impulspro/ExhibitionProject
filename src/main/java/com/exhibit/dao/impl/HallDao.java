@@ -21,7 +21,7 @@ import static com.exhibit.dao.constants.UtilConstants.*;
 
 public class HallDao implements HallService{
     static Mapper<Hall> mapper = MapperFactory.getInstance().getHallMapper();
-    Logger logger = LogManager.getLogger(INFO_LOGGER);
+    transient Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     private ConnectionManager manager;
 
