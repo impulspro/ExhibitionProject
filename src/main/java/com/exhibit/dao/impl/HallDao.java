@@ -189,19 +189,7 @@ public class HallDao implements HallService{
     }
 
     @Override
-    public boolean isOccupiedOnDate(long hallId, Date date) {
-        List<Date> dateList = getOccupiedDates(hallId);
-        for (Date dateItem : dateList) {
-            int result = dateItem.compareTo(date);
-            if (result == 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isOccupiedOnDate(long hallId, Date startDate, Date endDate) {
+    public boolean isOccupiedBetweenTwoDates(long hallId, Date startDate, Date endDate) {
         List<Date> dateList = getOccupiedDates(hallId);
         List<Date> interval = getDaysBetweenDates(startDate, endDate);
         for (Date dateFromInterval : interval) {

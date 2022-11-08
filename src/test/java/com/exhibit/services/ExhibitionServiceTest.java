@@ -336,7 +336,6 @@ class ExhibitionServiceTest {
 
     @Test
     void checkExhibitionsInPast() {
-        List<Exhibition> exhibitionsExpected = exhibitionService.findAll();
         String theme = "Test Theme " + randomString();
         Date date = nextDate();
         Exhibition exhibition = Exhibition.newBuilder()
@@ -352,9 +351,28 @@ class ExhibitionServiceTest {
 
         Optional<Exhibition> checkExhibition = exhibitionService.findById(exhibition.getId());
         assertFalse(exhibitionService.inPast(checkExhibition.get().getId()));
+        assertTrue(exhibitionService.isTicketCanBeReturnByExhibition(checkExhibition.get().getId()));
 
-        List<Exhibition> exhibitionsActual = exhibitionService.findAll();
-        assertEquals(exhibitionsExpected, exhibitionsActual);
+        User user = new User(randomString(), PasswordHashing.toMD5(randomString()));
+        userService.add(user);
+
+        //Exhibition in the past
+        theme = "Test Theme " + randomString();
+        date = Date.valueOf("2020-01-01");
+        exhibition = Exhibition.newBuilder()
+                .setTheme(theme)
+                .setDetails(detail)
+                .setStartDate(date)
+                .setEndDate(date)
+                .setStartTime(time)
+                .setEndTime(time)
+                .setPrice(price)
+                .build();
+        exhibitionService.add(exhibition);
+        checkExhibition = exhibitionService.findById(exhibition.getId());
+        assertTrue(exhibitionService.inPast(checkExhibition.get().getId()));
+        assertFalse(exhibitionService.isTicketCanBeReturnByExhibition(checkExhibition.get().getId()));
+
     }
 
     //method for generating random Theme

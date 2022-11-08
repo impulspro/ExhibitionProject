@@ -49,7 +49,7 @@ public class AddExhibition implements Command {
                 .build();
         try {
             for (String hallId: hallsId) {
-                if (hallService.isOccupiedOnDate(Long.parseLong(hallId), startDate, endDate)) {
+                if (hallService.isOccupiedBetweenTwoDates(Long.parseLong(hallId), startDate, endDate)) {
                     Optional<Hall> hall = hallService.findById(Long.parseLong(hallId));
                     hall.ifPresent(value -> req.getSession().setAttribute(ERROR_MESSAGE, value.getName() + "hall is occupied on this dates"));
                     return new CommandResponse(DispatchType.REDIRECT, DispatchCommand.GO, ADMIN_JSP);

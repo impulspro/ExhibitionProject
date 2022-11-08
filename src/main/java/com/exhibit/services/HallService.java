@@ -16,6 +16,5 @@ public interface HallService extends Serializable {
     List<Hall> getHallsByExhibitionId(final long exhibitionId);
     void setHallByExhibitionId(final long exhibitionId, final String[] hallsId);
     List<Date> getOccupiedDates(final long hallId);
-    boolean isOccupiedOnDate(final long hallId, final Date date);
-    boolean isOccupiedOnDate(final long hallId, final Date startDate, final Date endDate);
+    boolean isOccupiedBetweenTwoDates(final long hallId, final Date startDate, final Date endDate);
 }
