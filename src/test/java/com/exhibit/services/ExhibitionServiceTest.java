@@ -14,9 +14,9 @@ import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -133,10 +133,10 @@ class ExhibitionServiceTest {
                     .setPrice(price)
                     .build();
             exhibitionService.add(exhibition);
-            if (i < RECORDS_PER_PAGE ) {
+            if (i < RECORDS_PER_PAGE) {
                 exhibitionsPage1.add(exhibition);
             }
-            if (i >= RECORDS_PER_PAGE &&  i < RECORDS_PER_PAGE * 2) {
+            if (i >= RECORDS_PER_PAGE && i < RECORDS_PER_PAGE * 2) {
                 exhibitionsPage2.add(exhibition);
             }
         }
@@ -169,10 +169,10 @@ class ExhibitionServiceTest {
         long amountOfPages = exhibitionService.amountOfExhibitions(SORT_BY_HALL, "1");
 
         List<Exhibition> exhibitionsExpected = new CopyOnWriteArrayList<>();
-        for (Exhibition exh: allExbitions) {
+        for (Exhibition exh : allExbitions) {
             List<Hall> hallList = hallService.getHallsByExhibitionId(exh.getId());
-            for (Hall hall: hallList) {
-                if (hall.getId() == 1){
+            for (Hall hall : hallList) {
+                if (hall.getId() == 1) {
                     exhibitionsExpected.add(exh);
                 }
             }
@@ -255,7 +255,7 @@ class ExhibitionServiceTest {
         exhibitionService.add(exhibition);
 
         // Assert that users accounts have decreased
-        double moneyExpected =  (USER_DEFAULT_MONEY - exhibition.getPrice()) * testIterations;
+        double moneyExpected = (USER_DEFAULT_MONEY - exhibition.getPrice()) * testIterations;
         double moneyActual = 0;
         List<User> users = new CopyOnWriteArrayList<>();
         for (int i = 0; i < testIterations; i++) {
@@ -307,7 +307,7 @@ class ExhibitionServiceTest {
         assertFalse(hallList.isEmpty());
 
         // Assert that users accounts have decreased
-        double moneyExpected =  (USER_DEFAULT_MONEY - exhibition.getPrice()) * testIterations;
+        double moneyExpected = (USER_DEFAULT_MONEY - exhibition.getPrice()) * testIterations;
         double moneyActual = 0;
         List<User> users = new CopyOnWriteArrayList<>();
         for (int i = 0; i < testIterations; i++) {
@@ -332,6 +332,29 @@ class ExhibitionServiceTest {
             moneyActual += userService.findByLogin(users.get(i).getLogin()).get().getMoney();
         }
         assertEquals(moneyExpected, moneyActual);
+    }
+
+    @Test
+    void checkExhibitionsInPast() {
+        List<Exhibition> exhibitionsExpected = exhibitionService.findAll();
+        String theme = "Test Theme " + randomString();
+        Date date = nextDate();
+        Exhibition exhibition = Exhibition.newBuilder()
+                .setTheme(theme)
+                .setDetails(detail)
+                .setStartDate(date)
+                .setEndDate(date)
+                .setStartTime(time)
+                .setEndTime(time)
+                .setPrice(price)
+                .build();
+        exhibitionService.add(exhibition);
+
+        Optional<Exhibition> checkExhibition = exhibitionService.findById(exhibition.getId());
+        assertFalse(exhibitionService.inPast(checkExhibition.get().getId()));
+
+        List<Exhibition> exhibitionsActual = exhibitionService.findAll();
+        assertEquals(exhibitionsExpected, exhibitionsActual);
     }
 
     //method for generating random Theme
