@@ -1,18 +1,26 @@
 package com.exhibit.util;
 
 import com.exhibit.dao.exeptions.DaoException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import static com.exhibit.dao.constants.UtilConstants.HASHING_PROBLEMS;
+import static com.exhibit.dao.constants.UtilConstants.INFO_LOGGER;
+
 //MD5 Hashing Technique
 public class PasswordHashing {
+    private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
+
+
     private PasswordHashing() {
     }
 
     public static String toMD5(String crypticString) {
         /* Plain-text password initialization. */
-        String hashOfString;
+        String hashOfString = null;
         try {
             /* MessageDigest instance for MD5. */
             MessageDigest m = MessageDigest.getInstance("MD5");
@@ -32,7 +40,8 @@ public class PasswordHashing {
             /* Complete hashed password in hexadecimal format */
             hashOfString = s.toString();
         } catch (NoSuchAlgorithmException e) {
-            throw new DaoException("Cannot convert password", e);
+            logger.error(e);
+            throw new DaoException(HASHING_PROBLEMS, e);
         }
         return hashOfString;
     }

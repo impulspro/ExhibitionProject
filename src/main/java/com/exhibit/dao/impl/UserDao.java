@@ -128,7 +128,8 @@ public class UserDao implements UserService {
             conn.commit();
         } catch (SQLException e) {
             manager.rollbackConnection(conn, e);
-            throw new DaoException("No exhibition found");
+            logger.error(e);
+            throw new RuntimeException();
         } finally {
             manager.closeResources(conn, ps, rs);
         }

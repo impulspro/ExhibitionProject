@@ -20,6 +20,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static com.exhibit.dao.constants.ExhibitionConstants.SORT_BY_DATE;
+import static com.exhibit.dao.constants.ExhibitionConstants.SORT_BY_HALL;
+import static com.exhibit.dao.constants.UserConstants.USER_DEFAULT_MONEY;
+import static com.exhibit.dao.constants.UtilConstants.RECORDS_PER_PAGE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExhibitionServiceTest {
@@ -39,7 +43,7 @@ class ExhibitionServiceTest {
         exhibitionService = ServiceFactory.getInstance().getExhibitionService(TestConnectionManager.getInstance());
         userService = ServiceFactory.getInstance().getUserService(TestConnectionManager.getInstance());
         hallService = ServiceFactory.getInstance().getHallService(TestConnectionManager.getInstance());
-        testIterations = 6;
+        testIterations = 8;
         hallsAmount = 8;
         date = Date.valueOf("2023-06-01");
         detail = "Some test details";
@@ -48,13 +52,14 @@ class ExhibitionServiceTest {
     }
 
     @BeforeEach
-    void cleanDB(){
+    void cleanDB() {
         TestDB.restartDBScript();
     }
 
     @Test
     void addExhibitionWithoutHalls() {
         List<Exhibition> exhibitionsExpected = exhibitionService.findAll();
+
         for (int i = 0; i < testIterations; i++) {
             String theme = "Test Theme " + randomString();
             Date date = nextDate();
@@ -112,12 +117,82 @@ class ExhibitionServiceTest {
     }
 
     @Test
-    void numberOfExhibitions() {
-        int exhibitionsExpectedCount = exhibitionService.findAll().size();
+    void sortByDate() {
+        List<Exhibition> exhibitionsPage1 = new CopyOnWriteArrayList<>();
+        List<Exhibition> exhibitionsPage2 = new CopyOnWriteArrayList<>();
+        Date date = nextDate();
+        for (int i = 0; i < testIterations; i++) {
+            String theme = "Test Theme " + randomString();
+            Exhibition exhibition = Exhibition.newBuilder()
+                    .setTheme(theme)
+                    .setDetails(detail)
+                    .setStartDate(date)
+                    .setEndDate(date)
+                    .setStartTime(time)
+                    .setEndTime(time)
+                    .setPrice(price)
+                    .build();
+            exhibitionService.add(exhibition);
+            if (i < RECORDS_PER_PAGE ) {
+                exhibitionsPage1.add(exhibition);
+            }
+            if (i >= RECORDS_PER_PAGE &&  i < RECORDS_PER_PAGE * 2) {
+                exhibitionsPage2.add(exhibition);
+            }
+        }
+
+        List<Exhibition> exhibitionsActual = exhibitionService.findSortByWhereIs(SORT_BY_DATE, String.valueOf(date), 1);
+        assertEquals(exhibitionsPage1, exhibitionsActual);
+        exhibitionsActual = exhibitionService.findSortByWhereIs(SORT_BY_DATE, String.valueOf(date), 2);
+        assertEquals(exhibitionsPage2, exhibitionsActual);
+    }
+
+    @Test
+    void sortByHall() {
         for (int i = 0; i < testIterations; i++) {
             String theme = "Test Theme " + randomString();
             Date date = nextDate();
+            Exhibition exhibition = Exhibition.newBuilder()
+                    .setTheme(theme)
+                    .setDetails(detail)
+                    .setStartDate(date)
+                    .setEndDate(date)
+                    .setStartTime(time)
+                    .setEndTime(time)
+                    .setPrice(price)
+                    .build();
+            exhibitionService.add(exhibition);
+            hallService.setHallByExhibitionId(exhibition.getId(), new String[]{"1", "2"});
+        }
 
+        List<Exhibition> allExbitions = exhibitionService.findAll();
+        long amountOfPages = exhibitionService.amountOfExhibitions(SORT_BY_HALL, "1");
+
+        List<Exhibition> exhibitionsExpected = new CopyOnWriteArrayList<>();
+        for (Exhibition exh: allExbitions) {
+            List<Hall> hallList = hallService.getHallsByExhibitionId(exh.getId());
+            for (Hall hall: hallList) {
+                if (hall.getId() == 1){
+                    exhibitionsExpected.add(exh);
+                }
+            }
+        }
+
+        List<Exhibition> exhibitionsActual = new CopyOnWriteArrayList<>();
+        for (int i = 0; i < amountOfPages; i++) {
+            List<Exhibition> pageExhibitions = exhibitionService.findSortByWhereIs(SORT_BY_HALL, "1", i + 1);
+            exhibitionsActual.addAll(pageExhibitions);
+        }
+
+        assertEquals(exhibitionsExpected, exhibitionsActual);
+    }
+
+    @Test
+    void amountOfExhibitions() {
+        int exhibitionsExpectedCount = exhibitionService.findAll().size();
+        Date date = nextDate();
+        for (int i = 0; i < testIterations; i++) {
+            String theme = "Test Theme " + randomString();
             Exhibition exhibition = Exhibition.newBuilder()
                     .setTheme(theme)
                     .setDetails(detail)
@@ -131,38 +206,43 @@ class ExhibitionServiceTest {
             exhibitionsExpectedCount++;
         }
 
-        int exhibitionsActualCount = exhibitionService.findAll().size();
+        int exhibitionsActualCount = exhibitionService.amountOfExhibitions();
         assertEquals(exhibitionsExpectedCount, exhibitionsActualCount);
+
+        exhibitionsActualCount = exhibitionService.amountOfExhibitions(SORT_BY_DATE, String.valueOf(date));
+        exhibitionsExpectedCount = testIterations;
+
+        assertEquals(exhibitionsExpectedCount, exhibitionsActualCount);
+        date = nextDate();
+
+        exhibitionsActualCount = exhibitionService.amountOfExhibitions(SORT_BY_DATE, String.valueOf(date));
+        assertEquals(0, exhibitionsActualCount);
     }
 
     @Test
     void amountOfTickets() {
-
-
-        User user = new User(randomString(), PasswordHashing.toMD5(randomString()));
-        userService.add(user);
         List<Exhibition> exhibitionList = exhibitionService.findAll().subList(0, 2);
+        long expectedAmount = exhibitionService.amountOfTicketsByExhibition(exhibitionList.get(0).getId())
+                + exhibitionService.amountOfTicketsByExhibition(exhibitionList.get(1).getId())
+                + 2L * testIterations;
 
-        long expectedAmount = exhibitionService.amountOfTicketsByExhibition(exhibitionList.get(0).getId()) + exhibitionService.amountOfTicketsByExhibition(exhibitionList.get(1).getId()) + 2;
+        for (int i = 0; i < testIterations; i++) {
+            User user = new User(randomString(), PasswordHashing.toMD5(randomString()));
+            userService.add(user);
+            userService.buyTicket(user, exhibitionList.get(0).getId());
+            userService.buyTicket(user, exhibitionList.get(1).getId());
+        }
 
-        userService.buyTicket(user, exhibitionList.get(0).getId());
-        userService.buyTicket(user, exhibitionList.get(1).getId());
-
-        long actualAmount = exhibitionService.amountOfTicketsByExhibition(exhibitionList.get(0).getId()) + exhibitionService.amountOfTicketsByExhibition(exhibitionList.get(1).getId());
+        long actualAmount = exhibitionService.amountOfTicketsByExhibition(exhibitionList.get(0).getId())
+                + exhibitionService.amountOfTicketsByExhibition(exhibitionList.get(1).getId());
 
         assertEquals(expectedAmount, actualAmount);
-
     }
 
     @Test
     void cancelExhibition() {
         String theme = "Test Theme" + randomString();
-        String detail = "Some test details";
-        Date date = Date.valueOf(LocalDate.now());
-        Time time = new Time(7200000);
-        double price = 100D;
-
-        Exhibition expectedExh = Exhibition.newBuilder()
+        Exhibition exhibition = Exhibition.newBuilder()
                 .setTheme(theme)
                 .setDetails(detail)
                 .setStartDate(date)
@@ -172,28 +252,43 @@ class ExhibitionServiceTest {
                 .setPrice(price)
                 .build();
 
+        exhibitionService.add(exhibition);
 
-        exhibitionService.add(expectedExh);
-        exhibitionService.cancel(expectedExh.getId());
+        // Assert that users accounts have decreased
+        double moneyExpected =  (USER_DEFAULT_MONEY - exhibition.getPrice()) * testIterations;
+        double moneyActual = 0;
+        List<User> users = new CopyOnWriteArrayList<>();
+        for (int i = 0; i < testIterations; i++) {
+            User user = new User(randomString(), PasswordHashing.toMD5(randomString()));
+            userService.add(user);
+            userService.buyTicket(user, exhibition.getId());
+            moneyActual += user.getMoney();
+            users.add(userService.findByLogin(user.getLogin()).get());
+        }
+        assertEquals(moneyExpected, moneyActual);
 
-        if (exhibitionService.findById(expectedExh.getId()).isPresent()) {
-            double actualPrice = exhibitionService.findById(expectedExh.getId()).get().getPrice();
+        exhibitionService.cancel(exhibition.getId());
+
+        if (exhibitionService.findById(exhibition.getId()).isPresent()) {
+            double actualPrice = exhibitionService.findById(exhibition.getId()).get().getPrice();
             assertEquals(-1D, actualPrice);
         } else {
             fail();
         }
 
+        // Assert that users accounts have refunded
+        moneyExpected = USER_DEFAULT_MONEY * testIterations;
+        moneyActual = 0;
+        for (int i = 0; i < testIterations; i++) {
+            moneyActual += userService.findByLogin(users.get(i).getLogin()).get().getMoney();
+        }
+        assertEquals(moneyExpected, moneyActual);
     }
 
     @Test
     void deleteExhibition() {
         String theme = "Test Theme" + randomString();
-        String detail = "Some test details";
-        Date date = Date.valueOf(LocalDate.now());
-        Time time = new Time(7200000);
-        double price = 100D;
-
-        Exhibition expectedExh = Exhibition.newBuilder()
+        Exhibition exhibition = Exhibition.newBuilder()
                 .setTheme(theme)
                 .setDetails(detail)
                 .setStartDate(date)
@@ -203,20 +298,43 @@ class ExhibitionServiceTest {
                 .setPrice(price)
                 .build();
 
+        exhibitionService.add(exhibition);
+        assertTrue(exhibitionService.findById(exhibition.getId()).isPresent());
 
-        exhibitionService.add(expectedExh);
-        assertTrue(exhibitionService.findById(expectedExh.getId()).isPresent());
         String[] halls = {"1", "3", "5"};
-        hallService.setHallByExhibitionId(expectedExh.getId(), halls);
+        hallService.setHallByExhibitionId(exhibition.getId(), halls);
+        List<Hall> hallList = hallService.getHallsByExhibitionId(exhibition.getId());
+        assertFalse(hallList.isEmpty());
 
-        exhibitionService.delete(expectedExh.getId());
-        assertFalse(exhibitionService.findById(expectedExh.getId()).isPresent());
+        // Assert that users accounts have decreased
+        double moneyExpected =  (USER_DEFAULT_MONEY - exhibition.getPrice()) * testIterations;
+        double moneyActual = 0;
+        List<User> users = new CopyOnWriteArrayList<>();
+        for (int i = 0; i < testIterations; i++) {
+            User user = new User(randomString(), PasswordHashing.toMD5(randomString()));
+            userService.add(user);
+            userService.buyTicket(user, exhibition.getId());
+            moneyActual += user.getMoney();
+            users.add(userService.findByLogin(user.getLogin()).get());
+        }
+        assertEquals(moneyExpected, moneyActual);
 
-        List<Hall> hallListNull = hallService.getHallsByExhibitionId(expectedExh.getId());
+
+        exhibitionService.delete(exhibition.getId());
+        assertFalse(exhibitionService.findById(exhibition.getId()).isPresent());
+        List<Hall> hallListNull = hallService.getHallsByExhibitionId(exhibition.getId());
         assertTrue(hallListNull.isEmpty());
 
+        // Assert that users accounts have refunded
+        moneyExpected = USER_DEFAULT_MONEY * testIterations;
+        moneyActual = 0;
+        for (int i = 0; i < testIterations; i++) {
+            moneyActual += userService.findByLogin(users.get(i).getLogin()).get().getMoney();
+        }
+        assertEquals(moneyExpected, moneyActual);
     }
 
+    //method for generating random Theme
     private String randomString() {
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
@@ -229,7 +347,8 @@ class ExhibitionServiceTest {
                 .toString();
     }
 
-    Date nextDate() {
+    //method for generating next Date
+    private Date nextDate() {
         String dt = String.valueOf(date);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();

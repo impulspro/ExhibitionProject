@@ -10,12 +10,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import static com.exhibit.dao.constants.UtilConstants.INFO_LOGGER;
+import static com.exhibit.dao.constants.UtilConstants.*;
 
 
 public class BasicConnectionManager implements ConnectionManager {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
     private static final BasicDataSource ds = new BasicDataSource();
+
     private static ConnectionManager manager;
 
     static {
@@ -29,11 +30,9 @@ public class BasicConnectionManager implements ConnectionManager {
             ds.setUrl(prop.getProperty("db.url"));
             ds.setUsername(prop.getProperty("db.username"));
             ds.setPassword(prop.getProperty("db.password"));
-
-
         } catch (Exception e) {
-            logger.error("Problems with connection pool");
-            throw new DaoException("Problems with connection pool", e);
+            logger.error(PROBLEMS_WITH_CONNECTION_POOL);
+            throw new DaoException(PROBLEMS_WITH_CONNECTION_POOL, e);
         }
     }
 
@@ -54,8 +53,8 @@ public class BasicConnectionManager implements ConnectionManager {
             conn.setAutoCommit(false);
             return conn;
         } catch (SQLException e) {
-            logger.error("Problems with getConnection");
-            throw new DaoException("Problems with getConnection", e);
+            logger.error(PROBLEMS_WITH_GET_CONNECTION);
+            throw new DaoException(PROBLEMS_WITH_GET_CONNECTION);
         }
     }
 
