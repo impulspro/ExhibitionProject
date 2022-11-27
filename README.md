@@ -1,4 +1,5 @@
 # ExhibitionProject
+![DB scheme](ExhibitionDBModel.png)
 
 admin - admin
 user1 - 11111
