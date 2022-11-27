@@ -1,11 +1,24 @@
 # ExhibitionProject
+- EXHIBITION PROJECT DESCRIPTION 
+There are roles: user, authorized user, administrator.
+The administrator makes a list of exhibitions (theme, hall, period of operation and working hours, ticket price), and can also cancel exhibitions, view statistics of visits. The exhibition can occupy one or several halls.
+The user can view the exhibits by topic, ticket price, and filter by date.
+An authorized user can buy a ticket to the selected exhibition.
+-----------------------
+Based on:
+- Java 8
+- Apache Tomcat 9
+- MySql 8
+-----------------------
 ![DB scheme](ExhibitionDBModel.png)
 
+Created users:
 admin - admin
 user1 - 11111
 user2 - 22222
 user3 - 33333
 
+Acttions:
 Not authorised user:
 - see exhibitionі sorted by parametrs
 - see halls
