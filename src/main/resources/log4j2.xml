@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="FATAL">
+<Configuration status="OFF">
 
     <Appenders>
         <Console name="console">
@@ -10,19 +10,16 @@
                      ignoreExceptions="false">
             <PatternLayout pattern="%d{dd::MM::yyyy HH:mm:ss} [%t] %-5level %C{5} %M %msg%n"/>
             <SizeBasedTriggeringPolicy size="2MB"/>
-            <TimeBasedTriggeringPolicy/>
         </RollingFile>
         <RollingFile name="infoLogFile" fileName="logs/logInfoLevel/infoLog.log"
                      filePattern="logs/logInfoLevel/infoLog-%d{yyyy-MM-dd}.log">
             <PatternLayout pattern="%d{dd::MM::yyyy HH:mm:ss} [%t] %-5level %C{5}  %M %msg%n"/>
             <SizeBasedTriggeringPolicy size="2MB"/>
-            <TimeBasedTriggeringPolicy/>
         </RollingFile>
         <RollingFile name="debugLogFile" fileName="logs/logDebugLevel/debugLog.log"
                      filePattern="logs/logDebugLevel/debugLog-%d{yyyy-MM-dd}.log">
             <PatternLayout pattern="%d{dd::MM::yyyy HH:mm:ss} [%t] %-5level %C{5}  %M %msg%n"/>
             <SizeBasedTriggeringPolicy size="2MB"/>
-            <TimeBasedTriggeringPolicy/>
         </RollingFile>
     </Appenders>
 

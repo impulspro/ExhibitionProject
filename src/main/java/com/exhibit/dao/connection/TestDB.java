@@ -11,9 +11,16 @@ import org.apache.logging.log4j.Logger;
 
 import static com.exhibit.dao.constants.UtilConstants.INFO_LOGGER;
 
+/**
+ * Class for recreation test DB via script, so before each test DB will not be corrupted
+ */
 public class TestDB {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
     private TestDB(){}
+
+    /**
+     * run before each test to recreate DB from script file
+     */
     public static void restartDBScript(){
         try {
             //Registering the Driver

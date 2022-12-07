@@ -23,9 +23,7 @@ public class TestConnectionManager implements ConnectionManager {
                 getResourceAsStream("db/testDB.properties")) {
             Properties prop = new Properties();
             prop.load(in);
-
-            Class.forName(prop.getProperty("db.driver.classname"));
-
+            ds.setDriverClassName(prop.getProperty("db.driver.classname"));
             ds.setUrl(prop.getProperty("db.url"));
             ds.setUsername(prop.getProperty("db.username"));
             ds.setPassword(prop.getProperty("db.password"));
