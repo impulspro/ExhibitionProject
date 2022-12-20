@@ -153,6 +153,28 @@ public class ExhibitionDao implements ExhibitionService {
         return exhibitionList;
     }
 
+    public List<Exhibition> findAllActual() {
+        List<Exhibition> exhibitionList = new CopyOnWriteArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = manager.getConnection();
+            ps = conn.prepareStatement(FIND_ALL_ACTUAL_EXHIBITIONS_SQL);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Exhibition exhibition = mapper.extractFromResultSet(rs);
+                exhibitionList.add(exhibition);
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            manager.closeResources(conn, ps, rs);
+        }
+        return exhibitionList;
+    }
+
     @Override
     public List<User> findAllUsersByExhibitionId(long exhibitionId) {
         List<User> userList = new CopyOnWriteArrayList<>();

@@ -45,7 +45,7 @@ class ExhibitionServiceTest {
         hallService = ServiceFactory.getInstance().getHallService(TestConnectionManager.getInstance());
         testIterations = 8;
         hallsAmount = 8;
-        date = Date.valueOf("2023-06-01");
+        date = Date.valueOf("2025-08-01");
         detail = "Some test details";
         price = 100D;
         time = new Time(7200000);
@@ -165,11 +165,14 @@ class ExhibitionServiceTest {
             hallService.setHallByExhibitionId(exhibition.getId(), new String[]{"1", "2"});
         }
 
-        List<Exhibition> allExbitions = exhibitionService.findAll();
         long amountOfPages = exhibitionService.amountOfExhibitions(SORT_BY_HALL, "1");
+        List<Exhibition> allExhibitions = new CopyOnWriteArrayList<>();
+        for (int i = 1; i < amountOfPages + 1; i++) {
+            allExhibitions.addAll(exhibitionService.findSortByWhereIs(SORT_BY_HALL, "1", i));
+        }
 
         List<Exhibition> exhibitionsExpected = new CopyOnWriteArrayList<>();
-        for (Exhibition exh : allExbitions) {
+        for (Exhibition exh : allExhibitions) {
             List<Hall> hallList = hallService.getHallsByExhibitionId(exh.getId());
             for (Hall hall : hallList) {
                 if (hall.getId() == 1) {
@@ -189,7 +192,7 @@ class ExhibitionServiceTest {
 
     @Test
     void amountOfExhibitions() {
-        int exhibitionsExpectedCount = exhibitionService.findAll().size();
+        int exhibitionsExpectedCount = exhibitionService.findAllActual().size();
         Date date = nextDate();
         for (int i = 0; i < testIterations; i++) {
             String theme = "Test Theme " + randomString();

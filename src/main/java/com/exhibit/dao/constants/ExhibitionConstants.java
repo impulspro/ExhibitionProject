@@ -14,8 +14,10 @@ public class ExhibitionConstants {
                     "WHERE exhibition_halls.hall_id = ? AND end_date >= NOW()";
     public static final String FIND_ALL_EXHIBITIONS_SQL =
             "SELECT * FROM exhibition ORDER BY start_date";
+    public static final String FIND_ALL_ACTUAL_EXHIBITIONS_SQL =
+            "SELECT * FROM exhibition WHERE end_date >= NOW() ORDER BY start_date";
     public static final String SORT_BY_DATE_WHERE_SQL =
-            "SELECT * FROM exhibition WHERE ? AND end_date >= NOW() BETWEEN start_date AND end_date ORDER BY start_date LIMIT ? OFFSET ?";
+            "SELECT * FROM exhibition WHERE ? BETWEEN start_date AND end_date ORDER BY start_date LIMIT ? OFFSET ?";
     public static final String SORT_BY_HALL_WHERE_SQL =
             "SELECT * FROM exhibition INNER JOIN exhibition_halls" +
                     " ON exhibition.id = exhibition_halls.exhibition_id " +

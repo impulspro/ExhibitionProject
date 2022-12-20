@@ -15,6 +15,7 @@ public interface ExhibitionService extends Serializable {
     Optional<Exhibition> findByTheme(final String theme);
 
     List<Exhibition> findAll();
+    List<Exhibition> findAllActual();
     List<User> findAllUsersByExhibitionId(final long exhibitionId);
     int amountOfExhibitions(final String sortType, final String sortParam);
     int amountOfExhibitions();
