@@ -67,7 +67,13 @@
                         <button class="btn btn-primary" type="submit"><fmt:message
                                 key='index.exhibition.byHall'/></button>
                     </form>
-
+                    &nbsp; &nbsp; &nbsp;
+                    <form action="${pageContext.request.contextPath}/index-servlet" method="get">
+                        <input name="command" type="hidden" value="getExhibitionsCommand">
+                        <input name="sortType" type="hidden" value="sortByDateArchive">
+                        <button class="btn btn-warning" type="submit"><fmt:message
+                                key='index.exhibition.byDateArchive'/></button>
+                    </form>
                 </div>
             </div>
         </div>

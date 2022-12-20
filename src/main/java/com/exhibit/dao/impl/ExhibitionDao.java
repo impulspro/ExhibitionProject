@@ -68,9 +68,7 @@ public class ExhibitionDao implements ExhibitionService {
         java.sql.Date date = java.sql.Date.valueOf(LocalDate.now());
         Optional<Exhibition> exhibition = findById(exhibitionId);
         if (exhibition.isPresent()) {
-            if (exhibition.get().getEndDate().compareTo(date) < 0) {
-                return true;
-            }
+            return exhibition.get().getEndDate().compareTo(date) < 0;
         } else {
             logger.error("Cannot find exhibition");
         }
@@ -189,19 +187,33 @@ public class ExhibitionDao implements ExhibitionService {
         try {
             conn = manager.getConnection();
             if (sortParam != null && !sortParam.isEmpty()) {
-                if (sortType.equals(SORT_BY_HALL)) {
-                    ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_WHERE_HALL_SQL);
-                    ps.setLong(1, Long.parseLong(sortParam));
-                } else {
-                    ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_WHERE_DATE_SQL);
-                    ps.setDate(1, Date.valueOf(sortParam));
+                switch (sortType) {
+                    case SORT_BY_HALL:
+                        ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_WHERE_HALL_SQL);
+                        ps.setLong(1, Long.parseLong(sortParam));
+                        break;
+                    case SORT_BY_DATE:
+                        ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_WHERE_DATE_SQL);
+                        ps.setDate(1, Date.valueOf(sortParam));
+                        break;
+                    case SORT_BY_DATE_ARCHIVE:
+                        ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_WHERE_DATE_ARCHIVE_SQL);
+                        break;
+                    default:
+                        logger.error("Cannot get a sortType");
                 }
             } else {
-                ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_SQL);
+                if (sortType.equals(SORT_BY_DATE_ARCHIVE)){
+                    ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_WHERE_DATE_ARCHIVE_SQL);
+                } else {
+                    ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_SQL);
+                }
             }
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                amount = rs.getInt(1);
+            if (ps != null) {
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    amount = rs.getInt(1);
+                }
             }
         } catch (SQLException | IllegalArgumentException e) {
             amount = amountOfExhibitions();
@@ -253,6 +265,9 @@ public class ExhibitionDao implements ExhibitionService {
                         break;
                     case SORT_BY_DATE:
                         ps = conn.prepareStatement(SORT_BY_DATE_SQL);
+                        break;
+                    case SORT_BY_DATE_ARCHIVE:
+                        ps = conn.prepareStatement(SORT_BY_DATE_ARCHIVE_SQL);
                         break;
                     default:
                         logger.error("Cannot get a sortType");
