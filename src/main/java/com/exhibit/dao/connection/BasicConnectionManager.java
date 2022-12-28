@@ -45,8 +45,8 @@ public class BasicConnectionManager implements ConnectionManager {
     }
     public Connection getConnection() {
         try {
+
             Connection conn = ds.getConnection();
-            //snapshot isolation level
             conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             conn.setAutoCommit(false);
             return conn;

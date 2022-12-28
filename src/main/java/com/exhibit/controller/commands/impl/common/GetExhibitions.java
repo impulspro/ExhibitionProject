@@ -25,7 +25,7 @@ public class GetExhibitions implements Command {
 
     @Override
     public CommandResponse execute(final HttpServletRequest req, final HttpServletResponse resp, final ConnectionManager manager) {
-        ExhibitionService userService = ServiceFactory.getInstance().getExhibitionService(manager);
+        ExhibitionService exhibitionService = ServiceFactory.getInstance().getExhibitionService(manager);
         HttpSession session = req.getSession();
 
         String sortType = (String) session.getAttribute(SORT_TYPE);
@@ -50,12 +50,12 @@ public class GetExhibitions implements Command {
             currentPage = Integer.parseInt(req.getParameter(CURRENT_PAGE));
         }
 
-        int amountOfExhibitions = userService.amountOfExhibitions(sortType, sortParam);
+        int amountOfExhibitions = exhibitionService.amountOfExhibitions(sortType, sortParam);
         int amountOfPages = (int) Math.ceil(amountOfExhibitions * 1.0 / RECORDS_PER_PAGE);
 
         List<Exhibition> exhibitionsList = new CopyOnWriteArrayList<>();
         try {
-            exhibitionsList = userService.findSortByWhereIs(sortType, sortParam, currentPage);
+            exhibitionsList = exhibitionService.findSortByWhereIs(sortType, sortParam, currentPage);
         } catch (Exception e) {
             logger.error(e);
         }
