@@ -21,7 +21,7 @@
     <strong><fmt:message key='adminPanel.userExhibitions'/>:</strong>
     <br>
     <c:forEach var="ticket" items="${sessionScope.userService.getUserTickets(sessionScope.searchUser.id)}">
-        ${sessionScope.exhibitionService.findById(ticket.exhibitionId).theme}
+        ${sessionScope.exhibitionService.findById(ticket.exhibitionId).get().theme}
         <br>
     </c:forEach>
     <div>

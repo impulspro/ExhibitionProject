@@ -22,6 +22,9 @@ import static com.exhibit.dao.constants.ExhibitionConstants.SORT_BY_DATE;
 import static com.exhibit.dao.constants.UtilConstants.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * testing with using Mockito for controller package
+ */
 class FrontControllerTest {
     static ExhibitionService exhibitionService;
     static UserService userService;

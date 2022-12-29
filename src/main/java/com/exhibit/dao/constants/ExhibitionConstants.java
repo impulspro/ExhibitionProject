@@ -11,25 +11,25 @@ public class ExhibitionConstants {
     public static final String FIND_EXHIBITIONS_BY_HALL_ID_SQL =
             "SELECT * FROM exhibition INNER JOIN exhibition_halls" +
                     " ON exhibition.id = exhibition_halls.exhibition_id " +
-                    "WHERE exhibition_halls.hall_id = ? AND end_date >= NOW()";
+                    "WHERE exhibition_halls.hall_id = ? AND end_date >= CURDATE()";
     public static final String FIND_ALL_EXHIBITIONS_SQL =
             "SELECT * FROM exhibition ORDER BY start_date";
     public static final String FIND_ALL_ACTUAL_EXHIBITIONS_SQL =
-            "SELECT * FROM exhibition WHERE end_date >= NOW() ORDER BY start_date";
+            "SELECT * FROM exhibition WHERE end_date >= CURDATE() ORDER BY start_date";
     public static final String SORT_BY_DATE_WHERE_SQL =
             "SELECT * FROM exhibition WHERE ? BETWEEN start_date AND end_date ORDER BY start_date LIMIT ? OFFSET ?";
     public static final String SORT_BY_HALL_WHERE_SQL =
             "SELECT * FROM exhibition INNER JOIN exhibition_halls" +
                     " ON exhibition.id = exhibition_halls.exhibition_id " +
-                    "WHERE exhibition_halls.hall_id = ? AND end_date >= NOW() LIMIT ? OFFSET ?";
+                    "WHERE exhibition_halls.hall_id = ? AND end_date >= CURDATE() LIMIT ? OFFSET ?";
     public static final String SORT_BY_DATE_SQL =
-            "SELECT * FROM exhibition WHERE end_date >= NOW() ORDER BY start_date LIMIT ? OFFSET ?";
+            "SELECT * FROM exhibition WHERE end_date >= CURDATE() ORDER BY start_date LIMIT ? OFFSET ?";
     public static final String SORT_BY_DATE_ARCHIVE_SQL =
-            "SELECT * FROM exhibition WHERE end_date < NOW() ORDER BY start_date LIMIT ? OFFSET ?";
+            "SELECT * FROM exhibition WHERE end_date < CURDATE() ORDER BY start_date LIMIT ? OFFSET ?";
     public static final String SORT_BY_THEME_SQL =
-            "SELECT * FROM exhibition WHERE end_date >= NOW() ORDER BY theme LIMIT ? OFFSET ?";
+            "SELECT * FROM exhibition WHERE end_date >= CURDATE() ORDER BY theme LIMIT ? OFFSET ?";
     public static final String SORT_BY_PRICE_SQL =
-            "SELECT * FROM exhibition WHERE end_date >= NOW() ORDER BY price LIMIT ? OFFSET ?";
+            "SELECT * FROM exhibition WHERE end_date >= CURDATE() ORDER BY price LIMIT ? OFFSET ?";
 
     public static final String SORT_BY_DATE = "sortByDate";
     public static final String SORT_BY_HALL = "sortByHall";
@@ -48,15 +48,15 @@ public class ExhibitionConstants {
             "SELECT * FROM hall WHERE id = ?";
 
     public static final String FIND_EXHIBITIONS_AMOUNT_SQL =
-            "SELECT COUNT(*) FROM exhibition WHERE end_date >= NOW()";
+            "SELECT COUNT(*) FROM exhibition WHERE end_date >= CURDATE()";
     public static final String FIND_EXHIBITIONS_AMOUNT_WHERE_DATE_SQL =
             "SELECT COUNT(*) FROM exhibition WHERE ? BETWEEN start_date AND end_date";
     public static final String FIND_EXHIBITIONS_AMOUNT_WHERE_DATE_ARCHIVE_SQL =
-            "SELECT COUNT(*) FROM exhibition WHERE end_date < NOW()";
+            "SELECT COUNT(*) FROM exhibition WHERE end_date < CURDATE()";
     public static final String FIND_EXHIBITIONS_AMOUNT_WHERE_HALL_SQL =
             "SELECT COUNT(*) FROM exhibition INNER JOIN exhibition_halls" +
                     " ON exhibition.id = exhibition_halls.exhibition_id " +
-                    "WHERE exhibition_halls.hall_id = ? AND end_date >= NOW()";
+                    "WHERE exhibition_halls.hall_id = ? AND end_date >= CURDATE()";
 
     public static final String FIND_EXHIBITIONS_BY_HALL_SQL =
             "SELECT * FROM exhibition INNER JOIN exhibition_halls" +

@@ -34,7 +34,7 @@
     <div class="form-group">
         <label for="hallsId"><fmt:message key='addExhibition.form.chooseHalls'/></label>
         <select name="hallsId" multiple class="form-control" id="hallsId" required>
-            <c:forEach items="${sessionScope.hallList}" var="hall">
+            <c:forEach items="${sessionScope.hallService.findAll()}" var="hall">
                 <option value="${hall.id}">${hall.name}</option>
                 <br>
             </c:forEach>
