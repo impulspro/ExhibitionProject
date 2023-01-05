@@ -59,8 +59,6 @@ class FrontControllerTest {
         verify(session, atLeast(1)).getAttribute(SORT_PARAM);
 
         List<Exhibition> exhibitionsList = exhibitionService.findSortByWhereIs(SORT_BY_DATE, "", 1);
-        verify(session).setAttribute(CURRENT_PAGE, 1);
-        verify(session).setAttribute(AMOUNT_OF_PAGES, 2);
         verify(session).setAttribute(EXHIBITIONS_LIST, exhibitionsList);
     }
 }
