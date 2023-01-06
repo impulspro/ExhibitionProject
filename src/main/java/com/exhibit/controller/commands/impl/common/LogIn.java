@@ -40,7 +40,7 @@ public class LogIn implements Command {
                 req.getSession().setAttribute(ERROR_MESSAGE, "login/password dont match with db");
             }
         } catch (Exception e) {
-            logger.info(e);
+            logger.error(e);
             req.getSession().setAttribute(ERROR_MESSAGE, "problems in LogInCommand");
         }
 

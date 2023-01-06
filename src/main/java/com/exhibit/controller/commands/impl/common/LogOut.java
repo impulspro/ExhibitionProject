@@ -19,11 +19,10 @@ public class LogOut implements Command {
 
     @Override
     public CommandResponse execute(final HttpServletRequest req, final HttpServletResponse resp, final ConnectionManager manager) {
-        HttpSession session = req.getSession();
-        logger.info(session.getAttribute("user"));
-
-        session.removeAttribute("user");
-
+        HttpSession session = req.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
         return new CommandResponse(DispatchType.REDIRECT, DispatchCommand.STAY);
     }
 }

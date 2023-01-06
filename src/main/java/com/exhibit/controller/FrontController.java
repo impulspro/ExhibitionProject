@@ -12,7 +12,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.exhibit.dao.constants.UtilConstants.*;
@@ -24,25 +23,15 @@ public class FrontController extends HttpServlet {
     private static final ConnectionManager manager = BasicConnectionManager.getInstance();
 
     @Override
-    public void init() {
-        logger.info("Initializing servlet");
-    }
-
-
-    @Override
     protected void service(final HttpServletRequest req, final HttpServletResponse resp) {
         commandManager(req, resp);
     }
 
     private void commandManager(final HttpServletRequest req, final HttpServletResponse resp) {
-        HttpSession session = req.getSession();
-
         String commandName = req.getParameter("command");
         if (commandName == null || commandName.isEmpty()) {
             commandName = "getExhibitionsCommand";
         }
-
-        logger.info(commandName);
 
         CommandResponse cr = CommandContainer.getCommand(commandName).execute(req, resp, manager);
 
@@ -50,7 +39,7 @@ public class FrontController extends HttpServlet {
 
         switch (cr.getDispatchCommand()) {
             case SHOW:
-                session.setAttribute(SHOW_PAGE, cr.getPage());
+                req.getSession().setAttribute(SHOW_PAGE, cr.getPage());
                 break;
             case GO:
                 dispatchPage = cr.getPage();

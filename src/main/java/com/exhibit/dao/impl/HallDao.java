@@ -14,12 +14,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.exhibit.dao.constants.ExhibitionConstants.*;
-import static com.exhibit.dao.constants.UtilConstants.*;
+import static com.exhibit.dao.constants.UtilConstants.INFO_LOGGER;
 
-public class HallDao implements HallService{
+public class HallDao implements HallService {
     static Mapper<Hall> mapper = MapperFactory.getInstance().getHallMapper();
     transient Logger logger = LogManager.getLogger(INFO_LOGGER);
 
@@ -47,7 +46,7 @@ public class HallDao implements HallService{
     }
 
     public List<Hall> findAll() {
-        List<Hall> hallList = new CopyOnWriteArrayList<>();
+        List<Hall> hallList = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -92,7 +91,7 @@ public class HallDao implements HallService{
 
     @Override
     public List<Exhibition> findAllExhibitionsByHall(long hallId) {
-        List<Exhibition> exhibitions = new CopyOnWriteArrayList<>();
+        List<Exhibition> exhibitions = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -115,7 +114,7 @@ public class HallDao implements HallService{
 
     @Override
     public List<Hall> getHallsByExhibitionId(final long exhibitionId) {
-        List<Hall> hallList = new CopyOnWriteArrayList<>();
+        List<Hall> hallList = new ArrayList<>();
 
         Connection conn = null;
         PreparedStatement ps = null;
@@ -160,8 +159,8 @@ public class HallDao implements HallService{
 
     @Override
     public List<Date> getOccupiedDates(final long hallId) {
-        List<Exhibition> exhibitionList = new CopyOnWriteArrayList<>();
-        List<Date> dateList = new CopyOnWriteArrayList<>();
+        List<Exhibition> exhibitionList = new ArrayList<>();
+        List<Date> dateList = new ArrayList<>();
 
         Connection conn = null;
         PreparedStatement ps = null;

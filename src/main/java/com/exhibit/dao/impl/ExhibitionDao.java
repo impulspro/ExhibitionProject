@@ -13,9 +13,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.exhibit.dao.constants.ExhibitionConstants.*;
 import static com.exhibit.dao.constants.UserConstants.FIND_ALL_USERS_BY_EXHIBITION_ID_SQL;
@@ -25,8 +25,8 @@ import static com.exhibit.dao.constants.UtilConstants.RECORDS_PER_PAGE;
 
 public class ExhibitionDao implements ExhibitionService {
     private static final Mapper<Exhibition> mapper = MapperFactory.getInstance().getExhibitionMapper();
-    transient Logger logger = LogManager.getLogger(INFO_LOGGER);
     private final ConnectionManager manager;
+    transient Logger logger = LogManager.getLogger(INFO_LOGGER);
 
     public ExhibitionDao(ConnectionManager manager) {
         this.manager = manager;
@@ -132,7 +132,7 @@ public class ExhibitionDao implements ExhibitionService {
     }
 
     public List<Exhibition> findAll() {
-        List<Exhibition> exhibitionList = new CopyOnWriteArrayList<>();
+        List<Exhibition> exhibitionList = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -154,7 +154,7 @@ public class ExhibitionDao implements ExhibitionService {
     }
 
     public List<Exhibition> findAllActual() {
-        List<Exhibition> exhibitionList = new CopyOnWriteArrayList<>();
+        List<Exhibition> exhibitionList = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -177,7 +177,7 @@ public class ExhibitionDao implements ExhibitionService {
 
     @Override
     public List<User> findAllUsersByExhibitionId(long exhibitionId) {
-        List<User> userList = new CopyOnWriteArrayList<>();
+        List<User> userList = new ArrayList<>();
         Mapper<User> userMapper = MapperFactory.getInstance().getUserMapper();
         Connection conn = null;
         PreparedStatement ps = null;
@@ -225,7 +225,7 @@ public class ExhibitionDao implements ExhibitionService {
                         logger.error("Cannot get a sortType");
                 }
             } else {
-                if (sortType.equals(SORT_BY_DATE_ARCHIVE)){
+                if (sortType.equals(SORT_BY_DATE_ARCHIVE)) {
                     ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_WHERE_DATE_ARCHIVE_SQL);
                 } else {
                     ps = conn.prepareStatement(FIND_EXHIBITIONS_AMOUNT_SQL);
@@ -269,7 +269,7 @@ public class ExhibitionDao implements ExhibitionService {
 
     @Override
     public List<Exhibition> findSortByWhereIs(final String sortType, final String sortParam, final int pageNum) {
-        List<Exhibition> exhibitionList = new CopyOnWriteArrayList<>();
+        List<Exhibition> exhibitionList = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;

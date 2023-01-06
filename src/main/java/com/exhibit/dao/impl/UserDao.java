@@ -17,12 +17,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.exhibit.dao.constants.UserConstants.*;
-import static com.exhibit.dao.constants.UtilConstants.*;
+import static com.exhibit.dao.constants.UtilConstants.INFO_LOGGER;
 
 
 public class UserDao implements UserService {
@@ -137,7 +137,7 @@ public class UserDao implements UserService {
 
 
     public List<User> findAll() {
-        List<User> userList = new CopyOnWriteArrayList<>();
+        List<User> userList = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -231,7 +231,7 @@ public class UserDao implements UserService {
     }
 
     public List<Ticket> getUserTickets(final long userId) {
-        List<Ticket> tickets = new CopyOnWriteArrayList<>();
+        List<Ticket> tickets = new ArrayList<>();
         Mapper<Ticket> ticketMapper = MapperFactory.getInstance().getTicketMapper();
         Connection conn = null;
         PreparedStatement ps = null;

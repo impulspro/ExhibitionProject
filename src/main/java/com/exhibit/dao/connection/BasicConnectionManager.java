@@ -13,7 +13,7 @@ import java.util.Properties;
 import static com.exhibit.dao.constants.UtilConstants.*;
 
 
-public class BasicConnectionManager implements ConnectionManager {
+public class BasicConnectionManager implements ConnectionManager  {
     private static final Logger logger = LogManager.getLogger(INFO_LOGGER);
     private static final BasicDataSource ds = new BasicDataSource();
 
